@@ -18,8 +18,8 @@ const chat = ()=> {
             reconnect: true
         },
         identity: {
-            username: "twboapp",
-            password: "oauth:ucqhu02hrp7301bwiyzm8rrpt8j5va"
+            username: "",
+            password: "oauth:"
         },
         channels: ["shroud"]
     };
