@@ -1,5 +1,6 @@
 .App {
   text-align: center;
+  display: flex;
 }
 
 .App-logo {
@@ -18,9 +19,38 @@
   color: white;
 }
 
+.main-section {
+  height: 100vh;
+  width: 80vw;
+  border: 1px solid red;
+}
+.chat-section {
+  height: 100vh;
+  width: 20vw;
+  border: 1px solid rgb(44, 219, 0);
+}
 .App-link {
   color: #61dafb;
 }
+
+iframe{
+  
+  /* pointer-events: none; */
+  height: 20%;
+  width: 30%;
+
+  
+}
+
+iframe:hover{
+  
+  
+  height: 20%;
+  width: 30%;
+
+  
+}
+
 
 @keyframes App-logo-spin {
   from {
