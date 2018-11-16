@@ -17,10 +17,10 @@ const chat = ()=> {
         connection: {
             reconnect: true
         },
-        identity: {
-            username: "",
-            password: "oauth:"
-        },
+        // identity: {
+        //     username: "twboapp",
+        //     password: "oauth:"
+        // },
         channels: ["shroud"]
     };
     var client = new tmi.client(options);
@@ -31,7 +31,7 @@ const chat = ()=> {
     let myMessage="";
     
     client.on('chat', (channel, user, message, self)=>{
-       console.log(user["display-name"]+" CHAT WORKS: "+ message);
+        document.getElementById('chat').innerHTML = (user["display-name"]+" CHAT WORKS: "+ message);
        myMessage = message;
         
     })
