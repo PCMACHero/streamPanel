@@ -3,8 +3,8 @@ import Chat from './chat'
 
 const chatSection = ()=>{
     
-    return <div className='chat-section'>
-        <Chat/>
-    </div>
+    return (<div className='chat-section'>
+        <div id="chat"><Chat/></div>
+    </div>)
 }
 export default chatSection
