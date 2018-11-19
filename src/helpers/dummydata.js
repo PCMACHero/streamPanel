@@ -1,4 +1,6 @@
 //OBS Scene List Object
+export const streamer = "tsm_myth"
+
 export const OBSSceneObj = 
 { 'current-scene': 'In-Game',
   'message-id': '1',

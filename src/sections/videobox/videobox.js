@@ -5,12 +5,13 @@ const videoBox = (props)=>{
    return ( 
     <div className="video-box"> 
         <iframe
+        title="video"
             src={link}
             height="720"
             width="1280"
             frameBorder="0"
             scrolling="no"
-            allowfullscreen={false}>
+            allowFullScreen={false}>
         </iframe>
     </div>
 
