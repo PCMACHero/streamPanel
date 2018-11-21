@@ -1,5 +1,5 @@
 //OBS Scene List Object
-export const streamer = "chocotaco"
+export const streamer = "couragejd"
 
 export const OBSSceneObj = 
 { 'current-scene': 'In-Game',

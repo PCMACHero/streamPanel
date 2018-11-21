@@ -54,7 +54,7 @@ setTimeout(function(){
 obs.onConnectionOpened(() => {
   console.log("#######");
   obs.getSceneList().then(data => {
-    
+    console.log(data);
     // obs.setCurrentScene({
     //       'scene-name': scene.name
     //     });
@@ -64,4 +64,3 @@ obs.onConnectionOpened(() => {
   })
 });
 
-export default obs;

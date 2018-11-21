@@ -22,7 +22,7 @@
   height: 100vh;
   flex-basis: 70%;
   /* border: 1px solid red; */
-  background-image: linear-gradient(to bottom right, rgb(141, 41, 255), rgb(78, 0, 109));
+  background-image: linear-gradient(to bottom right, rgb(0, 65, 109), rgb(0, 109, 24));
   flex-grow: 0;
   flex-direction: column;
   
