@@ -1,12 +1,12 @@
 import React from 'react';
 import SceneBtn from './scenebtn'
-import {OBSSceneObj} from '../helpers/dummydata'
+// import {OBSSceneObj} from '../helpers/dummydata'
 
 
 
-const scenePanel = ()=>{
+const scenePanel = (props)=>{
 
-    
+    let OBSSceneObj = props.arr;
 
     let scenes = [];
     for (let i=0; i<OBSSceneObj.scenes.length; i++){
