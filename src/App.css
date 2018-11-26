@@ -48,15 +48,34 @@
   color: #61dafb;
 }
 
-.video-box{
+.video-box-small{
   
   /* pointer-events: none; */
   height: 60%;
   width: 60%;
   
   overflow: hidden;
+  animation: shrink .5s ;
 
   
+}
+.video-box-big{
+  
+  /* pointer-events: none; */
+  height: 75%;
+  width: 80%;
+  
+  overflow: hidden;
+  animation: grow .5s ;
+
+  
+}
+
+.click{
+  height:30px;
+  width: 30px;
+  border: white solid 1px;
+  position: absolute;
 }
 
 iframe{
@@ -272,5 +291,35 @@ iframe{
   }
   to {
     align-items: flex-end;
+  }
+}
+
+@keyframes grow {
+  from {
+    height: 60%;
+    width: 60%;
+  
+    overflow: hidden;
+  }
+  to {
+    height: 75%;
+  width: 80%;
+  
+  overflow: hidden;
+  }
+}
+
+@keyframes shrink {
+  from {
+    height: 75%;
+    width: 80%;
+  
+    overflow: hidden;
+  }
+  to {
+    height: 60%;
+  width: 60%;
+  
+  overflow: hidden;
   }
 }
