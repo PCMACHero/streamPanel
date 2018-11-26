@@ -24,7 +24,11 @@ class MainSection extends Component{
             server.addMessageListener( this.handleServerEvent.bind(this));
             server.connect().then((responseHandler)=>{
                 server.send({'request-type': 'GetSceneList'}).then(data=>{
-                    this.setState( { scenes: data.scenes } );
+                    console.log("LOOKING FOR CURRENT:", data["current-scene"])
+                    this.setState( { 
+                        scenes: data.scenes,
+                        currentScene:data["current-scene"] 
+                    } );
     
                 });
                 server.send({'request-type': 'GetMute', source: 'newsub'})
@@ -39,7 +43,7 @@ class MainSection extends Component{
     }
     render(){
         return <div className='main-section'>
-        <ScenePanel arr={this.state}/>
+        <ScenePanel arr={this.state} currentScene={this.state.currentScene}/>
     <div className="mid-section"><SourcePanel />
         <VideoBox channel={streamer}></VideoBox></div>
         </div>
