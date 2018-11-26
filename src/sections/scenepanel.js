@@ -7,6 +7,8 @@ import Obs from '../helpers/obs-server.js';
 
 const scenePanel = (props)=>{
 
+
+
     let OBSSceneObj = props.arr;
     let btnClass = null;
     let scenes = [];
@@ -16,8 +18,7 @@ const scenePanel = (props)=>{
         } else 
             {btnClass = "scene-btn"}
         scenes.push(
-        <div className={btnClass} key={i} onClick={()=>
-        {console.log("clicked",OBSSceneObj.scenes[i].name.toUpperCase())}}>
+        <div className={btnClass} key={i} onClick={()=>{props.func(OBSSceneObj.scenes[i].name)}}>
             <i className="material-icons">
             {props.icon}
             </i>

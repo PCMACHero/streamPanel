@@ -250,7 +250,7 @@ iframe{
   
 }
 
-.source-btn:active {
+/* .source-btn:active {
   display: flex;
   width: 20%;
   height: 100%;
@@ -260,7 +260,7 @@ iframe{
   
   animation: fadeIn .5s linear;
   
-}
+} */
 
 .label {
   font-family: 'Roboto Condensed', sans-serif;
