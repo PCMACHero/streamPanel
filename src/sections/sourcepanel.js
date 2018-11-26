@@ -1,5 +1,5 @@
 import React from 'react';
-import SceneBtn from './scenebtn'
+// import SceneBtn from './scenebtn'
 import {OBSSourcesObj} from '../helpers/dummydata'
 
 const sourcePanel = ()=>{
@@ -11,7 +11,14 @@ const sourcePanel = ()=>{
     }
     for (let i=0; i<OBSSourcesObj.sources.length; i++){
 
-        sources.push(<SceneBtn styling="source-btn" name={OBSSourcesObj.sources[i].name.toUpperCase()} icon={sourceMap[OBSSourcesObj.sources[i].typeId]} key={100+i}/>)
+        sources.push(
+            <div className="source-btn" key={100+i} onClick={()=>{console.log("clicked",OBSSourcesObj.sources[i].name.toUpperCase())}}>
+    <i className="material-icons">
+    {sourceMap[OBSSourcesObj.sources[i].typeId]}
+    </i>
+        <div className='label'>{OBSSourcesObj.sources[i].name.toUpperCase()}
+        </div>
+    </div>)
     }
     
     return (<div className='source-panel'>

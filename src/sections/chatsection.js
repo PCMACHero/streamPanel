@@ -4,7 +4,7 @@ import Chat from './chat'
 const chatSection = ()=>{
     
     return (<div id='chat-section'>
-        <div><Chat/></div>
+        <Chat/>
     </div>)
 }
 export default chatSection

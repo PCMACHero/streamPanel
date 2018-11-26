@@ -102,6 +102,7 @@ iframe{
   flex-direction: column;
   
   
+  
 }
 
 .scene-panel {
@@ -176,6 +177,30 @@ iframe{
   
 }
 
+.selected-scene-btn {
+  flex-direction: column;
+  display: flex;
+  width: 20%;
+  height: 100%;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 0;
+  margin: 6px 0;
+  border-radius: 2px;
+  /* padding: 0 16px; */
+
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+  background-image: linear-gradient(rgb(153, 240, 255), rgb(255, 255, 255), rgb(48, 48, 48));
+  -webkit-transition: background-color .2s ease-out;
+  transition: background-color .2s ease-out;
+  font-size: 1rem;
+  -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+          box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  
+}
+
 .source-btn {
   flex-direction: column;
   display: flex;
@@ -246,12 +271,15 @@ iframe{
   display: flex;
   justify-content: flex-start;
   
-  border: .5px solid rgb(0, 50, 63);
+  background-color: #252a30;
+  
+  border-bottom: .5px solid rgb(219, 242, 248);
   flex-flow: wrap;
   flex-shrink: 0;
   animation: fadeIn 1s linear;
   animation: scroll 1s linear;
   margin: 2px;
+  
   /* flex-direction: row; */
 }
 

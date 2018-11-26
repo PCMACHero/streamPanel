@@ -1,13 +1,13 @@
-import React from 'react';
+// import React from 'react';
 
-const sceneBtn = (props)=>{
+// const sceneBtn = (props)=>{
     
-    return (<div className={props.styling} onClick={()=>{console.log("clicked",props.name)}}>
-    <i className="material-icons">
-    {props.icon}
-    </i>
-        <div className='label'>{props.name}
-        </div>
-    </div>)
-}
-export default sceneBtn
+//     return (<div className="source-btn" key={100+i} onClick={()=>{console.log("clicked",OBSSourcesObj.sources[i].name.toUpperCase())}}>
+//     <i className="material-icons">
+//     {sourceMap[OBSSourcesObj.sources[i].typeId]}
+//     </i>
+//         <div className='label'>{OBSSourcesObj.sources[i].name.toUpperCase()}
+//         </div>
+//     </div>)
+// }
+// export default sceneBtn
