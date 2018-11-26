@@ -1,8 +1,9 @@
 import React from 'react';
 // import SceneBtn from './scenebtn'
-import {OBSSourcesObj} from '../helpers/dummydata'
+// import {OBSSourcesObj} from '../helpers/dummydata'
 
-const sourcePanel = ()=>{
+const sourcePanel = (props)=>{
+    let OBSSourcesObj = props.arr2;
     let myIcon = null;
     let sources = [];
     const sourceMap = {
@@ -12,7 +13,7 @@ const sourcePanel = ()=>{
     for (let i=0; i<OBSSourcesObj.sources.length; i++){
 
         sources.push(
-            <div className="source-btn" key={100+i} onClick={()=>{console.log("clicked",OBSSourcesObj.sources[i].name.toUpperCase())}}>
+            <div className="source-btn" key={100+i} onClick={()=>{props.func(OBSSourcesObj.sources[i].name)}}>
     <i className="material-icons">
     {sourceMap[OBSSourcesObj.sources[i].typeId]}
     </i>

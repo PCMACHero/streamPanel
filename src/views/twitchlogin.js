@@ -17,7 +17,7 @@ const twitchLogin = ()=> {
         <div id="login-box">
             <div className="login-text">Log In To Begin</div>
             <a className="twitch-btn" href= {URL}
-        /><div>LOGIN</div>
+        >LOGIN</a>
 
         </div>
       </div>
