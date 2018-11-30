@@ -324,6 +324,41 @@ iframe{
 .chat-message {
   color: #fff;
   align-items: center;
+  float: right;
+}
+
+.modal1{
+  border: 1px solid red;
+  width: 100%;
+  height: 100%;
+  
+}
+header{
+  color:white;
+  font-size: 2em;
+}
+.modal{
+  display:flex;
+  flex-flow: column ;
+  height: 70%;
+}
+.modal-content{
+  display:flex;
+  flex-flow: column ;
+  align-items: center;
+  
+
+}
+.modal-header{
+  
+  
+  
+}
+.modal-footer{
+  display: none;
+}
+.modal-btn-box{
+  
 }
 
 .material-icons {
