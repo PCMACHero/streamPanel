@@ -6,14 +6,20 @@ const sourcePanel = (props)=>{
     let OBSSourcesObj = props.arr2;
     let myIcon = null;
     let sources = [];
+    let srcClass=null;
     const sourceMap = {
         'coreaudio_input_capture': 'mic',
         'av_capture_input' : 'videocam'
     }
     for (let i=0; i<OBSSourcesObj.sources.length; i++){
-
+        console.log("SRCCLASS INSIDE COMPONENT:", OBSSourcesObj.sources[i].render)
+        if(OBSSourcesObj.sources[i].render===true){
+            srcClass = "src-btn-active"
+        } else {
+            srcClass = "src-btn-inactive"
+        }
         sources.push(
-            <div className="source-btn" key={100+i} onClick={()=>{props.func(OBSSourcesObj.sources[i].name)}}>
+            <div className={srcClass} key={100+i} onClick={()=>{props.func(OBSSourcesObj.sources[i].name)}}>
     <i className="material-icons">
     {sourceMap[OBSSourcesObj.sources[i].typeId]}
     </i>

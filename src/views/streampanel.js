@@ -20,7 +20,7 @@ class StreamPanel extends Component {
     return (
       <div className="App">
         <MainSection/>
-        <Chat-Section id="chat-section" ><Chat oauth={this.props.location.hash.slice(14,44)}/></Chat-Section>
+        <Chat-Section id="chat-section"><Chat oauth={this.props.location.hash.slice(14,44)}/></Chat-Section>
       </div>
     );
   }

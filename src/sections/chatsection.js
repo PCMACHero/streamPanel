@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 // import Chat from './chat'
 import tmi from "tmi.js";
-// import ChatModal from "./chatmodal"
-import {Modal, Button, Icon} from "react-materialize"
+import {streamer} from "../helpers/dummydata"
+import {Modal} from "react-materialize"
 
 
 export default class Chat extends Component {
@@ -40,7 +40,7 @@ export default class Chat extends Component {
                 username: "streampanelapp",
                 password: "oauth:"+this.props.oauth
             },
-            channels: ["#teepee"]
+            channels: [streamer]
         };
         console.log(options.identity.password)
         var client = new tmi.client(options);
@@ -99,14 +99,7 @@ export default class Chat extends Component {
 
             
             
-            // var chatSec = document.getElementById("chat-section");
-        
             
-            // myMessage = document.getElementById('chat-section').innerHTML += ("<div class='chat-card'>"+"<div class='chat-name'>"+user['display-name']+": "+"</div>"+ "<div class='chat-message'> "+" "+message+"</div>"+"</div>");
-    
-            // if(chatSec.childElementCount > 30) {
-            //     chatSec.removeChild(chatSec.children[0]);
-            // }}
 
 
         
