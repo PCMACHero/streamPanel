@@ -1,27 +1,26 @@
 import React, { Component } from 'react';
 import MainSection from '../sections/mainsection'
-import ChatSection from '../sections/chatsection'
+import Chat from '../sections/chatsection'
 // import getScenes from './sections/obsscenes'
 import '../App.css';
 
 class StreamPanel extends Component {
-    state = {
-        token: ""
-    }
+    
+    token = this.props.location.hash.slice(14,44);
 
     componentDidMount(){
-        let hash = this.props.location.hash;
-        let accessToken = hash.slice(13,44)
         
 
-        console.log("LOCATION DATA:----------->",accessToken)
+        
+
+        console.log("LOCATION DATA:----------->",this.props.location.hash.slice(14,44))
     }
     
   render() {
     return (
       <div className="App">
         <MainSection/>
-        <ChatSection />
+        <Chat-Section id="chat-section" ><Chat oauth={this.props.location.hash.slice(14,44)}/></Chat-Section>
       </div>
     );
   }

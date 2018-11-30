@@ -1,28 +1,28 @@
 import React, {Component} from 'react';
 import tmi from "tmi.js";
-import {streamer} from "../helpers/dummydata"
+// import {streamer} from "../helpers/dummydata"
 
 
 //get channel data (kraken/channel)
 
-var data = null;
+// var data = null;
 
-var xhr = new XMLHttpRequest();
-// xhr.withCredentials = true;
+// var xhr = new XMLHttpRequest();
+// // xhr.withCredentials = true;
 
-xhr.addEventListener("readystatechange", function () {
-  if (this.readyState === 4) {
-    console.log(this.responseText);
-  }
-});
+// xhr.addEventListener("readystatechange", function () {
+//   if (this.readyState === 4) {
+//     console.log(this.responseText);
+//   }
+// });
 
-xhr.open("GET", "https://api.twitch.tv/kraken/channel");
-xhr.setRequestHeader("Accept", "application/vnd.twitchtv.v5+json");
-xhr.setRequestHeader("Client-ID", "qcnyt9qlx36ej3dmou2x16xd36t73x");
-xhr.setRequestHeader("Authorization", "OAuth 79hy695c76z72fco69qib7kbof03x7");
+// xhr.open("GET", "https://api.twitch.tv/kraken/channel");
+// xhr.setRequestHeader("Accept", "application/vnd.twitchtv.v5+json");
+// xhr.setRequestHeader("Client-ID", "qcnyt9qlx36ej3dmou2x16xd36t73x");
+// xhr.setRequestHeader("Authorization", "OAuth 79hy695c76z72fco69qib7kbof03x7");
 
 
-xhr.send(data);
+// xhr.send(data);
 
 class Chat extends Component {
     myDivs = []
@@ -37,7 +37,7 @@ class Chat extends Component {
         
         
     componentDidMount(){
-
+        console.log("LOG OF auth INSIDE CHAT ",this)
         var options = {
             options: {
                 debug: true

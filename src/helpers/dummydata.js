@@ -1,5 +1,5 @@
 //OBS Scene List Object
-export const streamer = "goldglove"
+export const streamer = "tsm_viss"
 
 export const OBSSceneObj = 
 { 'current-scene': 'In-Game',

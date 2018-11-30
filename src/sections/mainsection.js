@@ -94,8 +94,9 @@ class MainSection extends Component{
     render(){
         return <div className='main-section'>
         <ScenePanel arr={this.state} func={this.setScene} currentScene={this.state.currentScene}/>
-    <div className="mid-section"><SourcePanel arr2={this.state} func={this.SetSceneItemProperties}/>
-        <VideoBox channel={streamer}></VideoBox></div>
+        <div className="mid-section">
+            <SourcePanel arr2={this.state} func={this.SetSceneItemProperties}/>
+            <VideoBox channel={streamer}></VideoBox></div>
         </div>
     }
 }
