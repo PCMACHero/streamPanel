@@ -2,7 +2,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: linear-gradient(rgb(0, 238, 255),rgb(127, 0, 201),rgb(56, 3, 80));
+    
+    /* background-image: linear-gradient(rgb(0, 238, 255),rgb(127, 0, 201),rgb(56, 3, 80)); */
     height: 100vh;
 }
 #login-box {
