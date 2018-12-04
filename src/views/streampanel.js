@@ -13,7 +13,7 @@ class StreamPanel extends Component {
 
         
 
-        console.log("LOCATION DATA:----------->",this.props.location.hash.slice(14,44))
+        // console.log("LOCATION DATA:----------->",this.props.location.hash.slice(14,44))
     }
     
   render() {

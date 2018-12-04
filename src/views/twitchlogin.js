@@ -1,7 +1,5 @@
 import React from 'react';
-import MainSection from '../sections/mainsection'
-import ChatSection from '../sections/chatsection'
-import TwitchList from '../sections/twitchoauth'
+
 import {clientID} from '../common/common'
 // import getScenes from './sections/obsscenes'
 import './login.css';

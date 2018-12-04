@@ -1,5 +1,4 @@
-import React, {Component} from 'react';
-import Obs from '../helpers/obs-server.js';
+import React from 'react';
 // import SceneBtn from './scenebtn'
 // import {OBSSceneObj} from '../helpers/dummydata'
 
@@ -9,20 +8,21 @@ const scenePanel = (props)=>{
 
 
 
-    let OBSSceneObj = props.arr;
+    let OBSSceneObj = props.scenes;
+    
     let btnClass = null;
     let scenes = [];
-    for (let i=0; i<OBSSceneObj.scenes.length; i++){
-        if(props.currentScene===OBSSceneObj.scenes[i].name){
+    for (let i=0; i<OBSSceneObj.length; i++){
+        if(props.currentScene===OBSSceneObj[i].name){
             btnClass = "selected-scene-btn"
         } else 
             {btnClass = "scene-btn"}
         scenes.push(
-        <div className={btnClass} key={i} onClick={()=>{props.func(OBSSceneObj.scenes[i].name)}}>
+        <div className={btnClass} key={i} onClick={()=>{props.func(OBSSceneObj[i].name)}}>
             <i className="material-icons">
             {props.icon}
             </i>
-                <div className='label'>{OBSSceneObj.scenes[i].name.toUpperCase()}
+                <div className='label'>{OBSSceneObj[i].name.toUpperCase()}
                 </div>
         </div>)
         }

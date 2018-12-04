@@ -1,12 +1,22 @@
+body{
+  background-image: url("./images/bg.jpeg");
+  background-size: cover;
+  
+}
 .App {
   text-align: center;
+  
+  
+  background-color: #0056ad57;
   
   
   
 }
 
 
-
+.player{
+  background: #1d7d74;
+}
 /* .App-header {
   background-color: #282c34;
   min-height: 100vh;
@@ -56,7 +66,7 @@
   height: 100vh;
   flex-basis: 70%;
   /* border: 1px solid red; */
-  background-image: linear-gradient(to bottom right, rgb(0, 65, 109), rgb(0, 109, 24));
+  /* background-image: linear-gradient(to bottom right, rgb(0, 65, 109), rgb(0, 109, 24)); */
   flex-grow: 0;
   flex-direction: column;
   
@@ -129,7 +139,7 @@ iframe{
   
   display: flex;
   color:rgb(219, 219, 255);
-  background-color: #070d1a;
+  background-color: #070d1a67;
   animation: fadeIn 1s linear;
   text-align: left;
   flex-direction: column;
@@ -171,8 +181,8 @@ iframe{
   /* padding: 0 16px; */
 
   text-decoration: none;
-  color: rgb(0, 0, 0);
-  background-image: linear-gradient(rgb(221, 221, 221), rgb(255, 255, 255), rgb(206, 206, 206));
+  color: rgb(41, 0, 75);
+  background-image: linear-gradient(rgba(221, 221, 221, 0.514), rgb(255, 255, 255), rgb(206, 206, 206));
   -webkit-transition: background-color .2s ease-out;
   transition: background-color .2s ease-out;
   font-size: 1rem;
@@ -186,29 +196,18 @@ iframe{
   display: flex;
   width: 20%;
   height: 100%;
-  background-color: #1d7d74;
-  background-image: linear-gradient(#0f665d, #1d7d74, #0b5c54);
-  color: rgb(255, 255, 255);
+  background-color: #b3b3b3;
+  /* background-image: linear-gradient(#0f665d, #1d7d74, #0b5c54); */
+  color: rgb(68, 0, 82);
   /* border: 1px solid red; */
   
-  animation: fadeIn .5s linear;
+  animation: fadeIn .2s linear;
   -webkit-box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 7px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -1px rgba(0, 0, 0, 0.2);
   box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.14), 0 1px 7px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -1px rgba(0, 0, 0, 0.2);
   
 }
 
-.scene-btn:active {
-  display: flex;
-  width: 20%;
-  height: 100%;
-  flex-shrink: 0;
-  background-color: rgb(51, 226, 182);
-  color: white;
-  /* border: 1px solid red; */
-  
-  animation: fadeIn .5s linear;
-  
-}
+
 
 .selected-scene-btn {
   flex-direction: column;
@@ -225,7 +224,7 @@ iframe{
 
   text-decoration: none;
   color: rgb(255, 255, 255);
-  background-image: linear-gradient(rgb(1, 2, 2), rgb(26, 26, 26), rgb(48, 48, 48));
+  background-image: linear-gradient(rgba(1, 2, 2, 0.664), rgb(26, 26, 26), rgb(48, 48, 48));
   -webkit-transition: background-color .2s ease-out;
   transition: background-color .2s ease-out;
   font-size: 1rem;
@@ -249,7 +248,7 @@ iframe{
 
   text-decoration: none;
   color: rgb(26, 226, 0);
-  background-color: #061727;
+  background-color: #061727d0;
   -webkit-transition: background-color .2s ease-out;
   transition: background-color .2s ease-out;
   font-size: 1rem;
@@ -329,9 +328,9 @@ iframe{
   display: flex;
   justify-content: flex-start;
   
-  background-color: #252a30;
+  background-color: #252a30bb;
   
-  border-bottom: .5px solid rgb(219, 242, 248);
+  border-bottom: .5px solid rgb(0, 54, 68);
   flex-flow: wrap;
   flex-shrink: 0;
   animation: fadeIn 1s linear;
@@ -342,7 +341,7 @@ iframe{
 }
 
 .chat-name {
-  color: rgb(0, 140, 255);
+  color: rgb(0, 255, 21);
   
 }
 

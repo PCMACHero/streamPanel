@@ -28,7 +28,7 @@ export default class Chat extends Component {
         
         
     componentDidMount(){
-        console.log("LOG OF auth INSIDE CHAT ",this.props.oauth)
+        
         var options = {
             options: {
                 debug: true
@@ -42,7 +42,7 @@ export default class Chat extends Component {
             },
             channels: [streamer]
         };
-        console.log(options.identity.password)
+        
         var client = new tmi.client(options);
         
       
@@ -51,7 +51,7 @@ export default class Chat extends Component {
 
         
         
-        var counter = 1;
+        var counter = 0;
         
         client.on('chat', (channel, user, message, self)=>{
             if(message==="test me"){
@@ -61,11 +61,11 @@ export default class Chat extends Component {
                     //
                 });
             }
-            this.myDivs.push(<Modal className="black"
+            this.myDivs.push(<Modal key={counter+=100} className="black"
                 // header={ (user.username).toUpperCase()}
                 trigger={<div className="chat-card" key={counter+=1} onClick={()=>{
       
-                  console.log(this.state.modal)
+                  
                   }}>
               <div className="chat-name" style={{color:user.color}}>{user.username}</div>
               <div className="chat-message" key={counter+=1}>: {message}</div>
@@ -76,7 +76,10 @@ export default class Chat extends Component {
                   <div className="btn purple">Message</div>
                 <div className="btn blue">Mod</div>
                 <div className="btn red">Ban</div>
-                <div className="btn red">Timeout</div></div>
+                <div className="btn red">Timeout</div>
+                <div>{JSON.stringify(user.badges)}</div>
+                <div>{JSON.stringify(channel)}</div>
+                </div>
                 
                 {/* <p>info: { JSON.stringify(user, null, 4)}</p> */}
                 
@@ -84,7 +87,7 @@ export default class Chat extends Component {
         
         )
         
-            if(this.myDivs.length > 1000) {
+            if(this.myDivs.length > 30) {
                 this.myDivs.shift()
             }
             // console.log(user);
