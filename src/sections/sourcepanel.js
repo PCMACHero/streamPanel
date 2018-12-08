@@ -5,7 +5,7 @@ import React from 'react';
 const sourcePanel = (props)=> {
         
         
-       
+       let icon =null
        let sources = [];
        let srcClass=null;
        let sourceMap = {
@@ -21,16 +21,19 @@ const sourcePanel = (props)=> {
             
             if(OBSSourcesObj[i].render===true){
                 srcClass = "src-btn-active"
+                icon = "visibility"
             } else {
                 srcClass = "src-btn-inactive"
+                icon = "visibility_off"
             }
             sources.push(
                 <div className={srcClass} key={100+i} onClick={()=>{props.func(OBSSourcesObj[i].name)}}>
-        <i className="material-icons">
-        {sourceMap[OBSSourcesObj[i].type]}
-        </i>
+        
             <div className='label'>{OBSSourcesObj[i].name.toUpperCase()}
             </div>
+            <i className="material-icons" style={{color:"white"}}>
+        {icon}
+        </i>
         </div>)
         }
      

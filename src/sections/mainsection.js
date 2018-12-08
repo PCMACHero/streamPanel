@@ -4,14 +4,19 @@ import ScenePanel from './scenepanel';
 import SourcePanel from './sourcepanel';
 import {streamer} from "../helpers/dummydata"
 import Obs from '../helpers/obs-server.js';
+import BottomPanel from "./bottompanel";
+import TwitchPanel from "./twitchpanel"
 import { setTimeout } from 'timers';
 // import {Modal, Button, Icon} from "react-materialize"
 
 class MainSection extends Component{
     srcClass = null;
     server = new Obs();
+    messageList = {}
     
     state = {
+        statusMessage:null,
+        streamStatus: null,
         currentScene: "",
         scenes: [],
         sources: [{
@@ -23,6 +28,15 @@ class MainSection extends Component{
 
 
     }
+
+    runAd(){
+        console.log("clicked run ad")
+    }
+
+    toggleStream = ()=>{
+        this.server.send({'request-type': 'StartStopStreaming'}).then(data=>{
+            
+    })}
     toggleSource = (sourceToToggle)=>{
     
         this.server.send({'request-type': 'GetCurrentScene'}).then(data=>{
@@ -54,6 +68,15 @@ class MainSection extends Component{
             
 
            }
+
+           
+                
+                
+           connectOBS(){
+               
+           } 
+            
+            
            getFirstScenesAndSources(){
             this.server.addMessageListener( this.handleServerEvent.bind(this));
             
@@ -66,7 +89,13 @@ class MainSection extends Component{
                     } );
     
                 });
-                
+                this.server.send({"request-type": "GetStreamingStatus"}).then(data=>{
+                    console.log("MY STREAM STATUS OBJ", data.streaming)
+                    this.setState({
+                        streamStatus:data.streaming
+                    })
+                })
+
                 this.server.send({'request-type': 'GetCurrentScene'}).then(data2=>{
                     
                     this.setState( { 
@@ -106,7 +135,7 @@ class MainSection extends Component{
            componentDidMount(){
             
             this.getFirstScenesAndSources()
-            
+            // this.getStreamingStatus();
             };
     
     
@@ -114,20 +143,46 @@ class MainSection extends Component{
 
            
     handleServerEvent(newEventData){
-        // console.log("EVENT FIRED", newEventData);
+        console.log("EVENT FIRED", newEventData);
+        if(newEventData["update-type"]==="SceneItemVisibilityChanged" || newEventData["update-type"]==="SwitchScenes"){
+            this.getFirstScenesAndSources()
+
+        }
+        if(newEventData["update-type"]==="StreamStopped"){
+            this.setState({
+                streamStatus: false,
+                statusMessage: null,
+            })
+        }else if ( newEventData["update-type"]==="StreamStopping"){
+            this.setState({
+                statusMessage: "Stream is stopping..."
+            })
+        } else if (newEventData["update-type"]==="StreamStarted"){
+            this.setState({
+                streamStatus: true,
+                statusMessage: null
+            })
+        } else if (newEventData["update-type"]==="StreamStarting"){
+            this.setState({
+                statusMessage:"Stream is starting..."
+            })
+        }
         
         
         
     }
     render(){
         return <div className='main-section'>
-        <ScenePanel scenes={this.state.scenes} func={this.setSceneAndSourcesOnClick} currentScene={this.state.currentScene}/>
-        <div className="mid-section">
-            <SourcePanel sources={this.state.sources} func={this.toggleSource} srcClass={this.state.srcClass} />
-            <VideoBox channel={streamer}></VideoBox>
-            
+            <ScenePanel scenes={this.state.scenes} func={this.setSceneAndSourcesOnClick} currentScene={this.state.currentScene}/>
+            <div className="mid-section">
+                <SourcePanel sources={this.state.sources} func={this.toggleSource} srcClass={this.state.srcClass} />
+                <VideoBox channel={streamer}></VideoBox>
+                <TwitchPanel runAd={this.runAd}/>
+                
             </div>
+            <BottomPanel func={this.toggleStream} statusMessage={this.state.statusMessage} streamingStatus={this.state.streamStatus}/>
         </div>
+        
     }
 }
 export default MainSection
