@@ -3,6 +3,9 @@ import React, {Component} from 'react';
 import tmi from "tmi.js";
 import {streamer} from "../helpers/dummydata"
 import {Modal} from "react-materialize"
+import axios from "axios";
+import {clientID} from "../common/common"
+import { isIPv4 } from 'net';
 
 
 export default class Chat extends Component {
@@ -11,6 +14,8 @@ export default class Chat extends Component {
         this.myDivs = []
         this.myReturn = this.myDivs.slice(0);
         this.modalClass = "hide-modal"
+        
+        this.badgeClass = "is-mod"
         
         
 
@@ -23,12 +28,25 @@ export default class Chat extends Component {
         userName: "",
         color: "",
         modal: false,
+        badges: null
         
         }
-        
+    getEmotes(){
+        const headers = {
+            headers:{
+                accept: "application/vnd.twitchtv.v5+json",
+                "Client-ID": clientID
+            }
+        }
+        const myURL = `https://api.twitch.tv/kraken/chat/emoticon_images?emotesets=0`
+        axios.get(myURL,headers).then(resp=>{
+            
+            console.log("MY AXIOS EMOTES ", resp.data["emoticon_sets"][0])
+        })
+    }
         
     componentDidMount(){
-        
+        // this.getEmotes();
         var options = {
             options: {
                 debug: true
@@ -49,11 +67,32 @@ export default class Chat extends Component {
             
         client.connect();
 
+       
         
         
         var counter = 0;
         
         client.on('chat', (channel, user, message, self)=>{
+            let newMessage;
+            if(/LUL/g.test(message)){
+                console.log('found')
+                newMessage = <div> Hello HELLO hello HELLO hello</div>
+            } else {
+                newMessage = message;
+            }
+            //const newMessage = message.replace(/LUL/g, )
+            var badgeArray = []
+            // console.log(user)
+            if(user.badges !== null){
+                if(user.badges.moderator){
+                    badgeArray.push(<img key={counter}className={this.badgeClass} src={this.props.chanBadges.mod.image} />)
+                }
+                if(user.badges.subscriber){
+                    badgeArray.push(<img className={this.badgeClass} key={counter+=1} src={this.props.chanBadges.subscriber.image} />)
+                }
+            }
+            
+            
             if(message==="test me"){
                 client.action("streampanelapp", "Your test message, hola").then(function(data) {
                     // data returns [channel]
@@ -67,13 +106,22 @@ export default class Chat extends Component {
       
                   
                   }}>
+              <div className="badges">{badgeArray}</div>
+              
               <div className="chat-name" style={{color:user.color}}>{user.username}</div>
-              <div className="chat-message" key={counter+=1}>: {message}</div>
+              
+              <div className="chat-message" key={counter+=1}>: {newMessage}</div>
               
           </div>}>
                   <header>{ (user.username).toUpperCase()}</header>
                   <div className="modal-btn-box">
-                  <div className="btn purple">Message</div>
+                  <div className="btn purple" onClick={()=>{
+                client.action("streampanelapp", `Hola, ${user.username}`).then(function(data) {
+                    // data returns [channel]
+                }).catch(function(err) {
+                    //
+                });
+            }}>Message</div>
                 <div className="btn blue">Mod</div>
                 <div className="btn red">Ban</div>
                 <div className="btn red">Timeout</div>
