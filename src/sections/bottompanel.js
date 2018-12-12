@@ -35,7 +35,7 @@ const BottomPanel = (props)=>{
                 <div className={btnClass} onClick={()=>{props.func()}}>
                     <div className="label2">{statusText}{statusMessage}
                     </div>
-                    <i class="material-icons" style={iconStyle}>
+                    <i className="material-icons" style={iconStyle}>
                     {icon}
                     </i>
                 </div>

@@ -1,14 +1,44 @@
 import React from 'react';
 import "./twitchpanel.css"
+import {streamer} from "../helpers/dummydata"
+import tmi from "tmi.js";
 // import SceneBtn from './scenebtn'
 // import {twitchBtns} from '../helpers/dummydata'
 
 const twitchPanel = (props)=> {
-        
+    const options = {
+        options: {
+            debug: true
+        },
+        connection: {
+            reconnect: true
+        },
+        identity: {
+            username: "streampanelapp",
+            password: "oauth:"+props.oauth
+        },
+        channels: [streamer]
+    };
+    const client = new tmi.client(options);
+    client.connect();
+
+    
+        const runAd=()=>{
+            
+            
+            
+            client.commercial(streamer, 30).then(function(data) {
+                // data returns [channel, seconds]
+            }).catch(function(err) {
+                //
+                console.log(err)
+            });
+            
+        }
     
         return (<div className='source-panel'>
 
-            <div className="twitch-btn"  onClick={()=>{props.runAd()}}>
+            <div className="twitch-btn"  onClick={()=>{runAd()}}>
                 <i className="material-icons">
                 monetization_on
                 </i>
