@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {Component, Fragment} from 'react';
 import VideoBox from '../sections/videobox/videobox';
 import ScenePanel from './scenepanel';
 import SourcePanel from './sourcepanel';
@@ -6,15 +6,17 @@ import {streamer} from "../helpers/dummydata"
 import Obs from '../helpers/obs-server.js';
 import BottomPanel from "./bottompanel";
 import TwitchPanel from "./twitchpanel"
-import { setTimeout } from 'timers';
+import Chat from "./chatsection"
 // import {Modal, Button, Icon} from "react-materialize"
 
 class MainSection extends Component{
     srcClass = null;
     server = new Obs();
-    messageList = {}
+    messageList = {};
+    ad = false;
     
     state = {
+        
         statusMessage:null,
         streamStatus: null,
         currentScene: "",
@@ -28,9 +30,17 @@ class MainSection extends Component{
 
 
     }
+   
+    runAd=()=>{
+        console.log("clicked run ad part 1")
+        this.ad = true;
 
-    runAd(){
-        console.log("clicked run ad")
+        
+    }
+    unrunAd=()=>{
+        console.log("clicked unrun ad part 1")
+        this.ad = false;
+
     }
 
     toggleStream = ()=>{
@@ -136,7 +146,11 @@ class MainSection extends Component{
             
             this.getFirstScenesAndSources()
             // this.getStreamingStatus();
+
+            
             };
+
+            
     
     
 
@@ -172,16 +186,25 @@ class MainSection extends Component{
         
     }
     render(){
-        return <div className='main-section'>
+        return (
+            <Fragment>
+            <div className='main-section'>
             <ScenePanel scenes={this.state.scenes} func={this.setSceneAndSourcesOnClick} currentScene={this.state.currentScene}/>
             <div className="mid-section">
                 <SourcePanel sources={this.state.sources} func={this.toggleSource} srcClass={this.state.srcClass} />
                 <VideoBox channel={streamer}></VideoBox>
-                <TwitchPanel runAd={this.runAd}/>
+                <TwitchPanel oauth={this.props.oauth} runAd={this.runAd}/>
                 
             </div>
+            
             <BottomPanel func={this.toggleStream} statusMessage={this.state.statusMessage} streamingStatus={this.state.streamStatus}/>
         </div>
+            <Chat-Section id="chat-section"><Chat chanBadges={this.props.chanBadges} 
+             oauth={this.props.oauth}/></Chat-Section>
+            </Fragment>
+            
+        )
+        
         
     }
 }

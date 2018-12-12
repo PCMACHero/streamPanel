@@ -7,7 +7,7 @@ import './login.css';
 let URL = `https://id.twitch.tv/oauth2/authorize?client_id=${
 clientID}&redirect_uri=
 http://localhost:3000/success&response_type=token&scope=
-channel_editor+channel_read+chat:read+chat:edit`
+channel_editor+channel_read+chat:read+chat:edit+user:edit+communities_moderate+channel:moderate`
 const twitchLogin = ()=> {
   
     return (

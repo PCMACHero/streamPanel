@@ -11,11 +11,33 @@ import { isIPv4 } from 'net';
 export default class Chat extends Component {
     constructor(props){
         super(props)
+        this.modDiv = null
         this.myDivs = []
         this.myReturn = this.myDivs.slice(0);
         this.modalClass = "hide-modal"
         
         this.badgeClass = "is-mod"
+        this.modUnmod = null;
+
+        this.options = {
+            options: {
+                debug: true
+            },
+            connection: {
+                reconnect: true
+            },
+            identity: {
+                username: "streampanelapp",
+                password: "oauth:"+this.props.oauth
+            },
+            channels: [streamer]
+        };
+        
+        this.client = new tmi.client(this.options);
+        
+      
+            
+        this.client.connect();
         
         
 
@@ -24,6 +46,7 @@ export default class Chat extends Component {
     
     
     state = {
+        modStatus: null,
         message: "",
         userName: "",
         color: "",
@@ -44,35 +67,140 @@ export default class Chat extends Component {
             console.log("MY AXIOS EMOTES ", resp.data["emoticon_sets"][0])
         })
     }
+
+   
+    
+
         
     componentDidMount(){
-        // this.getEmotes();
-        var options = {
-            options: {
-                debug: true
-            },
-            connection: {
-                reconnect: true
-            },
-            identity: {
-                username: "streampanelapp",
-                password: "oauth:"+this.props.oauth
-            },
-            channels: [streamer]
-        };
-        
-        var client = new tmi.client(options);
-        
-      
-            
-        client.connect();
-
-       
-        
-        
         var counter = 0;
         
-        client.on('chat', (channel, user, message, self)=>{
+        this.client.on('chat', (channel, user, message, self)=>{
+            
+            this.client.mods("streampanelapp").then(data =>{
+                // data returns [moderators]
+                console.log("CURRENT MODS", data)
+                
+                if(data.includes(user.username)){
+                    
+                    
+
+                    this.setState({
+                        modStatus:"UNMOD"
+                    })
+                    console.log("MADE IT TO 2C and it is UNMOD", this.state.modStatus)
+                    this.myDivs.push(<Modal key={counter+=100} className="black"
+                // header={ (user.username).toUpperCase()}
+                trigger={<div className="chat-card" key={counter+=1} onClick={()=>{
+      
+                  
+                  }}>
+              <div className="badges">{badgeArray}</div>
+              
+              <div className="chat-name" style={{color:user.color}}>{user.username}</div>
+              
+              <div className="chat-message" key={counter+=1}>: {newMessage}</div>
+              
+          </div>}>
+                  <header>{ (user.username).toUpperCase()}</header>
+                  <div className="modal-btn-box">
+                  <div className="btn purple" onClick={()=>{
+                this.client.action("streampanelapp", `Hola, ${user.username}`).then(function(data) {
+                    // data returns [channel]
+                }).catch(function(err) {
+                    //
+                });
+            }}>Message</div>
+                
+                <div className="btn blue" onClick={()=>{
+                            
+                            this.client.unmod("streampanelapp", user.username).then(function(data) {
+                                // data returns [channel, username]
+                                console.log(data)
+                            }).catch(function(err) {
+                                //
+                                console.log(err)
+                            });
+                        
+                    }}>{this.state.modStatus}</div>
+                <div className="btn red">Ban</div>
+                <div className="btn red">Timeout</div>
+                <div>{JSON.stringify(user.badges)}</div>
+                <div>{JSON.stringify(channel)}</div>
+                </div>
+                
+                {/* <p>info: { JSON.stringify(user, null, 4)}</p> */}
+                
+              </Modal>
+        
+        )
+                    } else { 
+
+                    
+                        
+                    this.setState({
+                        modStatus:"MOD"
+                    })
+                    console.log("MADE IT TO 2C and it is MOD", this.state.modStatus)
+                    this.myDivs.push(<Modal key={counter+=100} className="black"
+                // header={ (user.username).toUpperCase()}
+                trigger={<div className="chat-card" key={counter+=1} onClick={()=>{
+      
+                  
+                  }}>
+              <div className="badges">{badgeArray}</div>
+              
+              <div className="chat-name" style={{color:user.color}}>{user.username}</div>
+              
+              <div className="chat-message" key={counter+=1}>: {newMessage}</div>
+              
+          </div>}>
+                  <header>{ (user.username).toUpperCase()}</header>
+                  <div className="modal-btn-box">
+                  <div className="btn purple" onClick={()=>{
+                this.client.action("streampanelapp", `Hola, ${user.username}`).then(function(data) {
+                    // data returns [channel]
+                }).catch(function(err) {
+                    //
+                });
+            }}>Message</div>
+                
+                <div className="btn blue" onClick={()=>{
+                            
+                            this.client.mod("streampanelapp", user.username).then(function(data) {
+                                // data returns [channel, username]
+                                console.log(data)
+                            }).catch(function(err) {
+                                //
+                                console.log(err)
+                            });
+                        
+                    }}>{this.state.modStatus}</div>
+                <div className="btn red" onClick={()=>{
+                    this.client.ban("streampanelapp", user.username, "reason").then(function(data) {
+                        // data returns [channel, username, reason]
+                        console.log(user.username, " has been banned")
+                    }).catch(function(err) {
+                        //
+                        console.log(err)
+                    });
+                }}>Ban</div>
+                <div className="btn red">Timeout</div>
+                <div>{JSON.stringify(user.badges)}</div>
+                <div>{JSON.stringify(channel)}</div>
+                </div>
+                
+                {/* <p>info: { JSON.stringify(user, null, 4)}</p> */}
+                
+              </Modal>
+        
+        )
+                }
+            }).catch(function(err) {
+                //
+            });
+            
+
             let newMessage;
             if(/LUL/g.test(message)){
                 console.log('found')
@@ -94,56 +222,23 @@ export default class Chat extends Component {
             
             
             if(message==="test me"){
-                client.action("streampanelapp", "Your test message, hola").then(function(data) {
+                this.client.action("streampanelapp", "Your test message, hola").then(function(data) {
                     // data returns [channel]
                 }).catch(function(err) {
                     //
                 });
             }
-            this.myDivs.push(<Modal key={counter+=100} className="black"
-                // header={ (user.username).toUpperCase()}
-                trigger={<div className="chat-card" key={counter+=1} onClick={()=>{
-      
-                  
-                  }}>
-              <div className="badges">{badgeArray}</div>
-              
-              <div className="chat-name" style={{color:user.color}}>{user.username}</div>
-              
-              <div className="chat-message" key={counter+=1}>: {newMessage}</div>
-              
-          </div>}>
-                  <header>{ (user.username).toUpperCase()}</header>
-                  <div className="modal-btn-box">
-                  <div className="btn purple" onClick={()=>{
-                client.action("streampanelapp", `Hola, ${user.username}`).then(function(data) {
-                    // data returns [channel]
-                }).catch(function(err) {
-                    //
-                });
-            }}>Message</div>
-                <div className="btn blue">Mod</div>
-                <div className="btn red">Ban</div>
-                <div className="btn red">Timeout</div>
-                <div>{JSON.stringify(user.badges)}</div>
-                <div>{JSON.stringify(channel)}</div>
-                </div>
-                
-                {/* <p>info: { JSON.stringify(user, null, 4)}</p> */}
-                
-              </Modal>
-        
-        )
+            
         
             if(this.myDivs.length > 30) {
                 this.myDivs.shift()
             }
             // console.log(user);
-            this.setState({
-                message:message,
-                userName:user.username,
-                color: user.color
-            })
+            // this.setState({
+            //     message:message,
+            //     userName:user.username,
+            //     color: user.color
+            // })
             const chatSec = document.getElementById('chat-section');
             chatSec.scrollTop = chatSec.scrollHeight;
             
@@ -158,6 +253,7 @@ export default class Chat extends Component {
     })}
 
     render(){
+        
         
         return (
             this.myDivs

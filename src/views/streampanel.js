@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import MainSection from '../sections/mainsection'
-import Chat from '../sections/chatsection'
 import {streamer} from "../helpers/dummydata"
 import {clientID} from "../common/common"
 import axios from "axios"
@@ -59,8 +58,7 @@ class StreamPanel extends Component {
   render() {
     return (
       <div className="App">
-        <MainSection/>
-        <Chat-Section id="chat-section"><Chat chanBadges={this.state.badges} oauth={this.props.location.hash.slice(14,44)}/></Chat-Section>
+        <MainSection chanBadges={this.state.badges} oauth={this.props.location.hash.slice(14,44)}/>
       </div>
     );
   }
