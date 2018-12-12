@@ -12,7 +12,77 @@ body{
   
   
 }
+.command-item{
+  border: solid 1px rgb(58, 58, 58);
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  
+}
+.input-name{
+  color:white;
+}
 
+.input-name::placeholder{
+  color:rgb(70, 70, 70);
+  text-align: center;
+}
+.commands-box{
+  width:100%;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+
+}
+.command-btn{
+justify-items: flex-end;
+align-self: flex-end;
+width:20%;
+}
+.command-name{
+width: 20%;
+/* border:rgb(9, 175, 125) solid 1px; */
+height:100%;
+color:rgb(0, 221, 118);
+text-align: center;
+
+input{
+  color: white;
+}
+
+
+}
+.command-text{
+  display: flex;
+  width:60%;
+  height: 100%;
+  color:rgb(214, 0, 125);
+}
+.command-input-text{
+  width: 55%;
+}
+.commands{
+  width:80%;
+  justify-content: center;
+}
+.commands-input{
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+.commands-container{
+  display: flex;
+  flex-shrink: 0;
+  width: 100%;
+}
+.commands-modal{
+  width: 80%;
+  max-height: 100%;
+  background-color: rgba(0, 0, 0, 0.829);
+}
 
 .player{
   background: #1d7d74;
