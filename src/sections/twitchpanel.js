@@ -2,6 +2,8 @@ import React from 'react';
 import "./twitchpanel.css"
 import {streamer} from "../helpers/dummydata"
 import tmi from "tmi.js";
+import {Modal} from 'react-materialize'
+import Commands from './commands'
 // import SceneBtn from './scenebtn'
 // import {twitchBtns} from '../helpers/dummydata'
 
@@ -21,8 +23,8 @@ const twitchPanel = (props)=> {
     };
     const client = new tmi.client(options);
     client.connect();
-
-    
+        
+     
         const runAd=()=>{
             
             
@@ -44,12 +46,17 @@ const twitchPanel = (props)=> {
                 </i>
                 <div className='label'>RUN AD</div>
             </div>
-            <div className="twitch-btn"  onClick={()=>{console.log(" clicked")}}>
+            <Modal className="commands-modal"
+                header='Command Creator'
+                trigger={<div className="twitch-btn"  onClick={()=>{console.log(" clicked")}}>
                 <i className="material-icons">
                 adb
                 </i>
                 <div className='label'>COMMANDS</div>
-            </div>
+            </div>}>
+                <Commands/>
+                </Modal>
+            
             <div className="twitch-btn"  onClick={()=>{console.log(" clicked")}}>
                 <i className="material-icons">
                 chat

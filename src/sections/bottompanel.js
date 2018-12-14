@@ -1,53 +1,84 @@
-import React from "react";
-import './bottompanel.css'
+import React, {Component} from 'react';
+import './bottompanel.css';
+import ChannelStatus from './channelstatus'
 
-const BottomPanel = (props)=>{
-    let streamStatus = props.streamingStatus;
-    let statusMessage = props.statusMessage;
-    let statusText = null;
-    let btnClass= null;
-    let icon=null;
-    let iconStyle = {}
+class BottomPanel extends Component{
     
-    if(streamStatus){
-        statusText = "You are streaming"
-        btnClass = "streaming"
-        icon="cast_connected"
-        iconStyle={"color":"green",
-                    "font-size":"2em"
-                                
-    }
-    } else {statusText = "You are not streaming"
-        btnClass = "not-streaming"}
-        icon="cast"
-        iconStyle={"color":"white",
-                    "font-size":"2em"
-                                
-    }
-    if (statusMessage!==null){
-        statusText=null
+    
+    
+        
+        statusText = null
+        btnClass= null
+        icon=null
+        iconStyle = {}
+    
+    
+    
+
+    componentDidMount(){
+        console.log("MY SREAMINGSTATUS IN BOPA",this.props.OBSOBJ.streamingStatus)
+    
+    console.log("MY STATE IN BOTOMPANEL", this)
+    
+    
+
     }
 
+    
+    
+render(){
+    if(this.props.OBSOBJ.streamingStatus){
+        
+        this.statusText ="You are streaming"
+        this.btnClass ="streaming"
+        this.icon="cast_connected"
+        this.iconStyle={"color":"green",
+                    "font-size":"2em"}
+        
+    
+                            
+
+} else {
+
+    
+        this.statusText ="You are not streaming"
+        this.btnClass ="not-streaming"
+        this.icon="cast"
+        this.iconStyle={"color":"white",
+                    "font-size":"2em"}
+        
+    
+                            
+}
+if (this.props.OBSOBJ.statusMessage!==null){
+    this.statusText=null
+}
     return(
         
         <div className="bottom-panel" >
             <div className="bottom-left-container">
-                <div className={btnClass} onClick={()=>{props.func()}}>
-                    <div className="label2">{statusText}{statusMessage}
+                <div className={this.btnClass} onClick={()=>{this.props.func()
+                }}>
+                    <div className="label2">{this.props.OBSOBJ.statusMessage}{this.statusText}
                     </div>
-                    <i className="material-icons" style={iconStyle}>
-                    {icon}
+                    <i className="material-icons" style={this.iconStyle}>
+                    {this.icon}
                     </i>
                 </div>
-                <div className={btnClass}>
-                    <div className="label2">PROFILES</div>
+                <div className="profiles-btn">
+                    <div className="label2">{this.props.OBSOBJ.streamingStatus}</div>
                 </div>
                 
+            </div>
+            <div className="bottom-middle-container">
+                <ChannelStatus channelOBJ={this.props.ChannelOBJ}/>
             </div>
             
             
         </div>
     )
+}
+    
 }
 
 export default BottomPanel;

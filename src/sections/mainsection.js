@@ -7,6 +7,8 @@ import Obs from '../helpers/obs-server.js';
 import BottomPanel from "./bottompanel";
 import TwitchPanel from "./twitchpanel"
 import Chat from "./chatsection"
+import axios from 'axios'
+import { clientID } from '../common/common';
 // import {Modal, Button, Icon} from "react-materialize"
 
 class MainSection extends Component{
@@ -16,9 +18,20 @@ class MainSection extends Component{
     ad = false;
     
     state = {
-        
+        channel:{
+            
+            // game:null,
+            // status:null,
+            // userID:null,
+            // partner:null,
+            // name: null,
+            // email: null,
+            // mature: null,
+            // views: null,
+
+        },
         statusMessage:null,
-        streamStatus: null,
+        streamingStatus: null,
         currentScene: "",
         scenes: [],
         sources: [{
@@ -29,6 +42,35 @@ class MainSection extends Component{
         
 
 
+    }
+// need username, userID, game, status, live status, viewers, followers,
+    getUserID=()=>{
+        const headers = {"headers":{
+            "Client-ID": clientID,
+            "Authorization": 'OAuth '+this.props.oauth
+        }}
+         axios.get("https://api.twitch.tv/kraken/channel",headers).then(data=>{
+            console.log("THIS IS MY USERID AXIOS DATA: ",data.data)
+            
+            
+            this.setState({
+                channel: {
+                    statusFunc: this.getUserID,
+                    oauth: this.props.oauth,
+                    game: data.data.game,
+                    status: data.data.status,
+                    userID: data.data["_id"],
+                    partner:data.data.partner,
+                    name: data.data.name,
+                    email: data.data.email,
+                    mature: data.data.mature,
+                    views: data.data.views,
+                    streamKey: data.data.stream_key
+
+                }
+                
+            })
+        })
     }
    
     runAd=()=>{
@@ -44,9 +86,12 @@ class MainSection extends Component{
     }
 
     toggleStream = ()=>{
+        console.log("CLICKED TOGGLESTREAM")
         this.server.send({'request-type': 'StartStopStreaming'}).then(data=>{
-            
-    })}
+            console.log("TOGGLESTREAM RESP DATA", data)
+    })
+
+}
     toggleSource = (sourceToToggle)=>{
     
         this.server.send({'request-type': 'GetCurrentScene'}).then(data=>{
@@ -102,7 +147,7 @@ class MainSection extends Component{
                 this.server.send({"request-type": "GetStreamingStatus"}).then(data=>{
                     console.log("MY STREAM STATUS OBJ", data.streaming)
                     this.setState({
-                        streamStatus:data.streaming
+                        streamingStatus:data.streaming
                     })
                 })
 
@@ -144,8 +189,10 @@ class MainSection extends Component{
            }
            componentDidMount(){
             
+            this.getUserID()
+            
             this.getFirstScenesAndSources()
-            // this.getStreamingStatus();
+            
 
             
             };
@@ -157,31 +204,39 @@ class MainSection extends Component{
 
            
     handleServerEvent(newEventData){
+        
+        
         console.log("EVENT FIRED", newEventData);
         if(newEventData["update-type"]==="SceneItemVisibilityChanged" || newEventData["update-type"]==="SwitchScenes"){
             this.getFirstScenesAndSources()
 
         }
         if(newEventData["update-type"]==="StreamStopped"){
+            console.log("REEEEEEEEEEE STOPPED")
             this.setState({
-                streamStatus: false,
+                streamingStatus: false,
                 statusMessage: null,
             })
+            this.getFirstScenesAndSources()
         }else if ( newEventData["update-type"]==="StreamStopping"){
             this.setState({
                 statusMessage: "Stream is stopping..."
             })
+            this.getFirstScenesAndSources()
         } else if (newEventData["update-type"]==="StreamStarted"){
+            console.log("REEEEEEEEEEE STARTED")
             this.setState({
-                streamStatus: true,
+                streamingStatus: true,
                 statusMessage: null
             })
+            this.getFirstScenesAndSources()
         } else if (newEventData["update-type"]==="StreamStarting"){
             this.setState({
                 statusMessage:"Stream is starting..."
             })
+            this.getFirstScenesAndSources()
         }
-        
+        console.log("THIS DOESNT CHANGE!!!!!!!!!!!!!!!!!!!!!!!!!!!!",this.state.streamingStatus)
         
         
     }
@@ -197,7 +252,8 @@ class MainSection extends Component{
                 
             </div>
             
-            <BottomPanel func={this.toggleStream} statusMessage={this.state.statusMessage} streamingStatus={this.state.streamStatus}/>
+            <BottomPanel func={this.toggleStream} ChannelOBJ={this.state.channel} OBSOBJ={this.state}/>
+            
         </div>
             <Chat-Section id="chat-section"><Chat chanBadges={this.props.chanBadges} 
              oauth={this.props.oauth}/></Chat-Section>

@@ -58,7 +58,7 @@ class StreamPanel extends Component {
   render() {
     return (
       <div className="App">
-        <MainSection chanBadges={this.state.badges} oauth={this.props.location.hash.slice(14,44)}/>
+        <MainSection chanBadges={this.state.badges} oauth={this.token}/>
       </div>
     );
   }
