@@ -21,7 +21,8 @@ class VideoBox extends React.Component{
     render(){
         return ( 
             <div  className={ this.state.condition ? "video-box-small" : "video-box-big" }
-            >   <div className="click" onClick={this.handleClick}>CLICK</div>
+            >   
+            
                 <iframe 
                     title="video"
                     src={this.link}

@@ -2,18 +2,39 @@
     width: 100%;
     height:100%;
     padding: 2px;
-    background-color: rgba(26, 26, 26, 0.952);
+    background-color: rgba(0, 0, 0, 0.753);
     color: aliceblue;
     display: flex;
     flex-direction: row;
 }
 .game-playing{
-    background-color: black
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+
+    display: flex;
+    height: 20%;
+    align-items: center;
+    justify-content: center;
+    color:rgb(143, 223, 255);
+    background-color: rgb(0, 11, 109);
+    border-radius: 2px;
+}
+.text-div{
+    width:80%;
 }
 .channel-title{
-    background-color: rgb(0, 65, 65);
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+    color:rgb(94, 0, 0);
+    background-color: rgb(255, 255, 255);
+    border-radius: 3px;
+    /* margin: 5%; */
+    display: flex;
+    height: 40%;
+    align-items: center;
+    justify-content: center;
 }
 .bottom-left-container{
+    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+
     display: flex;
     width:20%;
     padding: 2px;
@@ -72,4 +93,34 @@
     background-color: rgb(0, 47, 255);
     color: rgb(255, 255, 255);
     display: flex;
+}
+
+.source-panel>.twitch-btn>div{
+    height:100%;
+}
+
+.autocomplete-content li img {
+    height: 90%;
+    width: 45px;
+    /* margin: 5px 15px; */
+    border-radius:0%;
+    padding: 0%;
+}
+/* .autocomplete-content >li>span  {
+    background-color: aqua;
+    border:1px solid black;
+} */
+.channel-status-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around
+}
+
+.update-card{
+    height: 30%;
+    background-color: rgb(71, 0, 61);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
 }

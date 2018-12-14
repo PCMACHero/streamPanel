@@ -18,9 +18,10 @@ const twitchLogin = ()=> {
                 <div className="nav-btn">About</div>
                 <div className="nav-btn">Setup</div>
             </div>
+            <div className="heading">StreamPanelApp</div>
             <div id="login-box">
-                <div className="login-text">Log In To Begin</div>
-                <a className="twitch-btn" href= {URL}>LOGIN</a>
+                <div className="login-text">Welcome to Streampanel, lets get started</div>
+                <a className="twitch-btn" href= {URL}><div className="login">Login</div></a>
 
             </div>
         </div>

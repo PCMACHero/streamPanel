@@ -43,6 +43,11 @@ class MainSection extends Component{
 
 
     }
+    // disableAC=()=>{
+    //     $(".autocomplete").attr({
+    //         "autocoplete":"off"
+    //     })
+    // }
 // need username, userID, game, status, live status, viewers, followers,
     getUserID=()=>{
         const headers = {"headers":{
@@ -125,11 +130,9 @@ class MainSection extends Component{
            }
 
            
+           
                 
-                
-           connectOBS(){
-               
-           } 
+           
             
             
            getFirstScenesAndSources(){
@@ -188,10 +191,16 @@ class MainSection extends Component{
             })
            }
            componentDidMount(){
-            
+            //    this.disableAC()
+            try{
+                this.getFirstScenesAndSources()
+
+            }catch(err){
+                console.log(err)
+            }
             this.getUserID()
             
-            this.getFirstScenesAndSources()
+            
             
 
             

@@ -22,8 +22,9 @@
 }
 
 .login-text {
-    color:white;
-    font-size: 3rem;
+    color:rgb(255, 255, 255);
+    font-size: 2rem;
+    font-family: 'Roboto Condensed', sans-serif;
 }
 
 .twitch-btn{

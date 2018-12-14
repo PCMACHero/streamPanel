@@ -63,7 +63,7 @@ export default class CommandsInput extends Component{
                         <div>{this.commandsTurnedToArray[i][0]}</div>
                     </div>
                     <div className="command-text">"{this.commandsTurnedToArray[i][1]}"</div>
-                    <div className="btn command-btn red" onClick={()=>{
+                    <div className="s1 btn right-align red" onClick={()=>{
                         console.log("clicked to delete: ",this.commandsTurnedToArray[i])
                         this.deleteCommand(i)
                         
@@ -134,13 +134,13 @@ export default class CommandsInput extends Component{
                 <form className="commands-input">
                     <div className="input-field">
                         <input className="input-name" name="name" autoComplete="off" id="name"placeholder="example: !PSN" type="text" onChange={this.changeHandler} value={this.state.name}/>
-                        <label for="name">Command Name</label>
+                        {/* <label for="name">Command Name</label> */}
                     </div>
                     <div className="input-field command-input-text">
                         <input className="input-name" name="response" autoComplete="off" id="response" placeholder={`"My PSN is StreamPanelApp"`} type="text" onChange={this.changeHandler} value={this.state.response}/>
-                        <label for="response">Command Response</label>
+                        {/* <label for="response">Command Response</label> */}
                     </div>
-                    <div onClick={this.addCommand} className="s1 btn right-align" waves='light'>ADD</div>
+                    <div onClick={this.addCommand} className="s1 btn right-align purple" waves='light'>ADD</div>
                 </form>
                 <div className="commands">
                     {this.commandsToShow}

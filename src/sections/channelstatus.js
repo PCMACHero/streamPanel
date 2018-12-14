@@ -11,10 +11,10 @@ class ChannelStatus extends Component{
         "Client-ID": clientID,
     }}
     state={
-        currentGame: null,
-        newGame:null,
-        currentTitle:null,
-        newTitle:null,
+        currentGame: "",
+        newGame:"",
+        currentTitle:"",
+        newTitle:"",
     }
     ChannelData = this.props.data
     
@@ -49,27 +49,38 @@ class ChannelStatus extends Component{
     render(){
         return(
             <Modal className="commands-modal"
-                header='Update Channel'
+                header='UPDATE CHANNEL'
                 trigger={<div className="channel-status-box">
                             <div className="game-playing">{this.props.channelOBJ.game}</div>
-                            <div className="channel-title">"{this.props.channelOBJ.status}"</div>
+                            <div className="channel-title">
+                                <div className="text-div">"{this.props.channelOBJ.status}"</div>
+                            </div>
+                            
+                            <div className="update-card">
+                                <div className="text-div">UPDATE CHANNEL</div>
+                                <i class="material-icons">
+                                    update
+                                    </i>
+                            </div>
+                            
                         </div>}>
                         
                     <form className="commands-input">
                         <Row>
                             <Autocomplete
-                            
+                                m={12}
                                 onChange={this.changeHandler}
                                 onAutocomplete={(e)=>{this.setState({
                                     newGame:e
                                 })}}
-
-                                title='Update Game/Category'
+                                // autocomplete="off"
+                                // title='Update Game/Category'
                                 className="input-name"
                                 data={this.gamesList}
                                 name="newGame"
                                 id="newGame"
-                                autoComplete="off"
+                                placeholder="Enter Game/Category"
+                                
                                 
                                 
                                 
@@ -82,10 +93,19 @@ class ChannelStatus extends Component{
                             <label for="new-name">Update Game</label>
                         </div> */}
                         <div className="input-field command-input-text">
-                            <input className="input-name" name="newTitle" autoComplete="off" id="new-title"placeholder={`Current: ${this.props.channelOBJ.status}`} type="text" onChange={this.changeHandler} value={this.state.newTitle}/>
-                            <label for="new-name">Update Title</label>
+                            <input className="input-name" name="newTitle" autoComplete="off" id="new-title"placeholder={`Enter Title ex: ${this.props.channelOBJ.status}`} type="text" onChange={this.changeHandler} value={this.state.newTitle}/>
+                            {/* <label for="new-title">Update Title</label> */}
                         </div>
-                        <div onClick={()=>{
+                        
+
+                    </form>
+
+                    
+
+
+
+                
+                <div onClick={()=>{
                             console.log(this.state.newGame)
                     axios({
                         method: 'put', //you can set what request you want to be
@@ -107,14 +127,7 @@ class ChannelStatus extends Component{
                         this.props.channelOBJ.statusFunc();
                       }, 500);
                       
-                }} className="s1 btn right-align" waves='light'>Update</div>
-
-                    </form>
-                    
-
-
-
-                <p>Lorem ipsum</p>
+                }} className="s1 btn right-align #4a148c purple darken-4" waves='light'>Update</div>
             </Modal>
             
         )

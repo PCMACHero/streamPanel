@@ -47,7 +47,7 @@ const twitchPanel = (props)=> {
                 <div className='label'>RUN AD</div>
             </div>
             <Modal className="commands-modal"
-                header='Command Creator'
+                header='COMMAND CREATOR'
                 trigger={<div className="twitch-btn"  onClick={()=>{console.log(" clicked")}}>
                 <i className="material-icons">
                 adb
