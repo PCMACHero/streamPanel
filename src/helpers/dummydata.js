@@ -1,6 +1,19 @@
 //OBS Scene List Object
-export const streamer = "shroud"
+import axios from 'axios'
+import {clientID} from "../common/common"
+const headers= {"headers": {
+  "Client-ID": clientID
 
+}}
+// const URL = "https://api.twitch.tv/kraken/streams/?channel=drdisrespect,shroud,chocotaco,tsm_viss,parasite,goldglove"
+// export const streamer = ()=>{
+//   axios.get(URL, headers).then(data=>{
+//   console.log(data.data.streams[0].channel.name,"AXIOS DATA")
+//   return data.data.streams[0].channel.name
+// })
+// return "parasite"
+// }
+export const streamer = "drdisrespect"
 export const OBSSceneObj = 
 { 'current-scene': 'In-Game',
   'message-id': '1',
