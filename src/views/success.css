@@ -1,0 +1,23 @@
+.container-pass{
+    height:100vh;
+    width:100%;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    border:solid red 1px;
+    flex-shrink:0;
+    background-color: rgba(0, 0, 0, 0.815);
+}
+.choose-password{
+    
+    justify-content: center;
+    align-items: center;
+    border:solid 1px red;
+    width: 50vw;
+    height: 50vh;
+}
+
+.greeting{
+    text-align: center;
+}

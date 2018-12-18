@@ -13,7 +13,7 @@ const headers= {"headers": {
 // })
 // return "parasite"
 // }
-export const streamer = "teepee"
+export const streamer = "katgunn"
 export const OBSSceneObj = 
 { 'current-scene': 'In-Game',
   'message-id': '1',

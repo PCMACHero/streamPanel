@@ -192,12 +192,8 @@ class MainSection extends Component{
            }
            componentDidMount(){
             //    this.disableAC()
-            try{
+            
                 this.getFirstScenesAndSources()
-
-            }catch(err){
-                console.log(err)
-            }
             this.getUserID()
             
             

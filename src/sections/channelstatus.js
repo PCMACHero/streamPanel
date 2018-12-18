@@ -4,6 +4,7 @@ import {clientID} from '../common/common'
 import {streamer} from '../helpers/dummydata'
 import {Modal, Row, Autocomplete} from 'react-materialize'
 import { setInterval } from 'timers';
+import bigGameList from '../helpers/gamelist'
 
 class ChannelStatus extends Component{
     gamesList={}
@@ -26,23 +27,37 @@ class ChannelStatus extends Component{
         
     }
     getGamesList=()=>{
-        axios.get("https://api.twitch.tv/helix/games/top?first=100",this.headers).then(data=>{
-            
-            
-            for(let i=0; i<data.data.data.length; i++){
-                let boxURL = data.data.data[i].box_art_url.split("")
+         for(let i=0; i<bigGameList.length; i++){
+                let boxURL = bigGameList[i].box_art_url.split("")
                 boxURL.splice(boxURL.length-20)
                 let boxURL2 = boxURL.join("")+"150x200.jpg"
 
-                this.gamesList[data.data.data[i].name]=boxURL2
-            }
-            console.log("MY 100 GAMES DATA:", this.gamesList)
-        })
+                this.gamesList[bigGameList[i].name]=boxURL2
+                //add to DB
+         }
 
-        
-    }
+            
+            console.log("MY 100 GAMES DATA:", (bigGameList))
+            //static game list until build list to mongo
+            // axios({
+            
+            //     url: '/twitchgames',
+            //     method: 'post',
+            //     "headers": {
+            //         "Content-Type": "application/json",
+                    
+            //                 },
+            //     "data": {
+            //         "list": bigGameList
+            //             }
+            //   })
+            
+            }
+
+
     componentDidMount(){
         this.getGamesList()
+        
         
         // console.log("weeeeeeeeeeeeee",this.ChannelData)
     }
@@ -68,6 +83,8 @@ class ChannelStatus extends Component{
                     <form className="commands-input">
                         <Row>
                             <Autocomplete
+                                limit={10}
+                                minLength={2}
                                 m={12}
                                 onChange={this.changeHandler}
                                 onAutocomplete={(e)=>{this.setState({
