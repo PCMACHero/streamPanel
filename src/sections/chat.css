@@ -1,0 +1,73 @@
+.emote{
+    height:25px;
+    width:25px;
+    /* display: inline; */
+    margin-top: -10px;
+    
+    
+}
+.badge{
+    height:20px;
+    display: flex;
+    
+    
+}
+.badges{
+    height:20px;
+    display: flex;
+    
+    
+}
+.message-intro-box{
+    float: left;
+    
+    height: 20px;
+    padding: 0;
+    margin:0;
+    font-size: 0;
+
+    
+    
+    
+}
+.message-intro{
+    display: flex;
+    flex-direction: row;
+}
+
+
+
+.chat-message {
+    
+    /* display: inline-block; */
+    color: #fff;
+    
+    
+    
+}
+.chat-name {
+    color: rgb(0, 255, 21);
+    
+    font-size: 1rem;
+    display: flex;
+    
+  }
+
+  .chat-card {
+      width: 100%;
+    padding: 5px;
+    /* display: inline-block; */
+
+    
+    
+    background-color: #090f18d8;
+    
+    /* border-bottom: .5px solid rgb(0, 54, 68); */
+    
+    
+    animation: fadeIn 1s linear;
+    animation: scroll 1s linear;
+    margin: 1px;
+    
+    /* flex-direction: row; */
+  }

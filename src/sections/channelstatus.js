@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import axios from "axios"
 import {clientID} from '../common/common'
-import {streamer} from '../helpers/dummydata'
+import {streamer, streamerID} from '../helpers/dummydata'
 import {Modal, Row, Autocomplete} from 'react-materialize'
-import { setInterval } from 'timers';
+import { setInterval, setTimeout } from 'timers';
 import bigGameList from '../helpers/gamelist'
 
 class ChannelStatus extends Component{
@@ -16,6 +16,7 @@ class ChannelStatus extends Component{
         newGame:"",
         currentTitle:"",
         newTitle:"",
+        gameCover:""
     }
     ChannelData = this.props.data
     
@@ -25,6 +26,21 @@ class ChannelStatus extends Component{
             [event.target.name]: event.target.value
         })
         
+    }
+    getGameCover=()=>{
+        axios.get("https://api.twitch.tv/helix/games?name="+this.props.channelOBJ.game,this.headers).then(data=>{
+        console.log("game cover---->", data)  
+        
+        let boxURL = data.data.data[0].box_art_url.split("")
+                boxURL.splice(boxURL.length-20)
+                let boxURL2 = boxURL.join("")+"150x200.jpg"
+
+                
+        
+        this.setState({
+                gameCover:boxURL2
+            })
+        })
     }
     getGamesList=()=>{
          for(let i=0; i<bigGameList.length; i++){
@@ -56,6 +72,10 @@ class ChannelStatus extends Component{
 
 
     componentDidMount(){
+        setTimeout(() => {
+            this.getGameCover()
+        }, 1000);
+        
         this.getGamesList()
         
         
@@ -66,14 +86,17 @@ class ChannelStatus extends Component{
             <Modal className="commands-modal"
                 header='UPDATE CHANNEL'
                 trigger={<div className="channel-status-box">
-                            <div className="game-playing">{this.props.channelOBJ.game}</div>
+                            <div className="follows-title">Category / Game</div>
+                            <div className="game-playing"><img className="game-cover" src={this.state.gameCover}/><div className="game-label">{this.props.channelOBJ.game}</div></div>
+                            <div className="follows-title">Channel Title</div>
                             <div className="channel-title">
+                            
                                 <div className="text-div">"{this.props.channelOBJ.status}"</div>
                             </div>
                             
                             <div className="update-card">
                                 <div className="text-div">UPDATE CHANNEL</div>
-                                <i class="material-icons">
+                                <i className="material-icons">
                                     update
                                     </i>
                             </div>

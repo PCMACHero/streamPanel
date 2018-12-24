@@ -1,6 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import VideoBox from '../sections/videobox/videobox';
 import ScenePanel from './scenepanel';
+import tmi from "tmi.js";
 import SourcePanel from './sourcepanel';
 import {streamer} from "../helpers/dummydata"
 import Obs from '../helpers/obs-server.js';
@@ -16,7 +17,20 @@ class MainSection extends Component{
     server = new Obs();
     messageList = {};
     ad = false;
-    
+    options = {
+        options: {
+            debug: true
+        },
+        connection: {
+            reconnect: true
+        },
+        identity: {
+            username: "streampanelapp",
+            password: "oauth:"+this.props.oauth
+        },
+        channels: [streamer]
+    };
+    client = new tmi.client(this.options);
     state = {
         channel:{
             
@@ -192,6 +206,7 @@ class MainSection extends Component{
            }
            componentDidMount(){
             //    this.disableAC()
+            this.client.connect();
             
                 this.getFirstScenesAndSources()
             this.getUserID()
@@ -257,10 +272,10 @@ class MainSection extends Component{
                 
             </div>
             
-            <BottomPanel func={this.toggleStream} ChannelOBJ={this.state.channel} OBSOBJ={this.state}/>
+            <BottomPanel func={this.toggleStream} ChannelOBJ={this.state.channel} client={this.client} OBSOBJ={this.state}/>
             
         </div>
-            <Chat-Section id="chat-section"><Chat chanBadges={this.props.chanBadges} 
+            <Chat-Section key={1000000}  id="chat-section"><Chat key={19000} client={this.client} chanBadges={this.props.chanBadges} partner={this.state.channel.partner} 
              oauth={this.props.oauth}/></Chat-Section>
             </Fragment>
             

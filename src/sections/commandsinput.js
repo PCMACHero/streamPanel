@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Button} from 'react-materialize'
 
 export default class CommandsInput extends Component{
+    counter=0
     objForLS = {}
     getLocalStorageCommands = {}
     commandsTurnedToArray= []
@@ -129,8 +130,9 @@ export default class CommandsInput extends Component{
 
     }
     render(){
+       this.counter+=10
         return (
-            <div className="commands-box">
+            <div className="commands-box" key={this.counter+=5}>
                 <form className="commands-input">
                     <div className="input-field">
                         <input className="input-name" name="name" autoComplete="off" id="name"placeholder="example: !PSN" type="text" onChange={this.changeHandler} value={this.state.name}/>
@@ -142,7 +144,7 @@ export default class CommandsInput extends Component{
                     </div>
                     <div onClick={this.addCommand} className="s1 btn right-align purple" waves='light'>ADD</div>
                 </form>
-                <div className="commands">
+                <div className="commands" key={this.counter+=2}>
                     {this.commandsToShow}
                 </div>
                 
