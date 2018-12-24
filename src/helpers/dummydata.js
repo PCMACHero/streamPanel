@@ -13,7 +13,13 @@ const headers= {"headers": {
 // })
 // return "parasite"
 // }
-export const streamer = "katgunn"
+const idOBJ={
+  imaqtpie: "24991333",
+  hutch: "8815236"
+
+}
+export const streamer = "hutch"
+export const streamerID= idOBJ[streamer]
 export const OBSSceneObj = 
 { 'current-scene': 'In-Game',
   'message-id': '1',

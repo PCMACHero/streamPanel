@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import './bottompanel.css';
 import ChannelStatus from './channelstatus'
+import Notifications from './notifications'
+import Numbers from './numbers'
 
 class BottomPanel extends Component{
     
@@ -45,7 +47,7 @@ render(){
         this.btnClass ="not-streaming"
         this.icon="cast"
         this.iconStyle={"color":"white",
-                    "font-size":"2em"}
+                    fontSize:"2em"}
         
     
                             
@@ -66,12 +68,15 @@ if (this.props.OBSOBJ.statusMessage!==null){
                     </i>
                 </div>
                 <div className="profiles-btn">
-                    <div className="label2">{this.props.OBSOBJ.streamingStatus}</div>
+                    <Numbers/>
                 </div>
                 
             </div>
             <div className="bottom-middle-container">
                 <ChannelStatus channelOBJ={this.props.ChannelOBJ}/>
+            </div>
+            <div className="bottom-right-container">
+                <Notifications userID={this.props.ChannelOBJ.userID} client={this.props.client}/>
             </div>
             
             

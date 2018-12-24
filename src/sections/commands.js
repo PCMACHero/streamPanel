@@ -5,7 +5,7 @@ export default class Commands extends Component{
     render(){
         return (
             <div className="commands-container">
-                <CommandInput/>
+                <CommandInput key={44000}/>
             </div>
         )
     }
