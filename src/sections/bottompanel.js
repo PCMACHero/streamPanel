@@ -8,16 +8,17 @@ class BottomPanel extends Component{
     
     
     
-        
+        oauth= this.props.oauth
         statusText = null
         btnClass= null
         icon=null
         iconStyle = {}
     
-    
+        
     
 
     componentDidMount(){
+        console.log("my chan obj", this.props.channelOBJ)
         console.log("MY SREAMINGSTATUS IN BOPA",this.props.OBSOBJ.streamingStatus)
     
     console.log("MY STATE IN BOTOMPANEL", this)
@@ -68,15 +69,16 @@ if (this.props.OBSOBJ.statusMessage!==null){
                     </i>
                 </div>
                 <div className="profiles-btn">
-                    <Numbers/>
+                <Numbers channelOBJ={this.props.ChannelOBJ} />
                 </div>
                 
             </div>
             <div className="bottom-middle-container">
-                <ChannelStatus channelOBJ={this.props.ChannelOBJ}/>
+                <ChannelStatus channelOBJ={this.props.ChannelOBJ} oauth={this.oauth}/>
             </div>
             <div className="bottom-right-container">
                 <Notifications userID={this.props.ChannelOBJ.userID} client={this.props.client}/>
+                
             </div>
             
             

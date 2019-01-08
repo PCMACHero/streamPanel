@@ -27,8 +27,8 @@ class ChannelStatus extends Component{
         })
         
     }
-    getGameCover=()=>{
-        axios.get("https://api.twitch.tv/helix/games?name="+this.props.channelOBJ.game,this.headers).then(data=>{
+    getGameCover=(game)=>{
+        axios.get("https://api.twitch.tv/helix/games?name="+game,this.headers).then(data=>{
         console.log("game cover---->", data)  
         
         let boxURL = data.data.data[0].box_art_url.split("")
@@ -42,6 +42,39 @@ class ChannelStatus extends Component{
             })
         })
     }
+
+    getChannelStatus=()=>{
+        // const oauth = this.props.oauth
+        const oauth = "xp5b0vv17q14ue9l0zw9x8hpreznkn"
+        const headers = {"headers":{
+            "Client-ID": clientID,
+            "Authorization": 'OAuth '+oauth
+        }}
+         axios.get("https://api.twitch.tv/kraken/channel",headers).then(data=>{
+            console.log("GET CHAN STATUS!!!!: ",data.data)
+            this.getGameCover(data.data.game)
+            
+            this.setState({
+                currentGame: data.data.game,
+                currentTitle: data.data.status,
+                channel: {
+                    
+                    
+                    
+                    // userID: data.data["_id"],
+                    // partner:data.data.partner,
+                    // name: data.data.name,
+                    // email: data.data.email,
+                    // mature: data.data.mature,
+                    // views: data.data.views,
+                    // streamKey: data.data.stream_key
+
+                }
+                
+            })
+        })
+    }
+
     getGamesList=()=>{
          for(let i=0; i<bigGameList.length; i++){
                 let boxURL = bigGameList[i].box_art_url.split("")
@@ -72,9 +105,8 @@ class ChannelStatus extends Component{
 
 
     componentDidMount(){
-        setTimeout(() => {
-            this.getGameCover()
-        }, 1000);
+        this.getChannelStatus()
+        
         
         this.getGamesList()
         
@@ -87,15 +119,15 @@ class ChannelStatus extends Component{
                 header='UPDATE CHANNEL'
                 trigger={<div className="channel-status-box">
                             <div className="follows-title">Category / Game</div>
-                            <div className="game-playing"><img className="game-cover" src={this.state.gameCover}/><div className="game-label">{this.props.channelOBJ.game}</div></div>
+                            <div className="game-playing"><img className="game-cover" src={this.state.gameCover}/><div className="game-label">{this.state.currentGame}</div></div>
                             <div className="follows-title">Channel Title</div>
                             <div className="channel-title">
                             
-                                <div className="text-div">"{this.props.channelOBJ.status}"</div>
+                                <div className="text-div">"{this.state.currentTitle}"</div>
                             </div>
                             
                             <div className="update-card">
-                                <div className="text-div">UPDATE CHANNEL</div>
+                                UPDATE CHANNEL
                                 <i className="material-icons">
                                     update
                                     </i>
@@ -154,18 +186,22 @@ class ChannelStatus extends Component{
                         headers: {
                             "Accept": "application/vnd.twitchtv.v5+json",
                             "Client-ID": clientID,
-                            "Authorization": 'OAuth ' + this.props.channelOBJ.oauth,
+                            "Authorization": 'OAuth ' + "xp5b0vv17q14ue9l0zw9x8hpreznkn",
+                            // this.props.channelOBJ.oauth,
                             'Content-Type': 'application/json'
                         }
+                      }).then(data=>{
+                        this.setState({
+                            newGame:"",
+                            newTitle:"",
+                            currentGame:data.data.game,
+                            currentTitle:data.data.status
+                        })
+                        this.getGameCover(this.state.currentGame)
                       })
-                      console.log(this.state)
-                      this.setState({
-                          newGame:"",
-                          newTitle:""
-                      })
-                      setTimeout(() => {
-                        this.props.channelOBJ.statusFunc();
-                      }, 500);
+                      
+                      
+                      
                       
                 }} className="s1 btn right-align #4a148c purple darken-4" waves='light'>Update</div>
             </Modal>

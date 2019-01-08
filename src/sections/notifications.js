@@ -6,39 +6,56 @@ import './notifications.css'
 import { streamerID } from '../helpers/dummydata';
 
 class Notifications extends Component{
+    counters = 0
+    counters2 = 10000
     arrOfSubs=[]
     state={
         array:[<div key={0}>Fetching Recents...</div>],
         arrayOfSubs:[]
     }
-getSubs(){
+getSubs=()=>{
     
     this.props.client.on("subscription", (channel, username, method, message, userstate)=> {
-       this.arrOfSubs.unshift(<div className="sub">{`${username} sub`}</div>)
-       if(this.arrOfSubs.length>7){
-        this.arrOfSubs.pop()
-      }
-        this.setState({
-        arrayOfSubs: this.arrOfSubs
+
+        console.log("NEW SUB")
+        this.counters+=1
+    //    this.arrOfSubs.push(<div key={this.counters} className="sub">{`${username} sub`}</div>)
+
+    //    if(this.arrOfSubs.length>7){
+    //     this.arrOfSubs.pop()
+    //   }
+    
+    this.setState(prevState => ({
+        arrayOfSubs: [...prevState.arrayOfSubs, <div key={this.counters} className="sub">{`${username} sub`}</div>]
       })
       
-    });
-    
+      )
+      let elem = document.getElementsByClassName("follow")
+      elem.scrollBottom = elem.scrollHeight
+    })
     this.props.client.on("resub", (channel, username, months, message, userstate, methods)=> {
         console.log("RESUB METHOD: ",methods)
-        this.arrOfSubs.unshift(<div className="resub">{`${username} Resub x${months}`}</div>)
-        if(this.arrOfSubs.length>7){
-            this.arrOfSubs.pop()
-          }
-            this.setState({
-            arrayOfSubs: this.arrOfSubs
-          })
-     });
+        this.counters2+=1
+        this.arrOfSubs.push(<div key={this.counters2} className="resub">{`${username} Resub x${months}`}</div>)
+        console.log("NEW ARR",this.arrOfSubs)
+       
+        this.setState(prevState => ({
+            arrayOfSubs: [...prevState.arrayOfSubs, <div key={this.counters2} className="resub">{`${username} Resub x${months}`}</div>]
+          }))
+          let elem = document.getElementsByClassName("follow")
+          elem.scrollBottom = elem.scrollHeight
+  }
+  
+    )
 }
+    
+            
+     
+
 
 getRecentFollows=()=>{
     // let URL = "https://api.twitch.tv/helix/users/follows?first=20&to_id="+this.props.userID
-    let URL = "https://api.twitch.tv/helix/users/follows?first=5&to_id="+streamerID
+    let URL = "https://api.twitch.tv/helix/users/follows?first=6&to_id="+streamerID
     let headers = {
         headers: {
             "Client-ID": clientID,
@@ -46,7 +63,7 @@ getRecentFollows=()=>{
         }
     }
     axios.get(URL,headers).then(data=>{
-        
+        let message=""
         console.log("MY AXIOS FOLLOWERS DATA: ", data.data.data.length)
         let tempArr = []
         for(let i = 0; i<data.data.data.length; i++){
@@ -55,16 +72,17 @@ getRecentFollows=()=>{
             let minutes = (now-timeStamp)/1000/60
             let time = ""
             let notiClass = ""
-            if(minutes>=1){
-
-                time = Math.floor(minutes)
-            } else {
+            time = Math.floor(minutes)
+            if(time>=1){
+                message=`${data.data.data[i].from_name} ${time}m ago`
+            } else if(minutes<1){
                 notiClass="animated infinite pulse"
                 time = "now"
+                message=`${data.data.data[i].from_name} now`
             }
         
 
-            tempArr.push(<div key={i} className={"notification "+notiClass}>{data.data.data[i].from_name} {time}m</div>)
+            tempArr.push(<div key={i} className={"notification "+notiClass}>{message}</div>)
         } this.setState({
             array: tempArr
         })
@@ -76,6 +94,7 @@ getRecentFollows=()=>{
 componentDidMount(){
 
     this.getSubs()
+    // this.getResubs()
 
     // this.props.client.on("subscription", function (channel, username, method, message, userstate) {
     //     console.log("MY SUB LISTENER: ",username, method, channel, message, userstate)
@@ -83,6 +102,7 @@ componentDidMount(){
 
 
     setInterval(() => {
+        
         this.getRecentFollows()
     }, 5000);
 }
@@ -93,11 +113,22 @@ render(){
         <div className="notifications-container">
             <div className="follows-container">
                 <div className="follows-title">Recent Follows</div>
-                {this.state.array}
+                <div className="follows">{this.state.array}</div>
+                
+                <div className="follows-title">Recent Subs</div>
+                <div className="follows">{this.state.arrayOfSubs}</div>
+                
             </div>
             <div className="subs-container">
-            <div className="follows-title">Recent Subs</div>
-                {this.state.arrayOfSubs}
+            
+                <div className="tweet-container">
+                    <div className="tweet-btn">
+                        <div className="title">TWEET</div>
+                        <div className="tweet-logo"></div>
+                    </div>
+                    
+                </div>
+                <div className="sp-logo">SPApp</div>
             </div>
             
             

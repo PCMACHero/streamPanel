@@ -32,6 +32,7 @@ class MainSection extends Component{
     };
     client = new tmi.client(this.options);
     state = {
+        bottomDiv: null,
         channel:{
             
             // game:null,
@@ -44,6 +45,7 @@ class MainSection extends Component{
             // views: null,
 
         },
+        event:{},
         statusMessage:null,
         streamingStatus: null,
         currentScene: "",
@@ -73,6 +75,7 @@ class MainSection extends Component{
             
             
             this.setState({
+                bottomDiv: <BottomPanel func={this.toggleStream} ChannelOBJ={this.state.channel} client={this.client} OBSOBJ={this.state} oauth={this.props.oauth}/>,
                 channel: {
                     statusFunc: this.getUserID,
                     oauth: this.props.oauth,
@@ -89,6 +92,7 @@ class MainSection extends Component{
                 }
                 
             })
+            console.log("MY CHAN OBJ", this.state.channel)
         })
     }
    
@@ -206,6 +210,7 @@ class MainSection extends Component{
            }
            componentDidMount(){
             //    this.disableAC()
+            
             this.client.connect();
             
                 this.getFirstScenesAndSources()
@@ -272,7 +277,7 @@ class MainSection extends Component{
                 
             </div>
             
-            <BottomPanel func={this.toggleStream} ChannelOBJ={this.state.channel} client={this.client} OBSOBJ={this.state}/>
+            {this.state.bottomDiv}
             
         </div>
             <Chat-Section key={1000000}  id="chat-section"><Chat key={19000} client={this.client} chanBadges={this.props.chanBadges} partner={this.state.channel.partner} 

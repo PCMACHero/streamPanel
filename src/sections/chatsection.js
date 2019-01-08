@@ -81,32 +81,32 @@ export default class Chat extends Component {
         // if(this.props.partner){
             if(true){
             axios.get(`https://api.twitch.tv/api/channels/${streamer}/product`,this.headers).then(data=>{
-                console.log("MY EMOTE SETS", data.data.plans[data.data.plans.length-1].emoticon_set_ids)
-                console.log("MY EMOTE SETS", data.data.plans)
+                // console.log("MY EMOTE SETS", data.data.plans[data.data.plans.length-1].emoticon_set_ids)
+                // console.log("MY EMOTE SETS", data.data.plans)
                 //ie 1332,44224,54443
                 // let makeSetsStrings = ","+data.data.plans[data.data.plans.length-1].emoticon_set_ids.join(",")
                 let makeSetsStrings = ","+data.data.plans[data.data.plans.length-1].emoticon_set_ids[0]
                 this.emoteSets.push(data.data.plans[data.data.plans.length-1].emoticon_set_ids[0])
                 this.emoteSets.push(0)
-                console.log("HYPED HYPED ", this.emoteSets)
+                // console.log("HYPED HYPED ", this.emoteSets)
                 emoteSetString+=","+makeSetsStrings
                 //make array of emotesets
                 
                 
-                console.log("EMOTESET STRING IN LOOP", emoteSetString)
+                // console.log("EMOTESET STRING IN LOOP", emoteSetString)
                 const myURL = `https://api.twitch.tv/kraken/chat/emoticon_images?emotesets=0${makeSetsStrings}`
-        console.log("MY EMOTESET BRRRRRRRRRR",myURL, )
+        // console.log("MY EMOTESET BRRRRRRRRRR",myURL, )
         axios.get(myURL,this.headers).then(resp=>{
             
                 for(let i=0;i<this.emoteSets.length;i++){
-                    console.log("MY EMOTESET CLOSE",resp.data.emoticon_sets[this.emoteSets[i]])
+                    // console.log("MY EMOTESET CLOSE",resp.data.emoticon_sets[this.emoteSets[i]])
                     // console.log("MY EMOTESET CLOSE",resp.data.emoticon_sets[this.emoteSets[i]])
                     this.arrayOfCombinedEmotes.push(...resp.data.emoticon_sets[this.emoteSets[i]])
-                    console.log("GRRRRRRRRRRRR", this.arrayOfCombinedEmotes)
+                    // console.log("GRRRRRRRRRRRR", this.arrayOfCombinedEmotes)
                 }
-                console.log("GRRRRRRRRRRRR", )
+                // console.log("GRRRRRRRRRRRR", )
                 this.emotes= this.arrayOfCombinedEmotes
-                console.log("MY EMOTE DATA RIGHT NOW:", this.emotes)
+                // console.log("MY EMOTE DATA RIGHT NOW:", this.emotes)
                 
         })
                 })
@@ -255,10 +255,10 @@ export default class Chat extends Component {
                             
                             this.props.client.unmod("streampanelapp", user.username).then(function(data) {
                                 // data returns [channel, username]
-                                console.log(data)
+                                // console.log(data)
                             }).catch(function(err) {
                                 //
-                                console.log(err)
+                                // console.log(err)
                             });
                         
                     }}>{this.state.modStatus}</div>
@@ -291,7 +291,7 @@ getGlobalBadges=()=>{
                 let myOBJ = data
                 this.globalBadges=myOBJ.data.badge_sets
                 
-                console.log("Global BADGES DATA:",this.globalBadges)
+                // console.log("Global BADGES DATA:",this.globalBadges)
             })
 
 }
@@ -307,7 +307,7 @@ getChannelBadges=()=>{
                 let myOBJ=data
                 this.channelBadges=myOBJ.data
                 
-                console.log("Channel BADGES DATA:",this.channelBadges)
+                // console.log("Channel BADGES DATA:",this.channelBadges)
             })
 
 }
@@ -318,16 +318,16 @@ makeBadgeDivs=(user)=>{
     } else {
         
         let arr = Object.keys(user.badges)
-        console.log(arr)
-        console.log(this.globalBadges)
+        // console.log(arr)
+        // console.log(this.globalBadges)
         for(let i=0; i<arr.length;i++){
             if(arr[i]==="moderator"){
                 let myURL = this.channelBadges.mod.image
-                console.log("my mod object",this.channelBadges.mod.image)
+                // console.log("my mod object",this.channelBadges.mod.image)
                 this.badgeDivArray.push(<img className="badge" src={myURL} />)
             }else if(arr[i]==="subscriber"){
                 let myURL = this.subscriberBadges[arr[i]].versions[user.badges[arr[i]]].image_url_4x
-                console.log(myURL)
+                // console.log(myURL)
                 this.badgeDivArray.push(<img className="badge" src={myURL} />)
             }
             else if(this.channelBadges[arr[i]]){
@@ -335,11 +335,11 @@ makeBadgeDivs=(user)=>{
                 this.badgeDivArray.push(<img className="badge" src={myURL} />)
             }
             else if(this.globalBadges[arr[i]]){
-                console.log("THIS IS MY UNDEFINED",this.globalBadges[arr[i]].versions[user.badges[arr[i]]])
+                // console.log("THIS IS MY UNDEFINED",this.globalBadges[arr[i]].versions[user.badges[arr[i]]])
                 let myURL = this.globalBadges[arr[i]].versions[user.badges[arr[i]]].image_url_4x
-                console.log(myURL)
+                // console.log(myURL)
                 this.badgeDivArray.push(<img className="badge" src={myURL} />)
-                console.log("I HAVE A BADGE AND IT IS GLOBAL BADGE: ",arr[i])
+                // console.log("I HAVE A BADGE AND IT IS GLOBAL BADGE: ",arr[i])
             }
         }
     }
@@ -353,7 +353,7 @@ makeBadgeDivs=(user)=>{
         // this.fetchEmotes()
         
         this.props.client.on('chat', (channel, user, message, self)=>{
-            console.log("MY ENTIRE EMOTES OBJ:",user.badges)
+            // console.log("MY ENTIRE EMOTES OBJ:",user.badges)
             this.makeBadgeDivs(user)
             
             

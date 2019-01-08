@@ -15,10 +15,15 @@ const headers= {"headers": {
 // }
 const idOBJ={
   imaqtpie: "24991333",
-  hutch: "8815236"
+  hutch: "8815236",
+  drdisrespect: "17337557",
+  teepee: "23844396",
+  goldglove: "1518077",
+  karma:"10406",
+  scump: "13240194"
 
 }
-export const streamer = "hutch"
+export const streamer = "scump"
 export const streamerID= idOBJ[streamer]
 export const OBSSceneObj = 
 { 'current-scene': 'In-Game',

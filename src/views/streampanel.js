@@ -17,7 +17,8 @@ class StreamPanel extends Component {
             }
 
 
-    token = this.props.location.hash.slice(14,44);
+    // token = this.props.location.hash.slice(14,44);
+    token = "xp5b0vv17q14ue9l0zw9x8hpreznkn"
 
     getUserID(){
         const URL = "https://api.twitch.tv/kraken/users?login="+streamer

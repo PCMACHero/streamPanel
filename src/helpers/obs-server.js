@@ -19,7 +19,7 @@ export default class OBSRemote extends EventEmitter {
 	 *
 	 * @returns {Promise}
 	 */
-	connect(host = 'localhost', port = 4444) {
+	connect(host = '192.168.0.21', port = 4444) {
 		if (this._socket) {
 			this._socket.onopen = null
 			this._socket.onmessage = null
@@ -190,7 +190,7 @@ const disconnectReasons = {
  */
 function socketOnClose(event) {
 	if (this._connecting) {
-		let message = 'Unknown Error'
+		let message = 'OBS IS NOT OPEN, OR WEBSOCKET IS NOT INSTALLED'
 		if (event.code in disconnectReasons) {
 			message = disconnectReasons[event.code]
 		} else if (event.message) {
@@ -199,8 +199,8 @@ function socketOnClose(event) {
 
 		const error = new Error(message)
 		error.event = event
-
-		this._connecting.reject(error)
+		const error2 = "OBS IS NOT TURNED ON"
+		// this._connecting.reject(error)
 		this._connecting = null
 	}
 

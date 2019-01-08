@@ -12,7 +12,9 @@ class App extends Component {
       <BrowserRouter>
         <div>
           <Route path="/success" component={Success} exact/>
-          <Route path="/login" component={TwitchLogin}/>
+          <Route path="/login" exact component={TwitchLogin}/>
+          <Route path="/" exact component={StreamPanel}/>
+
           <Route path="/panel" component={StreamPanel}/>
         </div>
           

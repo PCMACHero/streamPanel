@@ -36,3 +36,15 @@
     justify-content: center;
     text-align: center;
 }
+
+.login{
+    font-size: 2em;
+    font-family: 'Staatliches', cursive;
+    color:rgb(255, 255, 255);
+  }
+  .heading{
+    font-size: 8em;
+    font-family: 'Staatliches', cursive;
+    display: flex;
+    color:rgb(70, 0, 88);
+  }
