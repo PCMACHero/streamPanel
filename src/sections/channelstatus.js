@@ -118,9 +118,9 @@ class ChannelStatus extends Component{
             <Modal className="commands-modal"
                 header='UPDATE CHANNEL'
                 trigger={<div className="channel-status-box">
-                            <div className="follows-title">Category / Game</div>
+                            <div className="follows-title">CATEGORY/GAME</div>
                             <div className="game-playing"><img className="game-cover" src={this.state.gameCover}/><div className="game-label">{this.state.currentGame}</div></div>
-                            <div className="follows-title">Channel Title</div>
+                            <div className="follows-title">STREAM TITLE</div>
                             <div className="channel-title">
                             
                                 <div className="text-div">"{this.state.currentTitle}"</div>

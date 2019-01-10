@@ -6,6 +6,7 @@ import './notifications.css'
 import { streamerID } from '../helpers/dummydata';
 
 class Notifications extends Component{
+    div = null
     counters = 0
     counters2 = 10000
     arrOfSubs=[]
@@ -108,15 +109,21 @@ componentDidMount(){
 }
 
 render(){
+    if(this.state.arrayOfSubs.length===0){
+        this.div = <div className="follows">YOUR SUBS WILL APPEAR HERE</div>
+    } else {
+        this.div = <div className="follows">{this.state.arrayOfSubs}</div>
+    }
     
     return (
         <div className="notifications-container">
             <div className="follows-container">
-                <div className="follows-title">Recent Follows</div>
+                <div className="follows-title">FOLLOWS</div>
                 <div className="follows">{this.state.array}</div>
                 
-                <div className="follows-title">Recent Subs</div>
-                <div className="follows">{this.state.arrayOfSubs}</div>
+                <div className="follows-title">SUBS</div>
+                {this.div}
+                {/* <div className="follows">{this.state.arrayOfSubs}</div> */}
                 
             </div>
             <div className="subs-container">
@@ -128,7 +135,7 @@ render(){
                     </div>
                     
                 </div>
-                <div className="sp-logo">SPApp</div>
+                <div className="sp-logo"></div>
             </div>
             
             

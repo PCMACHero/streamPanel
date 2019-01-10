@@ -13,6 +13,11 @@ font-family: 'Julius Sans One', sans-serif;
 font-family: 'Baloo', cursive;
 font-family: 'Homenaje', sans-serif;
 font-family: 'Rubik Mono One', sans-serif; */
+* { 
+  -moz-box-sizing: border-box; 
+  -webkit-box-sizing: border-box; 
+   box-sizing: border-box; 
+}
 
 body{
   background-image: url("./images/bg.jpeg");
@@ -23,7 +28,7 @@ body{
   text-align: center;
   
   
-  background-color: #ffffffa9;
+  background-color: #ffffff;
   
   
   
@@ -210,7 +215,7 @@ text-align: center;
   display: flex;
   flex-direction: row;
   /* flex-basis: 100%; */
-  height: 40%;
+  height: 32%;
   flex-shrink: 0;
 
 }
@@ -229,8 +234,8 @@ text-align: center;
 .video-box-small{
   
   /* pointer-events: none; */
-  height: 40vh;
-  width: 50vw;
+  /* height: 40vh; */
+  width: 60%;
   margin: 1px;
   overflow: hidden;
   animation: shrink .5s ;
@@ -277,7 +282,7 @@ iframe{
   
   display: flex;
   color:rgb(219, 219, 255);
-  background-color: #24002167;
+  background-color: #000d2467;
   animation: fadeIn 1s linear;
   text-align: left;
   flex-direction: column;
@@ -330,21 +335,22 @@ iframe{
 }
 
 .scene-btn {
+  padding: 7px;
   flex-direction: column;
   display: flex;
   width: 20%;
   height: 100%;
-  flex-shrink: 0;
+  /* flex-shrink: 0; */
   align-items: center;
   justify-content: center;
-  flex-grow: 0;
-  margin: 1px;
+  /* flex-grow: 0; */
+  /* margin: 1px; */
   /* border-radius: 2px; */
   /* padding: 0 16px; */
 
   text-decoration: none;
   color: rgb(41, 0, 75);
-  background-image: linear-gradient(rgba(221, 221, 221, 0.267), rgba(255, 255, 255, 0.705), rgb(206, 206, 206));
+  background-image: linear-gradient(rgba(255, 255, 255, 0.783), rgb(255, 255, 255), rgba(255, 255, 255, 0.748));
   -webkit-transition: background-color .2s ease-out;
   transition: background-color .2s ease-out;
   font-size: 1rem;
@@ -380,13 +386,13 @@ iframe{
   align-items: center;
   justify-content: center;
   flex-grow: 0;
-  margin: 1px;
+  /* margin: 1px; */
   /* border-radius: 2px; */
   /* padding: 0 16px; */
 
   text-decoration: none;
   color: rgb(255, 255, 255);
-  background-image: linear-gradient(#550be0ea,#3c069eea, #550be0ea);
+  background-image: linear-gradient(rgb(100, 65, 164),#1e064bea, rgb(100, 65, 164));
   -webkit-transition: background-color .2s ease-out;
   transition: background-color .2s ease-out;
   font-size: 1rem;
@@ -399,19 +405,20 @@ iframe{
   margin: 1px;
   flex-direction: column;
   display: flex;
-  /* width: 100%; */
-  height: 33.33%;
+  width: 100%;
+  height: 32.7%;
   flex-shrink: 0;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
   flex-grow: 1;
   /* margin: 6px 0; */
   /* border-radius: 2px; */
   /* padding: 0 16px; */
 
   text-decoration: none;
-  color: rgb(26, 226, 0);
-  background-color: #061727d0;
+  color: rgb(255, 255, 255);
+  /* background-color: #061727d0; */
+  background-color: #0084ffeb;
   -webkit-transition: background-color .2s ease-out;
   transition: background-color .2s ease-out;
   font-size: 1em;
@@ -426,7 +433,7 @@ iframe{
   flex-direction: column;
   display: flex;
   width: 100%;
-  height: 33.3%;
+  height: 32.7%;
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
@@ -447,19 +454,23 @@ iframe{
   
   
 }
-
+.source-panel>.twitch-btn>div {
+  height: 20%;
+}
 
 .source-panel> div > .twitch-btn{
-  height:100%;
-}
-.source-panel > div{
+  flex-shrink: 0;
+  display: flex;
+  height: 13vh;
+  width: 20vw;}
+/* .source-panel > div{
   width:100%;
   height:33.3%;
   flex-flow: column;
   display: flex;
   justify-content: center;
   align-items: center;
-}
+} */
 .twitch-btn{
   
   
@@ -481,7 +492,8 @@ iframe{
 
   text-decoration: none;
   color: rgb(255, 255, 255);
-  background-color: #550be0ea;
+  background-color: rgb(100, 65, 164)
+  ;
   -webkit-transition: background-color .2s ease-out;
   transition: background-color .2s ease-out;
   font-size: 1rem;
@@ -616,7 +628,9 @@ header{
 ::-webkit-scrollbar { 
   display: none; 
   }
-
+  .z-depth-4, .modal {
+    box-shadow: none;
+}
 
 
 @keyframes fadeIn {
