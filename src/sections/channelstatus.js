@@ -18,7 +18,7 @@ class ChannelStatus extends Component{
         newTitle:"",
         gameCover:""
     }
-    ChannelData = this.props.data
+    ChannelData = this.props.channelOBJ
     
     changeHandler = (event)=>{
         
@@ -44,8 +44,8 @@ class ChannelStatus extends Component{
     }
 
     getChannelStatus=()=>{
-        // const oauth = this.props.oauth
-        const oauth = "xp5b0vv17q14ue9l0zw9x8hpreznkn"
+        const oauth = this.props.oauth
+        // const oauth = "xp5b0vv17q14ue9l0zw9x8hpreznkn"
         const headers = {"headers":{
             "Client-ID": clientID,
             "Authorization": 'OAuth '+oauth
@@ -61,7 +61,7 @@ class ChannelStatus extends Component{
                     
                     
                     
-                    // userID: data.data["_id"],
+                    userID: data.data["_id"],
                     // partner:data.data.partner,
                     // name: data.data.name,
                     // email: data.data.email,
@@ -181,7 +181,7 @@ class ChannelStatus extends Component{
                             console.log(this.state.newGame)
                     axios({
                         method: 'put', //you can set what request you want to be
-                        url: 'https://api.twitch.tv/kraken/channels/'+this.props.channelOBJ.userID,
+                        url: 'https://api.twitch.tv/kraken/channels/'+this.state.channel.userID,
                         data: {"channel": {"status": this.state.newTitle, "game": this.state.newGame}},
                         headers: {
                             "Accept": "application/vnd.twitchtv.v5+json",

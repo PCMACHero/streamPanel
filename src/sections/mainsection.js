@@ -32,9 +32,9 @@ class MainSection extends Component{
     };
     client = new tmi.client(this.options);
     state = {
-        bottomDiv: null,
+        
         channel:{
-            
+            test:true
             // game:null,
             // status:null,
             // userID:null,
@@ -56,7 +56,7 @@ class MainSection extends Component{
             typeId: "av_capture_input"
         }],
         
-
+        bottomDiv: null,
 
     }
     // disableAC=()=>{
@@ -71,11 +71,10 @@ class MainSection extends Component{
             "Authorization": 'OAuth '+this.props.oauth
         }}
          axios.get("https://api.twitch.tv/kraken/channel",headers).then(data=>{
-            console.log("THIS IS MY USERID AXIOS DATA: ",data.data)
+            console.log("THIS IS MY USERID AXIOS DATA: ",data.data._id)
             
             
             this.setState({
-                bottomDiv: <BottomPanel func={this.toggleStream} ChannelOBJ={this.state.channel} client={this.client} OBSOBJ={this.state} oauth={this.props.oauth}/>,
                 channel: {
                     statusFunc: this.getUserID,
                     oauth: this.props.oauth,
@@ -89,9 +88,12 @@ class MainSection extends Component{
                     views: data.data.views,
                     streamKey: data.data.stream_key
 
-                }
+                },
+                
+                
                 
             })
+            console.log("THIS IS MY USERID AXIOS DATA2: ",this.state.channel.userID)
             console.log("MY CHAN OBJ", this.state.channel)
         })
     }
@@ -210,11 +212,11 @@ class MainSection extends Component{
            }
            componentDidMount(){
             //    this.disableAC()
-            
+            this.getUserID()
             this.client.connect();
             
                 this.getFirstScenesAndSources()
-            this.getUserID()
+            
             
             
             
@@ -277,7 +279,7 @@ class MainSection extends Component{
                 
             </div>
             
-            {this.state.bottomDiv}
+            <BottomPanel func={this.toggleStream} channelOBJ={this.state.channel} client={this.client} OBSOBJ={this.state} oauth={this.props.oauth}/>
             
         </div>
             <Chat-Section key={1000000}  id="chat-section"><Chat key={19000} client={this.client} chanBadges={this.props.chanBadges} partner={this.state.channel.partner} 

@@ -18,7 +18,7 @@ class BottomPanel extends Component{
     
 
     componentDidMount(){
-        console.log("my chan obj", this.props.channelOBJ)
+        
         console.log("MY SREAMINGSTATUS IN BOPA",this.props.OBSOBJ.streamingStatus)
     
     console.log("MY STATE IN BOTOMPANEL", this)
@@ -30,6 +30,7 @@ class BottomPanel extends Component{
     
     
 render(){
+    console.log("my chan obj", this.props.channelOBJ)
     if(this.props.OBSOBJ.streamingStatus){
         
         this.statusText ="You are streaming"
@@ -69,15 +70,15 @@ if (this.props.OBSOBJ.statusMessage!==null){
                     </i>
                 </div>
                 <div className="profiles-btn">
-                <Numbers channelOBJ={this.props.ChannelOBJ} />
+                <Numbers channelOBJ={this.props.channelOBJ} />
                 </div>
                 
             </div>
             <div className="bottom-middle-container">
-                <ChannelStatus channelOBJ={this.props.ChannelOBJ} oauth={this.oauth}/>
+                <ChannelStatus channelOBJ={this.props.channelOBJ} oauth={this.oauth}/>
             </div>
             <div className="bottom-right-container">
-                <Notifications userID={this.props.ChannelOBJ.userID} client={this.props.client}/>
+                <Notifications userID={this.props.channelOBJ.userID} client={this.props.client}/>
                 
             </div>
             
