@@ -13,17 +13,30 @@ const twitchLogin = ()=> {
     return (
       <div className="App">
         <div className="login-container">
-            <div className="nav">
-                <div className="nav-btn">Sign-Up</div>
-                <div className="nav-btn">About</div>
+            {/* <div className="nav">
+            
+                <div className="nav-btn">Home</div>
                 <div className="nav-btn">Setup</div>
-            </div>
-            <div className="heading">StreamPanelApp</div>
+                <div className="nav-btn">About</div>
+            </div> */}
+             <nav>
+    <div class="nav-wrapper purple darken-3">
+      {/* <a href="#" class="brand-logo ">StreamPanel.app</a> */}
+      <ul id="nav-mobile" className=" hide-on-med-and-down">
+        <li><a href="sass.html">Home</a></li>
+        <li><a href="badges.html">Setup</a></li>
+        <li><a href="collapsible.html">About</a></li>
+      </ul>
+    </div>
+  </nav>
+            <div className="login-box-container">
             <div id="login-box">
                 <div className="login-text">Welcome to Streampanel, lets get started</div>
                 <a className="twitch-btn" href= {URL}><div className="login">Login</div></a>
 
             </div>
+            </div>
+            
         </div>
       </div>
         

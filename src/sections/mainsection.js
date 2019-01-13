@@ -34,7 +34,7 @@ class MainSection extends Component{
     state = {
         
         channel:{
-            test:true
+            
             // game:null,
             // status:null,
             // userID:null,

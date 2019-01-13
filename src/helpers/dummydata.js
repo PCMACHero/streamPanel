@@ -20,10 +20,11 @@ const idOBJ={
   teepee: "23844396",
   goldglove: "1518077",
   karma:"10406",
-  scump: "13240194"
+  scump: "13240194",
+  nameless: "10328157"
 
 }
-export const streamer = "scump"
+export const streamer = "nameless"
 export const streamerID= idOBJ[streamer]
 export const OBSSceneObj = 
 { 'current-scene': 'In-Game',

@@ -5,8 +5,10 @@ import {clientID} from "../common/common"
 import axios from "axios"
 
 class StreamPanel extends Component {
+    
     state={
-        userID: null
+        userID: null,
+        startClass:"start"
     };
     
     headers={
@@ -17,8 +19,8 @@ class StreamPanel extends Component {
             }
 
 
-    token = this.props.location.hash.slice(14,44);
-    // token = "xp5b0vv17q14ue9l0zw9x8hpreznkn"
+    // token = this.props.location.hash.slice(14,44);
+    token = "qoyqtgjhh6uwy7x1rfzv6fpdoclqjf"
 
     getUserID(){
         const URL = "https://api.twitch.tv/kraken/users?login="+streamer
@@ -48,6 +50,11 @@ class StreamPanel extends Component {
     
 
     componentDidMount(){
+        setInterval(() => {
+            this.setState({
+                startClass:"start-fade"
+            })
+        }, 2000);
         this.getUserID()
         
         
@@ -59,6 +66,14 @@ class StreamPanel extends Component {
   render() {
     return (
       <div className="App">
+        <div class={this.state.startClass}>
+            <div class="start-banner">STREAM PANEL</div>
+            <div class="progress">
+                <div class="indeterminate green"></div>
+            </div>
+        </div>
+
+
         <MainSection chanBadges={this.state.badges} oauth={this.token}/>
       </div>
     );

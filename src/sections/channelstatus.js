@@ -186,7 +186,8 @@ class ChannelStatus extends Component{
                         headers: {
                             "Accept": "application/vnd.twitchtv.v5+json",
                             "Client-ID": clientID,
-                            "Authorization": 'OAuth ' + "xp5b0vv17q14ue9l0zw9x8hpreznkn",
+                            // "Authorization": 'OAuth ' + "xp5b0vv17q14ue9l0zw9x8hpreznkn",
+                            "Authorization": 'OAuth ' + this.props.oauth,
                             // this.props.channelOBJ.oauth,
                             'Content-Type': 'application/json'
                         }
@@ -197,6 +198,7 @@ class ChannelStatus extends Component{
                             currentGame:data.data.game,
                             currentTitle:data.data.status
                         })
+                        console.log("MY CURRENT GAME:", this.state.currentGame)
                         this.getGameCover(this.state.currentGame)
                       })
                       

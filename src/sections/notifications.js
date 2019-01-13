@@ -105,7 +105,7 @@ componentDidMount(){
     setInterval(() => {
         
         this.getRecentFollows()
-    }, 5000);
+    }, 10000);
 }
 
 render(){

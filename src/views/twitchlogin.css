@@ -9,9 +9,10 @@
     height: 100vh;
 }
 #login-box {
-    height: 40vh;
-    width: 50vw;
-    background-color: rgba(0, 0, 0, 0.288);
+    animation: login 2s forwards;
+    height: 30vh;
+    width: 40vw;
+    background-color: rgba(0, 0, 0, 0.557);
     border-radius: 3px;
     align-items: center;
     justify-content: space-around;
@@ -20,7 +21,14 @@
     
 
 }
-
+@keyframes login{
+from{
+    transform: translate3d(-100%,0,0)
+}
+to{
+    transform: translate3d(0,-40%,0)
+}
+}
 .login-text {
     color:rgb(255, 255, 255);
     font-size: 2rem;
@@ -47,4 +55,9 @@
     font-family: 'Staatliches', cursive;
     display: flex;
     color:rgb(70, 0, 88);
+  }
+
+  nav{
+      position: absolute;
+      top: 0%;
   }
