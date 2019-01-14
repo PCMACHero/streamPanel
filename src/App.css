@@ -28,10 +28,15 @@ body{
   text-align: center;
   
   
-  background-color: #ffffff;
+  background-color: #000000;
   
   
   
+}
+
+.stream-panel{
+  text-align: center;
+  background-color: white;
 }
 .progress{
   width: 40%;

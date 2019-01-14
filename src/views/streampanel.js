@@ -50,7 +50,7 @@ class StreamPanel extends Component {
     
 
     componentDidMount(){
-        setInterval(() => {
+        setTimeout(() => {
             this.setState({
                 startClass:"start-fade"
             })
@@ -65,7 +65,7 @@ class StreamPanel extends Component {
     
   render() {
     return (
-      <div className="App">
+      <div className="stream-panel App">
         <div class={this.state.startClass}>
             <div class="start-banner">STREAM PANEL</div>
             <div class="progress">

@@ -30,7 +30,7 @@ class BottomPanel extends Component{
     
     
 render(){
-    console.log("my chan obj", this.props.channelOBJ)
+    // console.log("my chan obj", this.props.channelOBJ)
     if(this.props.OBSOBJ.streamingStatus){
         
         this.statusText ="You are streaming"

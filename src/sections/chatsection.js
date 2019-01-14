@@ -141,7 +141,7 @@ export default class Chat extends Component {
             for(var j in e) {
                 var mote = e[j];
                 if(typeof mote == 'string') {
-                    let JSXelem= <img className="emote animated pulse infinite" src={`https://static-cdn.jtvnw.net/emoticons/v1/${i}/2.0`}/>
+                    let JSXelem= <img key={this.counter+=1} className="emote animated pulse infinite" src={`https://static-cdn.jtvnw.net/emoticons/v1/${i}/2.0`}/>
                     mote = mote.split('-');
                     mote = [parseInt(mote[0]), parseInt(mote[1])];
                     var length =  mote[1] - mote[0],
@@ -225,10 +225,10 @@ export default class Chat extends Component {
 
     makeMessageDivs=(channel,user,message,self,badgeArray)=>{
         
-        this.counter +=1;
+        
         this.myDivs.push(
-        <Modal key={this.counter+=2} className="black"
-            trigger={<div className="chat-card" key={this.counter+=3} onClick={()=>{}}>
+        <Modal key={this.counter+=1} className="black"
+            trigger={<div className="chat-card" key={this.counter+=1} onClick={()=>{}}>
                 <div className="message-intro-box">
                     <div className="message-intro">
                     <div className="badges">{this.badgeDivArray}</div>
@@ -280,8 +280,11 @@ export default class Chat extends Component {
             this.myDivs.shift()
         }
         
-        const chatSec = document.getElementById('chat-section');
-        chatSec.scrollTop = chatSec.scrollHeight;
+        if(document.getElementById('chat-section')){
+            let chatSec = document.getElementById('chat-section');
+            chatSec.scrollTop = chatSec.scrollHeight;
+        }
+        
         // $('#chat-section').animate({ scrollTop: "+="+chatSec.scrollHeight }, "slow");
     }
     
@@ -328,7 +331,7 @@ makeBadgeDivs=(user)=>{
             }else if(arr[i]==="subscriber"){
                 let myURL = this.subscriberBadges[arr[i]].versions[user.badges[arr[i]]].image_url_4x
                 // console.log(myURL)
-                this.badgeDivArray.push(<img className="badge" src={myURL} />)
+                this.badgeDivArray.push(<img key={this.counter+=1} className="badge" src={myURL} />)
             }
             else if(this.channelBadges[arr[i]]){
                 let myURL = this.channelBadges[arr[i]].image
@@ -338,7 +341,7 @@ makeBadgeDivs=(user)=>{
                 // console.log("THIS IS MY UNDEFINED",this.globalBadges[arr[i]].versions[user.badges[arr[i]]])
                 let myURL = this.globalBadges[arr[i]].versions[user.badges[arr[i]]].image_url_4x
                 // console.log(myURL)
-                this.badgeDivArray.push(<img className="badge" src={myURL} />)
+                this.badgeDivArray.push(<img key={this.counter+=1} className="badge" src={myURL} />)
                 // console.log("I HAVE A BADGE AND IT IS GLOBAL BADGE: ",arr[i])
             }
         }

@@ -9,10 +9,11 @@
     height: 100vh;
 }
 #login-box {
-    animation: login 2s forwards;
+    animation: login 3s  forwards;
     height: 30vh;
-    width: 40vw;
-    background-color: rgba(0, 0, 0, 0.557);
+    width: 40%;
+    flex-shrink: 0;
+    background-color: rgba(0, 0, 0, 0.74);
     border-radius: 3px;
     align-items: center;
     justify-content: space-around;
@@ -22,10 +23,13 @@
 
 }
 @keyframes login{
-from{
-    transform: translate3d(-100%,0,0)
+0%{
+    transform: translate3d(-200%,0,0)
 }
-to{
+50% {
+    transform: translate3d(-200%,0,0)
+}
+100%{
     transform: translate3d(0,-40%,0)
 }
 }
@@ -34,10 +38,20 @@ to{
     font-size: 2rem;
     font-family: 'Roboto Condensed', sans-serif;
 }
-
+.nice-line{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.61);
+    width: 40vw;
+    padding: 3%;
+    height: 20vh;
+    font-size: 1.5em;
+}
 .twitch-btn{
     display: flex;
-    width:30%;
+    width:100%;
     height: 15%;
     background-color: white;
     flex-direction: column;

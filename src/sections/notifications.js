@@ -3,6 +3,7 @@ import axios from 'axios'
 import { clientID } from '../common/common';
 import { setInterval } from 'timers';
 import './notifications.css'
+import {Link} from 'react-router-dom'
 import { streamerID } from '../helpers/dummydata';
 
 class Notifications extends Component{
@@ -135,7 +136,7 @@ render(){
                     </div>
                     
                 </div>
-                <div className="sp-logo"></div>
+                <Link forceRefresh="true" to="/login" className="sp-logo"><div></div></Link>
             </div>
             
             

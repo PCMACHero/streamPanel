@@ -131,9 +131,9 @@ export default class CommandsInput extends Component{
 
     }
     render(){
-       this.counter+=10
+       this.counter+=300
         return (
-            <div className="commands-box" 
+            <div key={this.counter+669000} className="commands-box" 
             // key={this.counter+=5}
             >
                 <form className="commands-input">

@@ -56,12 +56,12 @@ class MainSection extends Component{
             typeId: "av_capture_input"
         }],
         
-        bottomDiv: null,
+        // bottomDiv: null,
 
     }
     // disableAC=()=>{
     //     $(".autocomplete").attr({
-    //         "autocoplete":"off"
+    //         "autocomplete":"off"
     //     })
     // }
 // need username, userID, game, status, live status, viewers, followers,
@@ -212,9 +212,9 @@ class MainSection extends Component{
            }
            componentDidMount(){
             //    this.disableAC()
-            this.getUserID()
-            this.client.connect();
             
+            this.client.connect();
+            this.getUserID()
                 this.getFirstScenesAndSources()
             
             
@@ -268,6 +268,7 @@ class MainSection extends Component{
         
     }
     render(){
+        console.log("RERENDERED MAINSECTION")
         return (
             <Fragment>
             <div className='main-section'>
