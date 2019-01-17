@@ -365,9 +365,10 @@ makeBadgeDivs=(user)=>{
             this.smartEmoteParser(message,user.emotes)
             this.makeMessageDivs(channel,user,message,self)
             
-            
-            if(message==="hola"){
-                this.props.client.action("streampanelapp", "Your test message, hola").then(function(data) {
+            let getLocalStorageCommands= JSON.parse(localStorage.getItem('commands'));
+            if(getLocalStorageCommands.hasOwnProperty(message)){
+                
+                this.props.client.action("streampanelapp", `${getLocalStorageCommands[message]}`).then(function(data) {
                     // data returns [channel]
                 }).catch(function(err) {
                     //

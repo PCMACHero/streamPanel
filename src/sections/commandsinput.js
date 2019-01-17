@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {Button} from 'react-materialize'
 
 export default class CommandsInput extends Component{
-    counter=0
+    counter=30000
+    counter2=70000
     objForLS = {}
     getLocalStorageCommands = {}
     commandsTurnedToArray= []
@@ -55,11 +56,11 @@ export default class CommandsInput extends Component{
     showCommands = ()=>{
         this.commandsToShow = []
         for(let i=0; i<this.commandsTurnedToArray.length;i++){
-            let index = 0
+            // let index = 1000000
             
             this.commandsToShow.push(
                 
-                <div className="command-item" key={index+=1}>
+                <div className="command-item" key={i}>
                     <div className="command-name">
                         <div>{this.commandsTurnedToArray[i][0]}</div>
                     </div>
@@ -131,9 +132,9 @@ export default class CommandsInput extends Component{
 
     }
     render(){
-       this.counter+=300
+       
         return (
-            <div key={this.counter+669000} className="commands-box" 
+            <div  className="commands-box" 
             // key={this.counter+=5}
             >
                 <form className="commands-input">
@@ -147,7 +148,7 @@ export default class CommandsInput extends Component{
                     </div>
                     <div onClick={this.addCommand} className="s1 btn right-align purple" waves='light'>ADD</div>
                 </form>
-                <div className="commands" key={this.counter+=2}>
+                <div className="commands" >
                     {this.commandsToShow}
                 </div>
                 
