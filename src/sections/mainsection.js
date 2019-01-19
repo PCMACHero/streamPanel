@@ -55,7 +55,7 @@ class MainSection extends Component{
             render: true,
             typeId: "av_capture_input"
         }],
-        
+        micSources: {"message-id": "6", muted: false, name: "bb", status: "ok"}
         // bottomDiv: null,
 
     }
@@ -152,13 +152,39 @@ class MainSection extends Component{
            
            
                 
-           
+           getMic(){
+            this.server.send({'request-type': 'GetSourcesList'})
+            .then(data=>{
+                    console.log("MY MIC DATA", data.sources)
+
+                    const arrayOfMics = []
+                    data.sources.forEach((val)=>{
+                        if(val.typeId==="coreaudio_input_capture"){
+                            arrayOfMics.push(val)
+                        }
+                    })
+                    
+                    console.log("MY MIC ARRAY", arrayOfMics)
+                    this.server.send({'request-type': 'GetMute','source':arrayOfMics[0].name}).then(data2=>{
+                        console.log("MY FINAL MIC DATA", data2)
+                        this.setState({
+                            micSources:data2
+                        })
+                    })
+                // this.setState( { 
+                //     scenes: data.scenes,
+                //     currentScene:data["current-scene"] 
+                // } );
+
+            })
             
+        }
             
            getFirstScenesAndSources(){
             this.server.addMessageListener( this.handleServerEvent.bind(this));
             
             this.server.connect().then((responseHandler)=>{
+                this.getMic()
                 this.server.send({'request-type': 'GetSceneList'}).then(data=>{
                     
                     this.setState( { 
@@ -216,7 +242,7 @@ class MainSection extends Component{
             this.client.connect();
             this.getUserID()
                 this.getFirstScenesAndSources()
-            
+                
             
             
             
@@ -274,13 +300,13 @@ class MainSection extends Component{
             <div className='main-section'>
             <ScenePanel scenes={this.state.scenes} func={this.setSceneAndSourcesOnClick} currentScene={this.state.currentScene}/>
             <div className="mid-section">
-                <SourcePanel sources={this.state.sources} func={this.toggleSource} srcClass={this.state.srcClass} />
+                <SourcePanel sources={this.state.sources}  func={this.toggleSource} srcClass={this.state.srcClass} />
                 <VideoBox channel={streamer}></VideoBox>
                 <TwitchPanel oauth={this.props.oauth} runAd={this.runAd}/>
                 
             </div>
             
-            <BottomPanel func={this.toggleStream} channelOBJ={this.state.channel} client={this.client} OBSOBJ={this.state} oauth={this.props.oauth}/>
+            <BottomPanel func={this.toggleStream} channelOBJ={this.state.channel} client={this.client} OBSOBJ={this.state} oauth={this.props.oauth} micSources={this.state.micSources}/>
             
         </div>
             <Chat-Section key={1000000}  id="chat-section"><Chat key={19000} client={this.client} chanBadges={this.props.chanBadges} partner={this.state.channel.partner} 

@@ -27,7 +27,7 @@ const idOBJ={
   streampanelapp: "277053577"
 
 }
-export const streamer = "streampanelapp"
+export const streamer = "drdisrespect"
 export const streamerID= idOBJ[streamer]
 export const OBSSceneObj = 
 { 'current-scene': 'In-Game',

@@ -13,9 +13,10 @@ const sourcePanel = (props)=> {
             'av_capture_input' : 'videocam'
         }
     
-     
+        
         const OBSSourcesObj = props.sources;
-        console.log(OBSSourcesObj)
+        
+        console.log("MY SOURCES AS OBJ",OBSSourcesObj)
          
         for (let i=0; i<OBSSourcesObj.length; i++){
             

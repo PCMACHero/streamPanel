@@ -327,7 +327,7 @@ makeBadgeDivs=(user)=>{
             if(arr[i]==="moderator"){
                 let myURL = this.channelBadges.mod.image
                 // console.log("my mod object",this.channelBadges.mod.image)
-                this.badgeDivArray.push(<img className="badge" src={myURL} />)
+                this.badgeDivArray.push(<img key={this.counter+=1} className="badge" src={myURL} />)
             }else if(arr[i]==="subscriber"){
                 let myURL = this.subscriberBadges[arr[i]].versions[user.badges[arr[i]]].image_url_4x
                 // console.log(myURL)
@@ -335,7 +335,7 @@ makeBadgeDivs=(user)=>{
             }
             else if(this.channelBadges[arr[i]]){
                 let myURL = this.channelBadges[arr[i]].image
-                this.badgeDivArray.push(<img className="badge" src={myURL} />)
+                this.badgeDivArray.push(<img key={this.counter+=1} className="badge" src={myURL} />)
             }
             else if(this.globalBadges[arr[i]]){
                 // console.log("THIS IS MY UNDEFINED",this.globalBadges[arr[i]].versions[user.badges[arr[i]]])

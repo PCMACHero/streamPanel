@@ -66,10 +66,10 @@ class StreamPanel extends Component {
   render() {
     return (
       <div className="stream-panel App">
-        <div class={this.state.startClass}>
-            <div class="start-banner">STREAM PANEL</div>
-            <div class="progress">
-                <div class="indeterminate green"></div>
+        <div className={this.state.startClass}>
+            <div className="start-banner">STREAM PANEL</div>
+            <div className="progress">
+                <div className="indeterminate green"></div>
             </div>
         </div>
 

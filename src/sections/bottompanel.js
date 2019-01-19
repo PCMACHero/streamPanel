@@ -70,6 +70,8 @@ if (this.props.OBSOBJ.statusMessage!==null){
                     </i>
                 </div>
                 <div className="profiles-btn">
+                <div>{this.props.micSources.name}</div>
+                <div> {this.props.micSources.muted.toString()}</div>
                 <Numbers channelOBJ={this.props.channelOBJ} />
                 </div>
                 

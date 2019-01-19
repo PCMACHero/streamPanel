@@ -136,7 +136,7 @@ render(){
                     </div>
                     
                 </div>
-                <Link forceRefresh="true" to="/login" className="sp-logo"><div></div></Link>
+                <Link to="/login" className="sp-logo"><div></div></Link>
             </div>
             
             
