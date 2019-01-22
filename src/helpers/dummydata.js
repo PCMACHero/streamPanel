@@ -24,10 +24,12 @@ const idOBJ={
   nameless: "10328157",
   shroud: "37402112",
   destiny: "18074328",
-  streampanelapp: "277053577"
+  streampanelapp: "277053577",
+  katgunn: "23822990",
+  callofduty: "501281"
 
 }
-export const streamer = "drdisrespect"
+export const streamer = "teepee"
 export const streamerID= idOBJ[streamer]
 export const OBSSceneObj = 
 { 'current-scene': 'In-Game',

@@ -57,7 +57,7 @@ getSubs=()=>{
 
 getRecentFollows=()=>{
     // let URL = "https://api.twitch.tv/helix/users/follows?first=20&to_id="+this.props.userID
-    let URL = "https://api.twitch.tv/helix/users/follows?first=6&to_id="+streamerID
+    let URL = "https://api.twitch.tv/helix/users/follows?first=20&to_id="+streamerID
     let headers = {
         headers: {
             "Client-ID": clientID,

@@ -366,7 +366,7 @@ makeBadgeDivs=(user)=>{
             this.makeMessageDivs(channel,user,message,self)
             
             let getLocalStorageCommands= JSON.parse(localStorage.getItem('commands'));
-            if(getLocalStorageCommands.hasOwnProperty(message)){
+            if(getLocalStorageCommands != null &&   getLocalStorageCommands.hasOwnProperty(message)){
                 
                 this.props.client.action("streampanelapp", `${getLocalStorageCommands[message]}`).then(function(data) {
                     // data returns [channel]
