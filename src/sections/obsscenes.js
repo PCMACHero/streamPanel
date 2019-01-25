@@ -44,12 +44,9 @@ obs.onSwitchScenes(data => {
   console.log("Current Scene is now: ",data["scene-name"]);
 });
 
-setTimeout(function(){
+// setTimeout(function(){
   obs.connect();
   console.log("@@@@@@@");
-},3000);/*({
-    address: "localhost:4444"
-  });*/
 
 obs.onConnectionOpened(() => {
   console.log("#######");
