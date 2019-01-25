@@ -1,72 +1,97 @@
 import React, {Component} from 'react';
-import {Button} from 'react-materialize'
+
+import {MyContext, MyProvider} from '../views/streampanel'
+import axios from 'axios'
 
 export default class CommandsInput extends Component{
-    counter=30000
-    counter2=70000
+    counter=1
+    // counter2=70000
     objForLS = {}
     getLocalStorageCommands = {}
-    commandsTurnedToArray= []
+    // commandsTurnedToArray= []
     commandsToShow =[]
+    dbCommands = null
+    getCommandsFromDB = (id)=>{
+        if(!id){
+            return
+        }else{
+            axios.get(`/spuser/${id}`).then(res=>{
+                this.dbCommands = res.data.commands
+                console.log("MY DB COMMANDS", this.dbCommands)
+                // this.getLSObjAndArray()
+                // this.commandsTurnedToArray = this.dbCommands
+                this.showCommands()
+            })
+        }
+        
+    }
     
     state={
         name:"",
         response: "",
-        commands: this.commandsToShow
+        commands: this.commandsToShow,
+        id:null
     }
     deleteCommand(item){
-        this.commandsTurnedToArray.splice(item,1);
-        this.LSArrayToOBj();
-        this.getLSObjAndArray();
-        let obj = {}
-        for (let i=0; i<this.commandsTurnedToArray.length;i++){
-            obj[this.commandsTurnedToArray[i][0]] = this.commandsTurnedToArray[i][1];
-            
-        } 
-        localStorage.clear()
-        localStorage.setItem('commands', JSON.stringify(obj));
-        this.getLocalStorageCommands= JSON.parse(localStorage.getItem('commands'));
-        this.commandsTurnedToArray= Object.entries(JSON.parse(localStorage.getItem('commands')))
-        this.setState({
-            name:"",
-            response:""
-        })
-        console.log("THIS IS GETLOCALSTORAGECOMMANDS: ", this.getLocalStorageCommands)
-        console.log("THIS IS COMMANDTURNEDTOARRAY: ", this.commandsTurnedToArray)
-        console.log("THIS IS COMMANDSTOSHOW:", this.commandsToShow)
-        this.showCommands()
-    }
-    LSArrayToOBj = ()=>{
-        this.objForLS = {}
-            console.log("before",this.objForLS)
-            for (let i=0; i<this.commandsTurnedToArray.length;i++){
-                this.objForLS[this.commandsTurnedToArray[i][0]] = this.commandsTurnedToArray[i][1];
-                console.log("this.commandsTurnedToArray", this.commandsTurnedToArray)
-                console.log("this.getlocalstoarage: ",this.getLocalStorageCommands )
-            } 
-            console.log("after",this.objForLS)
-            localStorage.setItem('commands', JSON.stringify(this.objForLS));
+        this.dbCommands.splice(item,1);
+        
 
+        axios.put(`/spuser/${this.props.context.state.myId}`,{
+            _id: this.props.context.state.myId,
+            username: this.props.context.state.username,
+            commands: this.dbCommands,
+            email: this.props.context.state.email,
+            partner: this.props.context.state.partner,
+        }).then(res=>{
+            this.dbCommands= res.data.commands
+            // this.setState({
+            //     name:"",
+            //     response:""
+            // })
+            this.showCommands()
+            this.setState({
+                name:"",
+                response:""
+            })
+            
+            
+        })
+
+        
     }
-    getLSObjAndArray = ()=>{
-        this.getLocalStorageCommands= JSON.parse(localStorage.getItem('commands'));
-         this.commandsTurnedToArray= Object.entries(JSON.parse(localStorage.getItem('commands')))
-    }
+    // LSArrayToOBj = ()=>{
+    //     this.objForLS = {}
+    //         console.log("before",this.objForLS)
+    //         for (let i=0; i<this.commandsTurnedToArray.length;i++){
+    //             this.objForLS[this.commandsTurnedToArray[i][0]] = this.commandsTurnedToArray[i][1];
+    //             console.log("this.commandsTurnedToArray", this.commandsTurnedToArray)
+    //             console.log("this.getlocalstoarage: ",this.getLocalStorageCommands )
+    //         } 
+    //         console.log("after",this.objForLS)
+    //         localStorage.setItem('commands', JSON.stringify(this.objForLS));
+
+    // }
+    // getLSObjAndArray = ()=>{
+    //     this.getLocalStorageCommands= JSON.parse(localStorage.getItem('commands'));
+    //     //  this.commandsTurnedToArray= Object.entries(JSON.parse(localStorage.getItem('commands')))
+    //     // this.commandsTurnedToArray= Object.entries(JSON.parse(this.dbCommands))
+    // }
 
     showCommands = ()=>{
+        
         this.commandsToShow = []
-        for(let i=0; i<this.commandsTurnedToArray.length;i++){
+        for(let i=0; i<this.dbCommands.length;i++){
             // let index = 1000000
-            
+            let makeObj = this.dbCommands[i]
             this.commandsToShow.push(
                 
                 <div className="command-item" key={i}>
                     <div className="command-name">
-                        <div>{this.commandsTurnedToArray[i][0]}</div>
+                        <div>{makeObj.name}</div>
                     </div>
-                    <div className="command-text">"{this.commandsTurnedToArray[i][1]}"</div>
+                    <div className="command-text">"{makeObj.response}"</div>
                     <div className="s1 btn right-align red" onClick={()=>{
-                        console.log("clicked to delete: ",this.commandsTurnedToArray[i])
+                        console.log("clicked to delete: ",makeObj)
                         this.deleteCommand(i)
                         
                         
@@ -79,33 +104,33 @@ export default class CommandsInput extends Component{
             )
         } 
     }
-    checkIfLSEmpty = ()=>{
-        if(JSON.parse(localStorage.getItem('commands'))){
-            this.getLocalStorageCommands = JSON.parse(localStorage.getItem('commands'));
-            this.commandsTurnedToArray= Object.entries(this.getLocalStorageCommands);
-        } else {
-            this.getLocalStorageCommands = {}
-            this.commandsTurnedToArray = []
-        }
+    // checkIfLSEmpty = ()=>{
+    //     if(JSON.parse(localStorage.getItem('commands'))){
+    //         this.getLocalStorageCommands = JSON.parse(localStorage.getItem('commands'));
+    //         this.commandsTurnedToArray= Object.entries(this.getLocalStorageCommands);
+    //     } else {
+    //         this.getLocalStorageCommands = {}
+    //         this.commandsTurnedToArray = []
+    //     }
 
-    }
+    // }
    
     addCommand = ()=>{
-        let commandToAdd = [this.state.name,this.state.response]
+        let commandToAdd = {name:this.state.name, response: this.state.response}
+        // this.commandsTurnedToArray.push(this.dbCommands)
+        this.dbCommands.push(commandToAdd)
+
+
+        axios.put(`/spuser/${this.props.context.state.myId}`,{
+            _id: this.props.context.state.myId,
+            username: this.props.context.state.username,
+            commands: this.dbCommands,
+            email: this.props.context.state.email,
+            partner: this.props.context.state.partner,
+        })
+
+        console.log("ADD CLICK", this.dbCommands)
         
-        this.commandsTurnedToArray.push(commandToAdd)
-        
-        // console.log(this.commandsTurnedToArray)
-        //make array into OBJ to send to local storage
-        let obj = {}
-        for (let i=0; i<this.commandsTurnedToArray.length;i++){
-            obj[this.commandsTurnedToArray[i][0]] = this.commandsTurnedToArray[i][1];
-            
-        } 
-        localStorage.clear()
-        localStorage.setItem('commands', JSON.stringify(obj));
-        this.getLocalStorageCommands= JSON.parse(localStorage.getItem('commands'));
-        this.commandsTurnedToArray= Object.entries(JSON.parse(localStorage.getItem('commands')))
         this.setState({
             name:"",
             response:""
@@ -125,9 +150,11 @@ export default class CommandsInput extends Component{
         
     }
     componentDidMount(){
-        this.checkIfLSEmpty()
-        this.showCommands()
         
+        setTimeout(() => {
+            console.log("MY CONTEXT",this.props.context)
+            this.getCommandsFromDB(this.props.context.state.myId)   
+        }, 500);
         
 
     }
@@ -137,6 +164,7 @@ export default class CommandsInput extends Component{
             <div  className="commands-box" 
             // key={this.counter+=5}
             >
+            
                 <form className="commands-input">
                     <div className="input-field">
                         <input className="input-name" name="name" autoComplete="off" id="name"placeholder="" type="text" onChange={this.changeHandler} value={this.state.name}/>
@@ -156,3 +184,5 @@ export default class CommandsInput extends Component{
         )
     }
 }
+
+CommandsInput.contextType = MyContext;

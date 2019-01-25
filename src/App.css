@@ -93,24 +93,7 @@ body{
 .modal-content > h4{
   color:rgb(212, 0, 255);
 }
-.bottom-middle-container{
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width:40%;
-  flex-shrink: 0;
-}
-.bottom-middle-container>div{
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  width:100%;
-  max-width: 100%;
-}
+
 
 .channel-status-box{
   background-color: #00000000;
@@ -434,7 +417,7 @@ iframe{
 
   text-decoration: none;
   color: rgb(255, 255, 255);
-  background-image: linear-gradient(rgb(100, 65, 164),#1e064bea, rgb(100, 65, 164));
+  background-color: rgb(100, 65, 164);
   -webkit-transition: background-color .2s ease-out;
   transition: background-color .2s ease-out;
   font-size: 1rem;
@@ -661,7 +644,25 @@ header{
   flex-direction: column;
   justify-content: space-around;
 }
-
+.cover{
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: row;
+  height: 10%;
+  background-color: #000000;
+}
+.brand{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width:45%;
+  height: 100%;
+  color: #ffffff;
+  font-size: 2.4em;
+  font-family: 'Titillium Web', sans-serif;
+  background-size: cover; 
+}
 .material-icons {
   font-size: 200%;
   color: #ffffff;

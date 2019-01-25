@@ -298,6 +298,7 @@ class MainSection extends Component{
         return (
             <Fragment>
             <div className='main-section'>
+            <div className="cover"><div className="brand"><div>STREAMPANEL app</div></div></div>
             <ScenePanel scenes={this.state.scenes} func={this.setSceneAndSourcesOnClick} currentScene={this.state.currentScene}/>
             <div className="mid-section">
                 <SourcePanel sources={this.state.sources}  func={this.toggleSource} srcClass={this.state.srcClass} />

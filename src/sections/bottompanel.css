@@ -13,12 +13,15 @@ font-family: 'Julius Sans One', sans-serif;
 font-family: 'Baloo', cursive;
 font-family: 'Homenaje', sans-serif;
 font-family: 'Rubik Mono One', sans-serif; */
-
+.bottom-panel >* {
+box-sizing: border-box;
+border:0.5px solid white;
+}
 .bottom-panel{
     justify-content: center;
     /* align-items: center; */
     width: 100%;
-    height:48%;
+    height:40%;
     flex-shrink: 0;
     /* padding: 2px; */
     /* background-color: rgba(0, 0, 0, 0.753); */
@@ -42,7 +45,7 @@ font-family: 'Rubik Mono One', sans-serif; */
     /* width: 100%; */
     flex-grow: 0;
     flex-shrink: 0;
-    margin:0px 1px;
+    
     /* box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2); */
     font-family: 'Titillium Web', sans-serif;
     display: flex;
@@ -55,21 +58,39 @@ font-family: 'Rubik Mono One', sans-serif; */
     /* border-radius: 2px; */
 }
 .text-div{
-    margin: 0px 1px;
+    
     font-family: 'Titillium Web', sans-serif;
 
     width:80%;
 }
+.bottom-middle-container{
+
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width:40%;
+    flex-shrink: 0;
+  }
+  .bottom-middle-container>div{
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width:100%;
+    max-width: 100%;
+  }
 .channel-title{
     /* width: 100%; */
-    margin: 0px 1px;
+    
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
     color:rgb(255, 255, 255);
     background-color: rgb(25, 23, 28);
     /* border-radius: 3px; */
-    /* margin: 5%; */
     display: flex;
-    height: 10%;
+    height: 20%;
     align-items: center;
     justify-content: center;
     font-family: 'Homenaje', sans-serif;
@@ -77,10 +98,8 @@ font-family: 'Rubik Mono One', sans-serif; */
 }
 .bottom-left-container{
     box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
-
     display: flex;
     width:20%;
-    /* margin: 2px; */
     flex-direction: column;
     overflow: hidden;
     justify-content: space-around;
@@ -90,7 +109,6 @@ font-family: 'Rubik Mono One', sans-serif; */
 }
 
 .streaming{
-    margin: 1px;
     width: 100%;
     height: 48%;
     flex-shrink: 0;
@@ -106,7 +124,6 @@ font-family: 'Rubik Mono One', sans-serif; */
 }
 
 .not-streaming{
-    margin: 1px;
     width: 100%;
     height: 50%;
     flex-direction: column;
@@ -137,10 +154,10 @@ font-family: 'Rubik Mono One', sans-serif; */
     align-items: center;
     text-align: center;
     /* border-radius: 2px; */
-    background-color: rgb(0, 193, 103);
+    background-color: rgb(60, 60, 60);
     color: rgb(255, 255, 255);
     display: flex;
-    margin: 1px;
+    
 }
 
 .source-panel>.twitch-btn>div{
@@ -150,7 +167,7 @@ font-family: 'Rubik Mono One', sans-serif; */
 .autocomplete-content li img {
     height: 90%;
     width: 45px;
-    /* margin: 5px 15px; */
+    
     border-radius:0%;
     padding: 0%;
 }
@@ -169,14 +186,14 @@ font-family: 'Rubik Mono One', sans-serif; */
     /* width: 100%; */
     /* font-family: 'Titillium Web', sans-serif; */
     font-family: 'Staatliches', cursive;
-    height: 40%;
-    background-color:  rgb(0, 193, 103);
+    height: 30%;
+    background-color:  rgb(60, 60, 60);
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     color:#000000;
-    margin: 0px 1px;
+    
 }
 
 .game-cover{
@@ -185,7 +202,6 @@ font-family: 'Rubik Mono One', sans-serif; */
 }
 
 .tweet-container{
-    margin:1px;
     height: 50%;
     width: 100%;
     display: flex;
@@ -195,7 +211,6 @@ font-family: 'Rubik Mono One', sans-serif; */
 }
 
 .tweet-btn{
-    /* margin: 1px; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -235,7 +250,6 @@ padding-top: 5px;
     background-size: contain;
     background-repeat: no-repeat;
     background-position-y: 50%;
-    margin: 1px;
     display: flex;
     justify-content: center;
     align-items: center;
