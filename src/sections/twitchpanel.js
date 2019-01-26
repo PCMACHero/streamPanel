@@ -1,35 +1,42 @@
-import React from 'react';
-import "./twitchpanel.css"
+import React, {Component, Fragment} from 'react';
+import "../App.css"
 import {streamer} from "../helpers/dummydata"
-import tmi from "tmi.js";
+import CommandsModal from './commandsModal'
 import {Modal} from 'react-materialize'
 import Commands from './commands'
 // import SceneBtn from './scenebtn'
 // import {twitchBtns} from '../helpers/dummydata'
 
-const twitchPanel = (props)=> {
-    const options = {
-        options: {
-            debug: true
-        },
-        connection: {
-            reconnect: true
-        },
-        identity: {
-            username: "streampanelapp",
-            password: "oauth:"+props.oauth
-        },
-        channels: [streamer]
-    };
-    const client = new tmi.client(options);
-    client.connect();
+class TwitchPanel extends Component{
+    state={
+        "followers-only": null,
+        "subs-only": null,
+        slow: null,
+        "emote-only": null,
+        active:null,
+        showModal: false,
+    }
+    client = this.props.client
+    
         
-     
-        const runAd=()=>{
+getChatMode=()=>{
+    
+    this.client.on("roomstate", (channel, state)=> {
+        // Do your stuff.
+        console.log("CHAT MODE",state["followers-only"])
+        if(state["followers-only"]){
+            this.setState({
+                active: "Follows-Only"
+            })
+        }
+        
+    });
+}
+       runAd=()=>{
             
             
             
-            client.commercial(streamer, 30).then(function(data) {
+            this.client.commercial(streamer, 30).then(function(data) {
                 // data returns [channel, seconds]
             }).catch(function(err) {
                 //
@@ -37,35 +44,64 @@ const twitchPanel = (props)=> {
             });
             
         }
+        
+        unrunAd=()=>{
+            console.log("clicked unrun ad part 1")
+            this.ad = false;
     
-        return (<div className='source-panel'>
+        }
 
-            <div className="twitch-btn"  onClick={()=>{runAd()}}>
+        componentDidMount(){
+            this.getChatMode()
+        }
+
+        render(){
+            let modal= null
+            if(this.state.showModal){
+                modal = 
+                <Fragment><div className="commands-container" onClick={()=>{
+                    console.log(this.state.showModal)
+                    this.setState({
+                    showModal: !this.state.showModal
+                })}}></div><CommandsModal/></Fragment>
+            }
+            return (<div className='source-panel'>
+            {modal}
+            <div className="twitch-btn"  onClick={()=>{this.runAd()}}>
                 <i className="material-icons">
                 monetization_on
                 </i>
                 <div className='label'>RUN AD</div>
             </div>
-            <Modal key={9999999} className="commands-modal"
-                header='COMMAND CREATOR'
-                trigger={<div className="twitch-btn"  onClick={()=>{console.log(" clicked")}}>
+            <div className="twitch-btn" onClick={()=>{
+                    console.log(this.state.showModal)
+                    this.setState({
+                    showModal: !this.state.showModal
+                })}}>
+
                 <i className="material-icons">
                 adb
                 </i>
-                <div className='label'>COMMANDS</div>
-            </div>}>
-                <Commands/>
-                </Modal>
+                <div className='label' >COMMANDS</div>
+                
+                
+            </div>
+                
+                
             
             <div className="twitch-btn"  onClick={()=>{console.log(" clicked")}}>
                 <i className="material-icons">
                 chat
                 </i>
-                <div className='label'>CHAT-MODE</div>
+                <div className='label'>CHAT-MODE
+                                    <div>{this.state.active}</div>
+                </div>
             </div>
         
     </div>)
+        }
+        
     
     
 }
-export default twitchPanel
+export default TwitchPanel

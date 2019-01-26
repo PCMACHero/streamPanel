@@ -117,14 +117,7 @@ body{
   /* color:rgb(70, 70, 70); */
   text-align: center;
 }
-.commands-box{
-  width:100%;
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  align-items: center;
 
-}
 .command-btn{
 justify-items: flex-end;
 align-self: flex-end;
@@ -163,12 +156,8 @@ text-align: center;
   justify-content: space-between;
   width: 100%;
 }
-.commands-container{
-  display: flex;
-  flex-shrink: 0;
-  width: 100%;
-}
-.commands-modal{
+
+.update-modal{
   width: 80%;
   max-height: 100%;
   background-color: rgba(0, 0, 0, 0.829);
@@ -435,7 +424,7 @@ iframe{
   flex-shrink: 0;
   align-items: center;
   justify-content: center;
-  flex-grow: 1;
+  flex-grow: 0;
   /* margin: 6px 0; */
   /* border-radius: 2px; */
   /* padding: 0 16px; */
@@ -443,15 +432,21 @@ iframe{
   text-decoration: none;
   color: rgb(255, 255, 255);
   /* background-color: #061727d0; */
-  background-color: #0084ffeb;
+  background-color: #00d08e;
   -webkit-transition: background-color .2s ease-out;
-  transition: background-color .2s ease-out;
+  transition: background-color .1s ease-out;
   font-size: 1em;
   -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
           box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
   
   
   
+}
+.src-btn-active:hover{
+  background-color: #00b179;
+}
+.src-btn-inactive:hover{
+  background-color: #010407;
 }
 .src-btn-inactive {
   margin: 1px;
@@ -469,7 +464,7 @@ iframe{
 
   text-decoration: none;
   color: rgb(255, 0, 0);
-  background-color: #061727;
+  background-color: #041f39;
   -webkit-transition: background-color .2s ease-out;
   transition: background-color .2s ease-out;
   font-size: 1em;
@@ -479,11 +474,11 @@ iframe{
   
   
 }
-.source-panel>.twitch-btn>div {
+/* .source-panel>.twitch-btn>div {
   height: 20%;
-}
+} */
 
-.source-panel> div > .twitch-btn{
+/* .source-panel> div > .twitch-btn{
   flex-shrink: 0;
   display: flex;
   height: 13vh;
@@ -495,7 +490,7 @@ iframe{
   display: flex;
   justify-content: center;
   align-items: center;
-} */
+} */ 
 .twitch-btn{
   
   
@@ -550,9 +545,9 @@ iframe{
 
   text-decoration: none;
   color: rgb(255, 255, 255);
-  background-color: #6cfff3ea;
+  background-color: rgb(41, 26, 67);
   -webkit-transition: background-color .2s ease-out;
-  transition: background-color .2s ease-out;
+  transition: background-color .1s ease-out;
   font-size: 1rem;
   -webkit-box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
           box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
