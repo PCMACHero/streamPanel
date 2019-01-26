@@ -1,4 +1,5 @@
-var users = require('../controllers/user');
+const users = require('../controllers/user');
+const path = require('path');
 
 module.exports = function(app) {
     app.get('/', users.root);
@@ -21,6 +22,6 @@ module.exports = function(app) {
     app.delete('/new-button/:id', users.delButton);
     app.get('/login', users.loginPlain);
     app.post('/login', users.logThemIn);
-    app.get('*', users.fourohfour);
+    app.all('*', (req, res, next) => res.sendFile(path.join(__dirname, '../../build/index.html')));
     // app.get('/success', users.success);
 }
