@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Stream Daddy</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+    <link rel="stylesheet" href="/css/landingPageStyles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <link rel="apple-touch-icon" sizes="57x57" href="/img/icons.ico/apple-icon-57x57.png">
+    <link rel="apple-touch-icon" sizes="60x60" href="/img/icons.ico/apple-icon-60x60.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="/img/icons.ico/apple-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="76x76" href="/img/icons.ico/apple-icon-76x76.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="/img/icons.ico/apple-icon-114x114.png">
+    <link rel="apple-touch-icon" sizes="120x120" href="/img/icons.ico/apple-icon-120x120.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="/img/icons.ico/apple-icon-144x144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="/img/icons.ico/apple-icon-152x152.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/img/icons.ico/apple-icon-180x180.png">
+    <link rel="icon" type="image/png" sizes="192x192"  href="/img/icons.ico/android-icon-192x192.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/icons.ico/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="96x96" href="/img/icons.ico/favicon-96x96.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/img/icons.ico/favicon-16x16.png">
+    <link rel="manifest" href="/img/icons.ico/manifest.json">
+    <meta name="msapplication-TileColor" content="transparent">
+    <meta name="msapplication-TileImage" content="/img/icons.ico/ms-icon-144x144.png">
+    <meta name="theme-color" content="transparent">
+    <script>
+        $(document).ready(function() {
+            var currClass = "";
+            var oppClass = "";
+
+            $(window).load(function(e) {
+                $('#mainRight').css('display', 'inline-block');
+                if($(window).width() > 824) {
+                    $('#mainRight').addClass('animatetop');
+                }
+            });
+            // Add the change in header once user scrolls down
+            $(window).scroll(function(e) {
+                let height = $(window).scrollTop();
+                if(height > 107){
+                    $('#myHeader').removeClass().addClass("white");
+                    $('.headerA').removeClass("white-text").addClass("black-text");
+                    $('#logo-container').attr('src', '/img/logoLetteringsm.png');
+                    $('#hamburger').css('color', '#311b92');
+                    $('#dropdown').css('background', 'white');
+                    $('.dropdownBtn').css('color', '#311b92');
+                } else if (height < 107) {
+                    $('#myHeader').removeClass().addClass("deep-purple darken-4");
+                    $('.headerA').removeClass('black-text').addClass("white-text");
+                    $('#logo-container').attr('src', '/img/logoLetteringwhtsm.png').fadeIn("slow");
+                    $('#hamburger').css('color', 'white');
+                    $('#dropdown').css('background', '#311b92');
+                    $('.dropdownBtn').css('color', 'white');
+                }
+            });
+            $(window).resize(function(e) {
+                console.log("width: ", $(window).width());
+                console.log("height: ", $(window).height());
+            });
+            // Mute video
+            $('video').prop('muted', true);
+
+            // pop up the modal
+            $('button').click(function() {
+                $('#signupModal').css('display', 'block');
+            });
+            $('#signuptag').click(function() {
+                $('#signupModal').css('display', 'block');
+            });
+            $('#signupModal').click(function(e) {
+                    if (e.target.id == 'signupModal') {
+                        $(this).css('display', 'none');
+                    }
+            });
+            $('.headerA').hover(function(e) {
+            // gauge height to find the class and store it
+                if (e.type == "mouseenter") {
+                    $(this).removeClass("transparent").addClass('teal');
+                } else if (e.type == "mouseleave") {
+                    $(this).removeClass('teal').addClass('transparent');
+                }
+                console.log(e.type, oppClass, currClass);
+            });
+            $('#hamburger').click(function(e) {
+                // display dropdown items
+                if($('#dropdown').css('display') == 'none') {
+                    $('#dropdown').css('display', 'block');
+                } else {
+                    $('#dropdown').css('display', 'none');
+                }
+            });
+            $('#hamburger').mouseleave(function(e) {
+                if (e.offsetX < 0) {
+                    $('#dropdown').css('display', 'none');
+                }
+            });
+            $('#dropdown').mouseleave(function(e) {
+                if (e.offsetY > 0) {
+                    $(this).css('display', 'none');
+                }
+            });
+        });
+    </script>
+</head>
+<body class="deep-purple darken-4">
+    <div id="signupModal">
+        <div id="signupModalContent">
+            <div id="modalHeader">
+                <h2>Thank you for your help with the beta-testing!</h2>
+            </div>
+            <div id="modalCard" class="card white">
+                <div class="card-content black-text">
+                    <img id="twitchLogo" src="/img/twitchLogo.png" alt="Twitch Logo">
+                    <h5>Log in with your Twitch Account</h5>
+                    <!-- waves-effect waves-teal -->
+                    <a href="<%= twitchLink %>"><button class="btn-large deep-purple darken-1">Log in with Twitch</button></a>
+                    <p class="disclaimer">If you are not registered as a beta-tester and would like to participate, email us at StreamDaddyApp@gmail.com</p>
+                </div>
+                <p class="directions">Following successfully logging in, you will be redirected (if you are not registered, you will be redirected here).</p>
+            </div>
+        </div>
+    </div>
+    <nav class="deep-purple darken-4" id="myHeader" role="navigation">
+        <div id="navbar" class="nav-wrapper container">
+            <!-- <h5 id="logo-container" class="headerA" class="brand-logo">Stream Daddy</h5> -->
+            <img src="/img/logoLetteringwhtsm.png" alt="lettering" id="logo-container" class="brand-logo">
+            <ul class="right hide-on-med-and-down">
+                <li>
+                    <a id="signuptag" class="headerA" >Sign up</a>
+                </li>
+                <li>
+                    <a href="/login" class="headerA" >Member Tools</a>
+                </li>
+            </ul>
+            <a class="right" id="hamburger"><i class="material-icons">menu</i></a>
+            <!-- <a href="#" data-target="nav-mobile" class="sidenav-trigger">
+                <i class="material-icons">menu</i>
+            </a> -->
+        </div>
+    </nav>
+    <div id="dropdown">
+        <ul>
+            <li>
+                <button class="dropdownBtn">Sign up</button>
+            </li>
+            <li>
+                <a href="/login" class="dropdownBtn">Member Tools</a>
+            </li>
+        </ul>
+    </div>
+    <div id="index-banner">
+        <div id="mainTop"></div>
+        <div id="mainLeft">
+            <h5 class="white-text" id="pitch">Take full control of your Twitch streaming experience with our Live Stream Controller Application!</h5>
+            <button id="downloadButton" class="btn-large waves-effect waves-teal transparent" class="signup">Get Started</button>
+        </div>
+        <div id="mainRight">
+            <img class="ipadImg" src="/img/ipad2.png" alt="ipad">
+        </div>
+    </div>
+    <div id="features">
+        <div id="featuresHeader">
+            <h2>Full and Instant Control</h2>
+            <h5>Check out what you can do with the Daddy, which works on any internet-enabled device!</h5>
+            <hr>
+        </div>
+        <div id="featuresLeft">
+            <img src="/img/logosm.png" id="logo" alt="ipad">
+        </div>
+        <div id="feature1">
+            <i class="material-icons">speaker_phone</i>
+            <h4>All-in-One Solution</h4>
+            <p>Control OBS, view your Twitch chat/video, and other data on one screen.</p>
+        </div>
+        <div id="feature2">
+            <i class="material-icons">perm_device_information</i>
+            <h4>Get your Twitch Info</h4>
+            <p>See your view count, view your stream title, see how long you've been streaming.</p>
+        </div>
+        <div id="feature3">
+            <i class="material-icons">chat_bubble_outline</i>
+            <h4>Control your Chat</h4>
+            <p>Keep an eye on your group and take control of it (slow mode, put users in timeout).</p>
+        </div>
+        <div id="feature4">
+            <i class="material-icons">view_stream</i>
+            <h4>Customize Buttons</h4>
+            <p>Use one of the three custom buttons for your favorite bot commands.</p>
+        </div>
+    </div>
+    <div id="gap"></div>
+    <div id="demo" style="background-color: white;">
+        <iframe width="100%" height="420" src="https://www.youtube.com/embed/itDuPgFGlCU?rel=0&amp;controls=0&amp;showinfo=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+    <div id="follow">
+        <div id="follDiv">
+            <h5>Follow us on Twitter! </h5>
+            <hr>
+        </div>
+        <a href="https://twitter.com/DaddyStream?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false" data-size="large">Follow @DaddyStream</a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+    </div>
+
+    <!-- <div id="fakePricing">
+        <div class="pricingColumn">
+            <ul>
+                <li class="pricingHeader">Basic</li>
+                <li class="gray">$5.00 / one-time</li>
+                <li>Unlimited Access - forever</li>
+                <li>Become 15.235% Cooler</li>
+                <li>We will like you</li>
+                <li><button class="pricingButton">Choose this option</button></li>
+            </ul>
+        </div>
+        <div class="pricingColumn">
+            <ul>
+                <li class="pricingHeader">Pro</li>
+                <li class="gray">$5.00001 / one-time</li>
+                <li>Unlimited Access - Even-More Forever</li>
+                <li>Become 15.839% Cooler</li>
+                <li>We will like you more</li>
+                <li><button class="pricingButton">Choose this option</button></li>
+            </ul>
+        </div>
+        <div class="pricingColumn">
+            <ul>
+                <li class="pricingHeader">Ultra</li>
+                <li class="gray">$5.00009 / one-time</li>
+                <li>Unlimited Access - Forever X2!!!</li>
+                <li>Become 15.999% Cooler</li>
+                <li>We will like you most</li>
+                <li><button class="pricingButton">Choose this option</button></li>
+            </ul>
+        </div>
+    </div> -->
+    <footer class="page-footer deep-purple darken-4">
+        <div class="footer-copyright">
+            <div class="container">
+                <p class="right">© 2018, Stream Daddy</p>
+            </div>
+        </div>
+    </footer>
+    <!-- <script type="text/javascript" src="js/materialize.min.js"></script> -->
+</body>
+</html>
