@@ -182,6 +182,7 @@ class StreamPanel extends Component {
     }
     
   render() {
+      console.log("STREAMPANEL RENDERED")
     return (
         <MyProvider>
             

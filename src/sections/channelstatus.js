@@ -115,7 +115,7 @@ class ChannelStatus extends Component{
     }
     render(){
         return(
-            <Modal className="commands-modal"
+            <Modal className="update-modal"
                 header='UPDATE CHANNEL'
                 trigger={<div className="channel-status-box">
                             <div className="follows-title">CATEGORY/GAME</div>

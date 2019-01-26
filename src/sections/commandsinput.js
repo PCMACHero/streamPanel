@@ -20,7 +20,7 @@ export default class CommandsInput extends Component{
                 console.log("MY DB COMMANDS", this.dbCommands)
                 // this.getLSObjAndArray()
                 // this.commandsTurnedToArray = this.dbCommands
-                this.showCommands()
+                this.showCommands(res.data.commands)
             })
         }
         
@@ -48,7 +48,7 @@ export default class CommandsInput extends Component{
             //     name:"",
             //     response:""
             // })
-            this.showCommands()
+            this.showCommands(res.data.commands)
             this.setState({
                 name:"",
                 response:""
@@ -77,12 +77,13 @@ export default class CommandsInput extends Component{
     //     // this.commandsTurnedToArray= Object.entries(JSON.parse(this.dbCommands))
     // }
 
-    showCommands = ()=>{
+    showCommands = (commands)=>{
         
         this.commandsToShow = []
-        for(let i=0; i<this.dbCommands.length;i++){
+        console.log("commands in show", commands)
+        for(let i=0; i<commands.length;i++){
             // let index = 1000000
-            let makeObj = this.dbCommands[i]
+            let makeObj = commands[i]
             this.commandsToShow.push(
                 
                 <div className="command-item" key={i}>
@@ -102,7 +103,9 @@ export default class CommandsInput extends Component{
                 </div>
 
             )
-        } 
+        } this.setState({
+            commands:this.commandsToShow
+        })
     }
     // checkIfLSEmpty = ()=>{
     //     if(JSON.parse(localStorage.getItem('commands'))){
@@ -127,9 +130,8 @@ export default class CommandsInput extends Component{
             commands: this.dbCommands,
             email: this.props.context.state.email,
             partner: this.props.context.state.partner,
-        })
-
-        console.log("ADD CLICK", this.dbCommands)
+        }).then(res=>{
+            console.log("ADD CLICK", this.dbCommands)
         
         this.setState({
             name:"",
@@ -138,7 +140,12 @@ export default class CommandsInput extends Component{
         console.log("THIS IS GETLOCALSTORAGECOMMANDS: ", this.getLocalStorageCommands)
         console.log("THIS IS COMMANDTURNEDTOARRAY: ", this.commandsTurnedToArray)
         console.log("THIS IS COMMANDSTOSHOW:", this.commandsToShow)
-        this.showCommands()
+        this.showCommands(res.data.commands)
+        }
+
+        )
+
+        
         
     }
     changeHandler = (event)=>{
@@ -151,10 +158,10 @@ export default class CommandsInput extends Component{
     }
     componentDidMount(){
         
-        setTimeout(() => {
+        
             console.log("MY CONTEXT",this.props.context)
-            this.getCommandsFromDB(this.props.context.state.myId)   
-        }, 500);
+            this.getCommandsFromDB(197845795)   
+        
         
 
     }
