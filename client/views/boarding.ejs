@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>One more thing...</title>
+    <link rel="stylesheet" href="/css/boardingStyles.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <input id="displayName" type="hidden" value="<$= user.displayName $>">
+        <h1 class="almost">Almost ready...</h1>
+        <div id="card">
+            <h3>Enter the local IP for the Computer using OBS.</h3>
+            <p>Go to this website if you don't know your local IP <br><span class="spanP">(Reload it if you need to)</span>: <br></p>
+             <h1><a href="https://www.whatismybrowser.com/detect/what-is-my-local-ip-address">https://www.whatismybrowser.com/detect/what-is-my-local-ip-address</a></h1>
+            <input type="url" id="input" name="localIp" value="<%= user.localIp %>">
+            <h5 id="error"></h5>
+            <button id="proceedBtn">Proceed<span class="sdSpan"> to Stream Daddy</span></button>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function() {
+            const err = document.getElementById('error');
+            const displayName = $('displayName').val();
+            $('button').click(function() {
+                console.log($('#input').attr('placeholder'));
+                if($('#input').val().length > 6) {
+                    if ($('#input').val() != $('#input').attr('placeholder')) {
+                        // submit form data
+                        let f = document.createElement('form');
+                        f.method = "POST";
+                        f.action = "/newUrl";
+                        let i = document.createElement('input');
+                        i.type = 'hidden';
+                        i.name = 'ip';
+                        i.value = $('#input').val().toString();
+                        f.appendChild(i);
+                        err.appendChild(f);
+                        f.submit();
+                    } else {
+                        // send them to the app if the ip address has not changed
+                        window.location = `/user/${displayName}/app`;
+                    }
+                } else {
+                    $('#error').text('Please enter a valid ip address');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
