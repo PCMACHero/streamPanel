@@ -1,5 +1,5 @@
-const users = require('../controllers/user');
-const path = require('path');
+const users = require('../controllers/user'),
+      api = require('../controllers/api');
 
 module.exports = function(app) {
     app.get('/', users.root);
@@ -22,6 +22,7 @@ module.exports = function(app) {
     app.delete('/new-button/:id', users.delButton);
     app.get('/login', users.loginPlain);
     app.post('/login', users.logThemIn);
-    app.all('*', (req, res, next) => res.sendFile(path.join(__dirname, '../../build/index.html')));
+    app.post('/api/*', )
+    app.all('*', users.renderReact);
     // app.get('/success', users.success);
 }

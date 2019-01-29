@@ -8,13 +8,12 @@ var reactApp = express();
 var port = 8000;
 
 app.use(bodyParser.urlencoded({extended:true}));
-app.use(express.static(path.join(__dirname, './client/static')));
+app.use(express.static(path.join(__dirname, './build/static')));
 app.set('views', path.join(__dirname, './client/views'));
 app.set('view engine', 'ejs');
 
 reactApp.use(bodyParser.urlencoded({extended:true}));
 reactApp.use(express.static(path.join(__dirname, './build/static')))
-
 
 app.use(session({
     secret: "77bfce89f4169e4e4e79d45af98d0c04",

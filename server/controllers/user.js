@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const request = require('request');
+const path = require('path');
 const session = require('express-session');
 // const url = require('url');
 const twitchCltId = "1w72cq9l8ub9r1pzuqrh91pwduz8r2";
@@ -16,6 +17,13 @@ const permittedUsers = {
 var User = mongoose.model('User');
 
 module.exports = {
+    renderReact: (req, res, next) => {
+        console.log('render react route hit')
+        // if (!req.session || !req.session.userId) {
+        //     res.redirect('/home');
+        // }
+        res.sendFile(path.join(__dirname, '../../build', 'index.html'))
+    },
     root: (req, res) => {
         // check if they're logged in
         if(!req.session.userId) {
@@ -37,7 +45,7 @@ module.exports = {
         res.render('landingPage', {twitchLink: responseStr});
     },
     twitch: (req, res) => {
-        if (req.query.state == randState && req.query.code) {
+        if (req.query.state === randState && req.query.code) {
             const code = req.query.code;
             request({
                 uri: "https://id.twitch.tv/oauth2/token?client_id=" + twitchCltId + "&client_secret=" + twitchSecret + "&grant_type=authorization_code&redirect_uri=" + redirectUri + "&code=" + code,
@@ -474,7 +482,7 @@ module.exports = {
                             winMsg: foundUser.winMsg
                         };
                         // render the application
-                        res.render('obs', {user: user});
+                        res.json({ message: "success", user: user});
                     }
                 }
             }
