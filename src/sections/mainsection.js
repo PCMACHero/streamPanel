@@ -98,17 +98,7 @@ class MainSection extends Component{
         })
     }
    
-    runAd=()=>{
-        console.log("clicked run ad part 1")
-        this.ad = true;
-
-        
-    }
-    unrunAd=()=>{
-        console.log("clicked unrun ad part 1")
-        this.ad = false;
-
-    }
+    
 
     toggleStream = ()=>{
         console.log("CLICKED TOGGLESTREAM")
@@ -117,131 +107,24 @@ class MainSection extends Component{
     })
 
 }
-    toggleSource = (sourceToToggle)=>{
     
-        this.server.send({'request-type': 'GetCurrentScene'}).then(data=>{
-            console.log("sources before click change", data.sources)
-            for(let i = 0; i < data.sources.length; i++){
-                
-                if (data.sources[i].name === sourceToToggle){
-                    
-                    let toggle = !data.sources[i].render
-                    console.log(toggle)
-                    
-                    //toggle visibility
-                    this.server.send({'request-type': 'SetSceneItemProperties',"item": sourceToToggle, "visible": toggle})
-                    
-                    
-                    
-                } 
-                
-            } this.getFirstScenesAndSources();
-            
-            
-        })
 
-            //    console.log("CLIECKED ROUCES :", source)
-            //    this.server.send({'request-type': 'GetSourceSettings',"sourceName": source}).then(data=>{
-            //        console.log("SDJKDFJKDJGKJGKJGFKG",data)
-            //    })
-            
-            
-
-           }
-
-           
+    connectOBS = ()=>{
+        this.server.connect()
+    }
            
                 
-           getMic(){
-            this.server.send({'request-type': 'GetSourcesList'})
-            .then(data=>{
-                    console.log("MY MIC DATA", data.sources)
-
-                    const arrayOfMics = []
-                    data.sources.forEach((val)=>{
-                        if(val.typeId==="coreaudio_input_capture"){
-                            arrayOfMics.push(val)
-                        }
-                    })
-                    
-                    console.log("MY MIC ARRAY", arrayOfMics)
-                    this.server.send({'request-type': 'GetMute','source':arrayOfMics[0].name}).then(data2=>{
-                        console.log("MY FINAL MIC DATA", data2)
-                        this.setState({
-                            micSources:data2
-                        })
-                    })
-                // this.setState( { 
-                //     scenes: data.scenes,
-                //     currentScene:data["current-scene"] 
-                // } );
-
-            })
+           
             
-        }
-            
-           getFirstScenesAndSources(){
-            this.server.addMessageListener( this.handleServerEvent.bind(this));
-            
-            this.server.connect().then((responseHandler)=>{
-                this.getMic()
-                this.server.send({'request-type': 'GetSceneList'}).then(data=>{
-                    
-                    this.setState( { 
-                        scenes: data.scenes,
-                        currentScene:data["current-scene"] 
-                    } );
-    
-                });
-                this.server.send({"request-type": "GetStreamingStatus"}).then(data=>{
-                    console.log("MY STREAM STATUS OBJ", data.streaming)
-                    this.setState({
-                        streamingStatus:data.streaming
-                    })
-                })
-
-                this.server.send({'request-type': 'GetCurrentScene'}).then(data2=>{
-                    
-                    this.setState( { 
-                        sources: data2.sources
-                    } )});
-
-
-                // this.server.send({'request-type': 'GetMute', source: 'newsub'})
-                // this.server.send({'request-type': 'ToggleMute', source: "Browser"})
-                
-                
-            })
-
-           }
-           setSceneAndSourcesOnClick=(scene)=>{
-            //get new current scene and scene sources
-            this.server.send({'request-type': 'SetCurrentScene', "scene-name": scene})
-            this.server.send({'request-type': 'GetCurrentScene', "scene-name": scene}).then(data2=>{
-               console.log(data2)
-               this.setState({
-                   currentScene:data2.name,
-                   sources: data2.sources
-               })
-                
-            })
-            //get new scenes array
-            this.server.send({'request-type': 'GetSceneList'}).then(data=>{
-                
-                this.setState( { 
-                    
-                    currentScene:data["current-scene"],
-                    
-                } );
-
-            })
-           }
+           
+           
            componentDidMount(){
+            this.server.connect()
             //    this.disableAC()
+            this.getUserID()
             
             this.client.connect();
-            this.getUserID()
-                this.getFirstScenesAndSources()
+            
                 
             
             
@@ -256,62 +139,26 @@ class MainSection extends Component{
 
 
            
-    handleServerEvent(newEventData){
-        
-        
-        console.log("EVENT FIRED", newEventData);
-        if(newEventData["update-type"]==="SceneItemVisibilityChanged" || newEventData["update-type"]==="SwitchScenes"){
-            this.getFirstScenesAndSources()
-
-        }
-        if(newEventData["update-type"]==="StreamStopped"){
-            console.log("REEEEEEEEEEE STOPPED")
-            this.setState({
-                streamingStatus: false,
-                statusMessage: null,
-            })
-            this.getFirstScenesAndSources()
-        }else if ( newEventData["update-type"]==="StreamStopping"){
-            this.setState({
-                statusMessage: "Stream is stopping..."
-            })
-            this.getFirstScenesAndSources()
-        } else if (newEventData["update-type"]==="StreamStarted"){
-            console.log("REEEEEEEEEEE STARTED")
-            this.setState({
-                streamingStatus: true,
-                statusMessage: null
-            })
-            this.getFirstScenesAndSources()
-        } else if (newEventData["update-type"]==="StreamStarting"){
-            this.setState({
-                statusMessage:"Stream is starting..."
-            })
-            this.getFirstScenesAndSources()
-        }
-        console.log("THIS DOESNT CHANGE!!!!!!!!!!!!!!!!!!!!!!!!!!!!",this.state.streamingStatus)
-        
-        
-    }
+    
     render(){
         console.log("RERENDERED MAINSECTION")
         return (
             <Fragment>
             <div className='main-section'>
             <div className="cover"><div className="brand"><div>STREAMPANEL app</div></div></div>
-            <ScenePanel scenes={this.state.scenes} func={this.setSceneAndSourcesOnClick} currentScene={this.state.currentScene}/>
+            <ScenePanel server={this.server} scenes={this.state.scenes} func={this.setSceneAndSourcesOnClick} currentScene={this.state.currentScene}/>
             <div className="mid-section">
-                <SourcePanel sources={this.state.sources}  func={this.toggleSource} srcClass={this.state.srcClass} />
+                <SourcePanel server={this.server}  func={this.toggleSource} srcClass={this.state.srcClass} />
                 <VideoBox channel={streamer}></VideoBox>
-                <TwitchPanel oauth={this.props.oauth} runAd={this.runAd}/>
+                <TwitchPanel client={this.client} oauth={this.props.oauth} runAd={this.runAd}/>
                 
             </div>
             
-            <BottomPanel func={this.toggleStream} channelOBJ={this.state.channel} client={this.client} OBSOBJ={this.state} oauth={this.props.oauth} micSources={this.state.micSources}/>
+            <BottomPanel func={this.toggleStream} channelOBJ={this.state.channel} client={this.client} OBSOBJ={this.state} oauth={this.props.oauth} micSources={this.state.micSources}/> 
             
-        </div>
-            <Chat-Section key={1000000}  id="chat-section"><Chat key={19000} client={this.client} chanBadges={this.props.chanBadges} partner={this.state.channel.partner} 
-             oauth={this.props.oauth}/></Chat-Section>
+        </div> 
+            <Chat-Section id="chat-section"><Chat key={19000} client={this.client} chanBadges={this.props.chanBadges} partner={this.state.channel.partner} 
+             oauth={this.props.oauth}/></Chat-Section> 
             </Fragment>
             
         )

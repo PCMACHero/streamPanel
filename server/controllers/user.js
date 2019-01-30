@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const request = require('request');
+const RequestManager = require('./requests');
 const path = require('path');
 const session = require('express-session');
 // const url = require('url');
@@ -7,7 +8,7 @@ const twitchCltId = "1w72cq9l8ub9r1pzuqrh91pwduz8r2";
 const twitchSecret = "kbindvae0yd2g2c6lbsfq83f86rezr";
 const randState = "77bfce89f4169e4e4e79d45af98d0c04";
 const redirectUri = "http://localhost:8000/success/payment-portal";
-const responseStr = "https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=" + twitchCltId + "&redirect_uri=" + redirectUri + "&scope=channel_editor+chat_login+viewing_activity_read+user:read:email+bits:read&state=" + randState;
+const responseStr = "https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=" + twitchCltId + "&redirect_uri=" + redirectUri + "&scope=channel_editor+channel_read+chat:read+chat:edit+viewing_activity_read+user:read:email+bits:read&state=" + randState;
 
 const permittedUsers = {
     "twboapp@gmail.com": true,
@@ -22,7 +23,7 @@ module.exports = {
         // if (!req.session || !req.session.userId) {
         //     res.redirect('/home');
         // }
-        res.sendFile(path.join(__dirname, '../../build', 'index.html'))
+        res.sendFile(path.join(__dirname, '../../public', 'index.html'))
     },
     root: (req, res) => {
         // check if they're logged in
@@ -44,7 +45,7 @@ module.exports = {
     index: (req, res) => {
         res.render('landingPage', {twitchLink: responseStr});
     },
-    twitch: (req, res) => {
+    twitch: async (req, res) => {
         if (req.query.state === randState && req.query.code) {
             const code = req.query.code;
             request({
@@ -81,7 +82,7 @@ module.exports = {
                         "Authorization": "Bearer ".concat(accessToken)
                     }
                 };
-                request(options, function(error,response,body){
+                request (options, async function(error,response,body){
                     // Store in the db
                     if(error) {
                         console.log("error in request", error);
@@ -99,11 +100,24 @@ module.exports = {
                     }
                     var userData = jsonResponse.data[0];
                 // check if duplicate key error
-                    if (!userData.email) {
+                    if (!userData.id) {
                         res.redirect('/home');
                         return;
                     }
-                    User.findOne({email: userData.email}, function(err, user) {
+                    var postUrl = "https://api.twitch.tv/kraken/channel";
+                    var opts = {
+                        method: 'GET',
+                        url: postUrl,
+                        timeout: 10000,
+                        headers: {
+                            "Authorization": "OAuth ".concat(accessToken)
+                        }
+                    };
+                    let test = await RequestManager.returnJSONFromTwitch(opts);
+                    console.log('hola test ', test);
+
+
+                    User.findOne({twitchId: userData.id}, function(err, user) {
                         if (err) {
                             console.log('error finding: ', err);
                             res.redirect('/home');
@@ -156,6 +170,7 @@ module.exports = {
                                         email: userData.email,
                                         displayName: userData.display_name,
                                         imgUrl: userData.profile_image_url,
+                                        offlineImgUrl: userData.offline_image_url,
                                         twitchLogin: userData.login
                                     });
                                     newUser.save(function(err, user) {
@@ -279,9 +294,6 @@ module.exports = {
             }
         });
         // redirect to the app link w/o data
-    },
-    success: (req, res) => {
-        res.send("Welcome partner!");
     },
     dashboard: (req, res) => {
         if(!req.session.userId) {
@@ -491,10 +503,10 @@ module.exports = {
     password: (req, res) => {
         // check if logged in
         if (!req.session.userId) {
-            res.redirect('login');
+            res.redirect('/login');
         // check if correct route was used
         } else if (req.session.userId != req.params.id) {
-            res.redirect('login');
+            res.redirect('/login');
             // maybe send them to the dashboard instead?
         } else {
             // update user info

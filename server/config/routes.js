@@ -2,6 +2,9 @@ const users = require('../controllers/user'),
       api = require('../controllers/api');
 
 module.exports = function(app) {
+
+    // Static Website
+
     app.get('/', users.root);
     app.get('/home', users.index);
     app.get('/success/payment-portal', users.twitch);
@@ -22,7 +25,19 @@ module.exports = function(app) {
     app.delete('/new-button/:id', users.delButton);
     app.get('/login', users.loginPlain);
     app.post('/login', users.logThemIn);
-    app.post('/api/*', )
-    app.all('*', users.renderReact);
-    // app.get('/success', users.success);
+    
+    // API Routes
+    
+    app.post('/api/isuserauthenticated', api.isAuthenticated);
+    app.post('/api/updatelocalip', api.updateUserLocalIP);
+    app.post('/api/updateobspassword', api.updateOBSPassword);
+    app.post('/api/newcommand', api.createNewCommand);
+    app.delete('/api/command', api.deleteCommand);
+    app.post('/api/updatewinmessage', api.updateWinMessage);
+    app.post('/api/getuserinfo', api.getUserInfo);
+    
+    // React Routes
+
+    app.all('/app/*', users.renderReact);
+    app.all('*', users.fourohfour);
 }
