@@ -18,7 +18,8 @@ var UserSchema = new mongoose.Schema({
     password: {type: String, required: false},
     custom: {type: Array, required: false},
     winMsg: {type: String, required: false},
-    isPartner: {type: Boolean, required: false}
+    isPartner: {type: Boolean, required: false},
+    language: {type: String, required: false}
 }, {timestamps: true});
 
 mongoose.model('User', UserSchema);

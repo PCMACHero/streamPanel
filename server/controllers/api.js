@@ -4,6 +4,7 @@ const mongoose = require('mongoose'),
       config = require('../../common_config/config'),
       User = mongoose.model('User'),
       twitchCredentials = config.TwitchCredentials,
+      ApiHelper = require('../helpers/api_helpers'),
       UserManager = require('../models/usermanager');
 
 module.exports = {
@@ -85,6 +86,8 @@ module.exports = {
                 let saved = await UserManager.saveUserReturnUser(user.data);
                 if (saved.message === "Success") {
                     res.json({ message: `Successfully added new command ${newBtn.title}`, data: saved.data.custom });
+                } else {
+                    res.json(UserManager.saveFailMessage());
                 }
             } else {
                 res.json(UserManager.invalidSessionMessage());
@@ -92,7 +95,26 @@ module.exports = {
         }
     },
     deleteCommand: async (req, res) => {
-
+        // will take in index and delete from array
+        if (UserManager.userNotInSession(req.session)) {
+            res.json(UserManager.notLoggedInMessage());
+        } else if (!req.body.index) {
+            res.json({ message: "Error", err: "Must provide an index to delete from." })
+        } else {
+            let user = await UserManager.findUserByID(req.session.userId);
+            if (user.message === "Success") {
+                let newArrayOfCommands = ApiHelper.removeFromArrayAtIndex(user.data.custom, req.body.index);
+                user.data.custom = newArrayOfCommands;
+                let saved = await UserManager.saveUserReturnUser(user.data);
+                if (saved.message === "Success") {
+                    res.json({ message: `Successfully removed command from index ${req.body.index}`, data: saved.data.custom });
+                } else {
+                    res.json(UserManager.saveFailMessage());
+                }
+            } else {
+                res.json(UserManager.invalidSessionMessage());
+            }
+        }
     },
     updateWinMessage: async (req, res) => {
         if (UserManager.userNotInSession(req.session)) {
@@ -115,6 +137,15 @@ module.exports = {
         }
     },
     getUserInfo: async (req, res) => {
-
+        if (UserManager.userNotInSession(req.session)) {
+            res.json(UserManager.notLoggedInMessage());
+        } else {
+            let user = await UserManager.findUserByID(req.session.userId);
+            if (user.message === "Success") {
+                res.json({ message: "Success", data: user.info });
+            } else {
+                res.json(UserManager.invalidSessionMessage());
+            }
+        }
     },
 }

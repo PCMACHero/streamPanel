@@ -2,6 +2,21 @@ const mongoose = require('mongoose');
 const User = mongoose.model('User');
 
 module.exports = {
+    isNewUserByTwitchId: (twitchId) => {
+        return new Promise((resolve) => {
+            if (!twitchId) resolve({ results: null, err: "No TwitchId provided" })
+            User.findOne({twitchId: twitchId}, (err, results) => {
+                if (err) {
+                    console.log('Error finding user with twitchId: ' + twitchId)
+                    resolve({ results: null, err: err });
+                } else if (results) {
+                    resolve({ results: false, user: results });
+                } else {
+                    resolve({ results: true });
+                }
+            });
+        });
+    },
     findUserByID: (userId) => {
         return new Promise((resolve, reject) => {
             User.findOne({_id: userId}, (err, foundUser) => {
@@ -9,7 +24,7 @@ module.exports = {
                     console.log('Error finding User ', err);
                     resolve({ message: "Error", err: err });
                 } else {
-                    resolve({ message: "Success", info: foundUser });
+                    resolve({ message: "Success", data: foundUser });
                 }
             });
         });
