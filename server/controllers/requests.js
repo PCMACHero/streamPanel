@@ -1,4 +1,5 @@
-const request = require('request');
+const request = require('request'), 
+      twitchCredentials = require('../../common_config/config').twitchCredentials;
 
 module.exports = {
     returnJSONFromTwitch: (options) => {
@@ -22,6 +23,23 @@ module.exports = {
             user.accessToken = newInfo.accessToken;
         }
         user.expiresIn = newInfo.expiresIn;
+        return user;
+    },
+    refreshTwitchTokens: (user, jsonInfo) => {
+        if (!user || !jsonInfo) {
+            return null;
+        }
+        if (jsonInfo['access_token']) {
+            user.accessToken = jsonInfo['access_token']
+        }
+        if (jsonInfo['refresh_token']) {
+            user.refreshToken = jsonInfo['refresh_token']
+        }
+        if (jsonInfo['expires_in']) {
+            let currT = (new Date()).getTime();
+            currT += parseInt(jsonInfo["expires_in"]) * 1000;
+            user.expiresIn = currT;
+        }
         return user;
     },
     updateTwitchUserInfo: (user, infoInJSON) => {
@@ -60,4 +78,36 @@ module.exports = {
         }
         return user;
     },
+    accessTokenHasExpired: (user) => {
+        if (!user || !user.expiresIn) {
+            return null;
+        }
+        let currTime = (new Date()).getTime();
+        currTime += 120000;
+        if (currTime >= user.expiresIn) {
+            return true;
+        }
+        return false;
+    },
+    getTwitchRefreshRequestOpts: (user) => {
+        let twitchRefreshRequestUrl = "https://id.twitch.tv/oauth2/token";
+        let opts = {
+            method: 'POST',
+            url: twitchRefreshRequestUrl,
+            timeout: 10000,
+            headers: {
+                "Authorization": "Bearer ".concat(user.data.accessToken),
+                "Client-ID": "1w72cq9l8ub9r1pzuqrh91pwduz8r2",
+                "Content-Type": "application/x-www-form-urlencoded",
+                "Accept": "application/vnd.twitchtv.v5+json",
+            },
+            form: {
+                "grant_type": "refresh_token",
+                "refresh_token": user.refreshToken,
+                "client_id": twitchCredentials.twitchCltId,
+                "client_secret": twitchCredentials.twitchSecret 
+            }
+        };
+        return opts;
+    }
 }

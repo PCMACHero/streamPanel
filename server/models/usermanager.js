@@ -29,6 +29,17 @@ module.exports = {
             });
         });
     },
+    findUserByTwitchID: (twitchId) => {
+        return new Promise((resolve) => {
+            User.findOne({twitchId: twitchId}, (err, foundUser) => {
+                if (err) {
+                    console.log('Error finding User ', err);
+                    resolve({ message: "Error", err: err });
+                }
+                resolve({ message: "Success", data: foundUser });
+            });
+        });
+    },
     saveUserWithoutReturn: (user) => {
         return new Promise((resolve, reject) => {
             user.save(err => {
@@ -83,4 +94,11 @@ module.exports = {
     invalidSessionMessage: () => {
         return { message: 'Error', err: 'Invalid Session' };
     },
+    getOnlyTokens: (user) => {
+        return {
+            accessToken: user.accessToken,
+            refreshToken: user.refreshToken,
+            expiresIn: user.expiresIn
+        }
+    }
 }

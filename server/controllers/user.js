@@ -4,17 +4,13 @@ const RequestManager = require('./requests');
 const UserManager = require('../models/usermanager');
 const path = require('path');
 const session = require('express-session');
-// const url = require('url');
-const twitchCltId = "1w72cq9l8ub9r1pzuqrh91pwduz8r2";
-const twitchSecret = "kbindvae0yd2g2c6lbsfq83f86rezr";
-const randState = "77bfce89f4169e4e4e79d45af98d0c04";
-const redirectUri = "http://localhost:8000/success/payment-portal";
-const responseStr = "https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=" + twitchCltId + "&redirect_uri=" + redirectUri + "&scope=channel_editor+channel_read+chat:read+chat:edit+viewing_activity_read+user:read:email+bits:read&state=" + randState;
-
-const permittedUsers = {
-    "twboapp@gmail.com": true,
-    "twboapp": true
-}
+const config = require('../../common_config/config')
+const permittedUsers = config.PermittedUsers;
+const twitchCltId = config.TwitchCredentials.twitchCltId,
+      twitchSecret = config.TwitchCredentials.twitchSecret,
+      randState = config.TwitchCredentials.randState,
+      redirectUri = config.TwitchCredentials.redirectUri,
+      responseStr = "https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=" + twitchCltId + "&redirect_uri=" + redirectUri + "&scope=channel_editor+channel_read+chat:read+chat:edit+viewing_activity_read+user:read:email+bits:read&state=" + randState;
 
 var User = mongoose.model('User');
 
@@ -269,7 +265,6 @@ module.exports = {
                         "_id": foundUser._id,
                         "twitchId": foundUser.twitchId,
                         "displayName": foundUser.displayName,
-                        "twitchId": foundUser.twitchId,
                         "email": foundUser.email,
                         "imgUrl": foundUser.imgUrl,
                         "ip": foundUser.localIp,

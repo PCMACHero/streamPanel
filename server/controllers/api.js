@@ -1,11 +1,9 @@
-const mongoose = require('mongoose'),
-      request = require('request'),
-      session = require('express-session'),
+const session = require('express-session'),
       config = require('../../common_config/config'),
-      User = mongoose.model('User'),
       twitchCredentials = config.TwitchCredentials,
       ApiHelper = require('../helpers/api_helpers'),
-      UserManager = require('../models/usermanager');
+      UserManager = require('../models/usermanager'),
+      RequestManager = require('../controllers/requests');
 
 module.exports = {
     isAuthenticated: async (req, res, next) => {
@@ -142,10 +140,41 @@ module.exports = {
         } else {
             let user = await UserManager.findUserByID(req.session.userId);
             if (user.message === "Success") {
-                res.json({ message: "Success", data: user.info });
+                if (RequestManager.accessTokenHasExpired(user.data)) {
+                    let opts = RequestManager.getTwitchRefreshRequestOpts(user.data),
+                        jsonResponse = await RequestManager.returnJSONFromTwitch(opts);
+                    user.data = RequestManager.refreshTwitchTokens(user.data, jsonResponse);
+                    const savedSuccessfully = await UserManager.saveUserWithoutReturn(user.data);
+                    if (!savedSuccessfully) {
+                        res.json(UserManager.saveFailMessage());
+                        return
+                    }
+                }
+                res.json({ message: "Success", data: user.data });
             } else {
                 res.json(UserManager.invalidSessionMessage());
             }
         }
     },
+    getTokensRefreshed: async (req, res) => {
+        if (!req.body.accessToken || !req.body.refreshToken || !req.body.expiresIn || !req.body.twitchId) {
+            res.json({ message: "Error", err: "Must provide an accessToken, refreshToken, expiresIn and TwitchId" });
+            return
+        }
+        let opts = RequestManager.getTwitchRefreshRequestOpts(req.body);
+        let jsonResponse = await RequestManager.returnJSONFromTwitch(opts);
+        let user = await UserManager.findUserByTwitchID(req.body.twitchId);
+        if (user.message === "Error") {
+            res.json({ message: "Error", err: "Invalid data provided" });
+            return
+        }
+        user = RequestManager.refreshTwitchTokens(user, jsonResponse);
+        let savedSuccessfully = await UserManager.saveUserWithoutReturn(user);
+        if (!savedSuccessfully) {
+            res.json(UserManager.saveFailMessage());
+            return
+        }
+        let tokens = UserManager.getOnlyTokens(user)
+        res.json({ message: "Success", data: tokens });
+    }
 }
