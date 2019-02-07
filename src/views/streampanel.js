@@ -7,23 +7,26 @@ import axios from "axios"
 export const MyContext = React.createContext()
 
 export class MyProvider extends Component {
-    token = "mzilallgzh02pwqsyxhdm734kux3mk"
+    begin= window.location.href.indexOf("=")
+    token = window.location.href.slice(this.begin+1,this.begin+31)
     state={
+        loadListener: false,
         myId: null,
         myOauth: this.token,
+        username: null,
+        commands: null,
+        email:null,
+        partner: null,
         
 
     }
-    getOauth=(oauth)=>{
-        this.setState({
-            myOauth: oauth
-        })
-    }
+  
     getUser(){
         axios.get("https://api.twitch.tv/kraken/channel", {headers: {
             Authorization: `OAuth ${this.token}`
         }}).then(data =>{
             let id= data.data._id
+            
             let begginingCommand = {"!uptime": "1 day"}
                     let email = data.data.email
                     let commands = data.data.commands
@@ -56,7 +59,8 @@ export class MyProvider extends Component {
             })
             console.log("MY SWEET USER DATA",data.data)
             this.setState({
-                myId: id,
+                loadListener: true,
+                myId: data.data._id,
                 username: username,
                 commands: commands,
                 email:email,
@@ -67,6 +71,7 @@ export class MyProvider extends Component {
     }
 
     componentDidMount(){
+        console.log("MY PROVIDER MOUNTED", this.state)
         this.getUser()
     }
     render(){
@@ -166,6 +171,7 @@ class StreamPanel extends Component {
     
 
     componentDidMount(){
+        console.log("STREAMPANEL Mounted")
         
         // this.getUser()
         setTimeout(() => {
@@ -184,9 +190,9 @@ class StreamPanel extends Component {
   render() {
       console.log("STREAMPANEL RENDERED")
     return (
-        <MyProvider>
+        
             
-            <div className="stream-panel App">
+            <div className="stream-panel panel-container">
         <div className={this.state.startClass}>
             <div className="start-banner">STREAM PANEL</div>
             <div className="progress">
@@ -198,7 +204,7 @@ class StreamPanel extends Component {
         <MainSection chanBadges={this.state.badges} oauth={this.token}/>
       </div>
 
-        </MyProvider>
+       
       
     );
   }

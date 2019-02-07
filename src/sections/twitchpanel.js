@@ -22,13 +22,26 @@ class TwitchPanel extends Component{
 getChatMode=()=>{
     
     this.client.on("roomstate", (channel, state)=> {
-        // Do your stuff.
-        console.log("CHAT MODE",state["followers-only"])
-        if(state["followers-only"]){
-            this.setState({
-                active: "Follows-Only"
-            })
+        let activeText = []
+        if(state["followers-only"]>0){
+            activeText.push("FOL")
         }
+        if(state["subs-only"]){
+            activeText.push("SUB")
+        }
+        if(state.slow){
+            activeText.push("SLW")
+        }
+        if(activeText.length==0){
+            activeText = "NORMAL"
+        }
+        
+        console.log("CHAT MODE",state)
+        
+            this.setState({
+                active: activeText
+            })
+        
         
     });
 }
