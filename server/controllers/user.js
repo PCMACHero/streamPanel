@@ -1,21 +1,27 @@
 const mongoose = require('mongoose');
 const request = require('request');
+const RequestManager = require('./requests');
+const UserManager = require('../models/usermanager');
+const path = require('path');
 const session = require('express-session');
-// const url = require('url');
-const twitchCltId = "1w72cq9l8ub9r1pzuqrh91pwduz8r2";
-const twitchSecret = "kbindvae0yd2g2c6lbsfq83f86rezr";
-const randState = "77bfce89f4169e4e4e79d45af98d0c04";
-const redirectUri = "http://localhost:8000/success/payment-portal";
-const responseStr = "https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=" + twitchCltId + "&redirect_uri=" + redirectUri + "&scope=channel_editor+chat_login+viewing_activity_read+user:read:email+bits:read&state=" + randState;
-
-const permittedUsers = {
-    "twboapp@gmail.com": true,
-    "twboapp": true
-}
+const config = require('../../common_config/config')
+const permittedUsers = config.PermittedUsers;
+const twitchCltId = config.TwitchCredentials.twitchCltId,
+      twitchSecret = config.TwitchCredentials.twitchSecret,
+      randState = config.TwitchCredentials.randState,
+      redirectUri = config.TwitchCredentials.redirectUri,
+      responseStr = "https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=" + twitchCltId + "&redirect_uri=" + redirectUri + "&scope=channel_editor+channel_read+chat:read+chat:edit+viewing_activity_read+user:read:email+bits:read&state=" + randState;
 
 var User = mongoose.model('User');
 
 module.exports = {
+    renderReact: (req, res, next) => {
+        console.log('render react route hit')
+        // if (!req.session || !req.session.userId) {
+        //     res.redirect('/home');
+        // }
+        res.sendFile(path.join(__dirname, '../../public', 'index.html'))
+    },
     root: (req, res) => {
         // check if they're logged in
         if(!req.session.userId) {
@@ -36,142 +42,109 @@ module.exports = {
     index: (req, res) => {
         res.render('landingPage', {twitchLink: responseStr});
     },
-    twitch: (req, res) => {
-        if (req.query.state == randState && req.query.code) {
+    twitch: async (req, res) => {
+        if (req.query.state === randState && req.query.code) {
+            let twitchUser = new User();
             const code = req.query.code;
-            request({
-                uri: "https://id.twitch.tv/oauth2/token?client_id=" + twitchCltId + "&client_secret=" + twitchSecret + "&grant_type=authorization_code&redirect_uri=" + redirectUri + "&code=" + code,
-                method: "POST",
+
+            let firstTwitchUrl = "https://id.twitch.tv/oauth2/token?client_id=" + twitchCltId + "&client_secret=" + twitchSecret + "&grant_type=authorization_code&redirect_uri=" + redirectUri + "&code=" + code;
+            let opts = {
+                method: 'POST',
+                url: firstTwitchUrl,
                 timeout: 10000,
                 followRedirect: true,
                 maxRedirects: 10
-              }, function(error, response, body) {
-                // Todo: Validate the response id_token
+            }
 
-                if(error) {
-                    console.log("error in Twitch handshake", error);
-                    res.send(error);
-                    return;
-                } 
+            let jsonResponse = await RequestManager.returnJSONFromTwitch(opts);
+            if (jsonResponse.message !== "Success") {
+                console.log('Error getting info from Twitch ' + jsonResponse.err);
+                res.redirect('/home');
+            }
 
-                var jsonResponse = JSON.parse(body);
-                var idToken = jsonResponse["id_token"];
-                var accessToken = jsonResponse["access_token"];
-                var refreshToken = jsonResponse["refresh_token"];
-                var expires_in = jsonResponse["expires_in"];
-                // set the exact time that this expires using date
-                let d = new Date();
-                var expires = parseInt(expires_in) * 1000;
-                expires += d.getTime();
+            twitchUser.accessToken = jsonResponse.data["access_token"];
+            twitchUser.refreshToken = jsonResponse.data["refresh_token"];
+            const expires_in = jsonResponse.data["expires_in"];
+            twitchUser.expiresIn = parseInt(expires_in) * 1000 + (new Date()).getTime();
 
-                var postUrl = "https://api.twitch.tv/helix/users";
-                var options = {
+            let secondTwitchUrl = "https://api.twitch.tv/helix/users";
+            opts = {
+                method: 'GET',
+                url: secondTwitchUrl,
+                timeout: 10000,
+                headers: {
+                    "Authorization": "Bearer ".concat(twitchUser.accessToken)
+                }
+            };
+
+            jsonResponse = await RequestManager.returnJSONFromTwitch(opts);
+            if (!jsonResponse || jsonResponse.message === 'Error') {
+                res.redirect('/home');
+                return
+            }
+            let userIsNew = await UserManager.isNewUserByTwitchId(jsonResponse.data.data[0]["id"]);
+            if (userIsNew.results === null) {
+                res.redirect('/home');
+            } else if (userIsNew.results === false) {
+                let registeredUser = userIsNew.user;
+                req.session.userId = registeredUser._id;
+                // Check if the tokens have changed and update them
+                registeredUser = RequestManager.updateTwitchTokens(registeredUser, twitchUser);
+                // Check if user has already accepted the privacy agreement
+                if(registeredUser.acceptedPP === undefined) {
+                    await UserManager.saveUserWithoutReturn(registeredUser);
+                    res.redirect('/privacy-agreement');
+                    return
+                }
+
+                registeredUser = RequestManager.updateTwitchUserInfo(registeredUser, jsonResponse.data.data[0]);
+
+                const thirdTwitchUrl = "https://api.twitch.tv/kraken/channel";
+                opts = {
                     method: 'GET',
-                    url: postUrl,
+                    url: thirdTwitchUrl,
                     timeout: 10000,
                     headers: {
-                        "Authorization": "Bearer ".concat(accessToken)
+                        "Authorization": "OAuth ".concat(twitchUser.accessToken)
                     }
                 };
-                request(options, function(error,response,body){
-                    // Store in the db
-                    if(error) {
-                        console.log("error in request", error);
-                        res.send(error);
-                        return
+                jsonResponse = await RequestManager.returnJSONFromTwitch(opts);
+                registeredUser = RequestManager.updateTwitchChannelInfo(registeredUser, jsonResponse.data);
+                console.log('registered user = ', registeredUser);
+                let savedSuccessfully = UserManager.saveUserWithoutReturn(registeredUser);
+                if (savedSuccessfully === false) {
+                    res.redirect('/home');
+                    return
+                } else {
+                    res.redirect(`/user/${registeredUser.displayName}`);
+                }
+            } else if (userIsNew.results === true) {
+                if (!permittedUsers[jsonResponse.data.data[0]["email"]]) {
+                    res.redirect('/home');
+                    return;
+                }
+                // Register new user
+                twitchUser.twitchId = jsonResponse.data.data[0]["id"];
+                twitchUser = RequestManager.updateTwitchUserInfo(twitchUser, jsonResponse.data.data[0]);
+                const thirdTwitchUrl = "https://api.twitch.tv/kraken/channel";
+                opts = {
+                    method: 'GET',
+                    url: thirdTwitchUrl,
+                    timeout: 10000,
+                    headers: {
+                        "Authorization": "OAuth ".concat(twitchUser.accessToken)
                     }
-                    // console.log(response);
-                    var jsonResponse = JSON.parse(body);
-                    if(!jsonResponse.data) {
-                        res.redirect('home');
-                        return;
-                    } else if (jsonResponse.data.length === 0) {
-                        res.redirect('home');
-                        return;
-                    }
-                    var userData = jsonResponse.data[0];
-                // check if duplicate key error
-                    if (!userData.email) {
-                        res.redirect('/home');
-                        return;
-                    }
-                    User.findOne({email: userData.email}, function(err, user) {
-                        if (err) {
-                            console.log('error finding: ', err);
-                            res.redirect('/home');
-                        } else {
-                            if (user) {
-                                // console.log("user: ", user);
-                                req.session.userId = user._id;
-                                // res.redirect('/payment');
-                                // Check if the tokens have changed and update them
-                                if (user.accessToken != accessToken && user.refreshToken != refreshToken) {
-                                    user.accessToken = accessToken;
-                                    user.refreshToken = refreshToken;
-                                    user.expiresIn = expires;
-                                } else if (user.accessToken != accessToken) {
-                                    user.accessToken = accessToken;
-                                    user.expiresIn = expires;
-                                } else {
-                                    // Check if user has already accepted the privacy agreement
-                                    if(user.acceptedPP == undefined) {
-                                        res.redirect('/privacy-agreement');
-                                        return
-                                    } else {
-                                        res.redirect(`/user/${user.displayName}`);
-                                        return
-                                    }
-                                }
-                                user.save(function(err) {
-                                    if(err) {
-                                        console.log('error saving ', err);
-                                        res.redirect('/home');
-                                    } else {
-                                    // Check if user has already accepted the privacy agreement
-                                        if(user.acceptedPP == undefined) {
-                                            res.redirect('/privacy-agreement');
-                                        } else {
-                                            console.log(user.accessToken, user.refreshToken);
-                                            res.redirect(`/user/${user.displayName}`);
-                                        }
-                                    }
-                                });
-                            } else {
-                                // So only beta testers can use...
-                                if (permittedUsers[userData.email] != undefined) {
-                                    let newUser = new User({
-                                        idToken: idToken,
-                                        refreshToken: refreshToken,
-                                        accessToken: accessToken,
-                                        expiresIn: expires,
-                                        twitchId: userData.id,
-                                        email: userData.email,
-                                        displayName: userData.display_name,
-                                        imgUrl: userData.profile_image_url,
-                                        twitchLogin: userData.login
-                                    });
-                                    newUser.save(function(err, user) {
-                                        if (err) {
-                                            console.log("error saving: ", err);
-                                            res.redirect('/home');
-                                        } else {
-                                            console.log('user saved successfully!');
-                                            req.session.userId = user._id;
-                                            // res.redirect('/payment');
-                                            res.redirect('/privacy-agreement');
-                                        }
-                                    });
-                                } else {
-                                    console.log('not a permitted user');
-                                    res.redirect('/home');
-                                }
-                            }
-                        }
-                    });
-                });
-              });
-        } else {
-            res.redirect('/home');
+                };
+                jsonResponse = await RequestManager.returnJSONFromTwitch(opts);
+                twitchUser = RequestManager.updateTwitchChannelInfo(twitchUser, jsonResponse.data);
+                let saved = await UserManager.saveUserReturnUser(twitchUser);
+                if(saved.message === 'Success') {
+                    req.session.userId = saved.data._id;
+                    res.redirect(`/user/${saved.data.displayName}`);
+                } else {
+                    res.redirect('/home');
+                }
+            }
         }
     },
     pay: (req, res) => {
@@ -272,9 +245,6 @@ module.exports = {
         });
         // redirect to the app link w/o data
     },
-    success: (req, res) => {
-        res.send("Welcome partner!");
-    },
     dashboard: (req, res) => {
         if(!req.session.userId) {
             res.redirect('/login');
@@ -295,7 +265,6 @@ module.exports = {
                         "_id": foundUser._id,
                         "twitchId": foundUser.twitchId,
                         "displayName": foundUser.displayName,
-                        "twitchId": foundUser.twitchId,
                         "email": foundUser.email,
                         "imgUrl": foundUser.imgUrl,
                         "ip": foundUser.localIp,
@@ -474,7 +443,7 @@ module.exports = {
                             winMsg: foundUser.winMsg
                         };
                         // render the application
-                        res.render('obs', {user: user});
+                        res.json({ message: "success", user: user});
                     }
                 }
             }
@@ -483,10 +452,10 @@ module.exports = {
     password: (req, res) => {
         // check if logged in
         if (!req.session.userId) {
-            res.redirect('login');
+            res.redirect('/login');
         // check if correct route was used
         } else if (req.session.userId != req.params.id) {
-            res.redirect('login');
+            res.redirect('/login');
             // maybe send them to the dashboard instead?
         } else {
             // update user info

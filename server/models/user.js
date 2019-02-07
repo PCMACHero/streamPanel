@@ -10,13 +10,16 @@ var UserSchema = new mongoose.Schema({
     email: {type: String, minlength: 5, required: true, unique: true},
     hasPaid: {type: Boolean},
     imgUrl: {type: String},
+    offlineImgUrl: {type: String, required: false},
     twitchLogin: {type: String, minlength: 2, required: true},
     referredBy: {type: String, maxlength: 6, required: false},
     acceptedPP: {type: String, required: false},
     localIp: {type: String, required: false},
     password: {type: String, required: false},
     custom: {type: Array, required: false},
-    winMsg: {type: String, required: false}
+    winMsg: {type: String, required: false},
+    isPartner: {type: Boolean, required: false},
+    language: {type: String, required: false}
 }, {timestamps: true});
 
 mongoose.model('User', UserSchema);
