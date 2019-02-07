@@ -131,6 +131,12 @@ class ScenePanel extends Component{
     makeDivs(sceneArr, current){
         this.scenes = []
         console.log("MAKE DIVS SCENE ARR,", sceneArr)
+        let style = null
+        if(sceneArr.length<6){
+            style = {width:`${100/sceneArr.length}%`}
+        } else {
+            style = {width:`16.666%`}
+        }
         for (let i=0; i<sceneArr.length; i++){
             
             if(current===sceneArr[i].name){
@@ -138,7 +144,7 @@ class ScenePanel extends Component{
             } else 
                 {this.btnClass = "scene-btn"}
             this.scenes.push(
-            <div className={this.btnClass} key={i} onClick={()=>{this.setSceneAndSourcesOnClick(this.state.scenes[i].name)}}>
+            <div className={this.btnClass} key={i} style={style} onClick={()=>{this.setSceneAndSourcesOnClick(this.state.scenes[i].name)}}>
                 <i className="material-icons">
                 {/* {props.icon} */}
                 </i>
@@ -151,7 +157,7 @@ class ScenePanel extends Component{
     
     componentDidMount(){
         setTimeout(() => {
-            this.server.addMessageListener( this.handleServerEvent.bind(this));
+            // this.server.addMessageListener( this.handleServerEvent.bind(this));
             this.getFirstScenesAndSources() 
         }, 1000);
         
@@ -160,7 +166,7 @@ class ScenePanel extends Component{
     }
     
     render(){
-        return (<div className='scene-panel'>
+        return (<div className='scene-panel' >
         
         {this.scenes}
     </div>)

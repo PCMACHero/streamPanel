@@ -8,12 +8,12 @@ const setup = ()=>{
         <div className="login-container">
 
              <nav>
-    <div class="nav-wrapper purple darken-3">
+    <div class="nav-wrapper">
     <div className="brand-logo left">StreamPanel App</div>
       {/* <a href="#" class="brand-logo ">StreamPanel.app</a> */}
       <ul id="nav-mobile" className="right hide-on-small">
       
-        <li><Link to="/login">Home</Link></li>
+        <li><Link to="/">Home</Link></li>
         <li><Link to="/setup">Setup</Link></li>
         <li><Link to="/about">About</Link></li>
         

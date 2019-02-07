@@ -16,10 +16,36 @@ class ChannelStatus extends Component{
         newGame:"",
         currentTitle:"",
         newTitle:"",
-        gameCover:""
+        gameCover:"",
+        viewers: "",
+        followers: "",
+        channel: {
+            views: "",
+
+        }
     }
     ChannelData = this.props.channelOBJ
-    
+    getStreamData = ()=>{
+        axios.get(`https://api.twitch.tv/kraken/streams/${streamerID}`, {
+            headers: {
+                Accept:"application/vnd.twitchtv.v5+json",
+                "Client-ID": clientID
+            }
+        }).then(data=>{
+            if(data.data.stream){
+                console.log("$$$", data.data.stream._id)
+            this.setState({
+                channel: {
+                    _id: data.data.stream._id,
+                    viewers: data.data.stream.viewers,
+                    totalViews: data.data.stream.channel.views,
+                    followers: data.data.stream.channel.followers
+                }
+            })
+            }
+            
+        })
+    }
     changeHandler = (event)=>{
         
         this.setState({
@@ -33,7 +59,7 @@ class ChannelStatus extends Component{
         
         let boxURL = data.data.data[0].box_art_url.split("")
                 boxURL.splice(boxURL.length-20)
-                let boxURL2 = boxURL.join("")+"150x200.jpg"
+                let boxURL2 = boxURL.join("")+"450x600.jpg"
 
                 
         
@@ -62,12 +88,12 @@ class ChannelStatus extends Component{
                     
                     
                     userID: data.data["_id"],
-                    // partner:data.data.partner,
-                    // name: data.data.name,
-                    // email: data.data.email,
-                    // mature: data.data.mature,
-                    // views: data.data.views,
-                    // streamKey: data.data.stream_key
+                    partner:data.data.partner,
+                    name: data.data.name,
+                    email: data.data.email,
+                    mature: data.data.mature,
+                    views: data.data.views,
+                    streamKey: data.data.stream_key
 
                 }
                 
@@ -105,6 +131,11 @@ class ChannelStatus extends Component{
 
 
     componentDidMount(){
+        this.getStreamData()
+        setInterval(() => {
+            this.getStreamData()
+        }, 15000);
+        
         this.getChannelStatus()
         
         
@@ -117,14 +148,37 @@ class ChannelStatus extends Component{
         return(
             <Modal className="update-modal"
                 header='UPDATE CHANNEL'
-                trigger={<div className="channel-status-box">
-                            <div className="follows-title">CATEGORY/GAME</div>
-                            <div className="game-playing"><img className="game-cover" src={this.state.gameCover}/><div className="game-label">{this.state.currentGame}</div></div>
-                            <div className="follows-title">STREAM TITLE</div>
-                            <div className="channel-title">
+                trigger={<div className="channel-status-box" >
+                            <div className="status-bg" style={{backgroundImage: `url(${this.state.gameCover})`, backgroundSize: "cover", backgroundPosition: "center"}}></div>
+                            <div className="status-info">
+                                <div className="follows-title">STREAM STATUS</div>
+                                <div className="status-box">
+                                <div className="game-label">{this.state.currentGame}</div>
+                                <div className="game-label">"{this.state.currentTitle}"</div>
+                                <div className="game-label"><i className="material-icons" style={{color:"black", fontSize: "1.5em"}}>
+face
+</i>Viewers:  <div style={{color: "#EE2B2A"}}>{this.state.channel.viewers}</div>
+</div>
+                                <div className="game-label">Total Views: {this.state.channel.totalViews}</div>
+                                <div className="game-label"><i className="material-icons" style={{color:"#EE2B2A", fontSize: "1.5em"}} >
+favorite
+</i>Total Follows: {this.state.channel.followers}</div>
                             
-                                <div className="text-div">"{this.state.currentTitle}"</div>
+                            
                             </div>
+                            </div>
+                            
+                            {/* <div className="game-playing" > */}
+                            {/* <img className="game-cover" src={this.state.gameCover}/> */}
+                            
+                            
+                            
+                            {/* </div> */}
+                            {/* <div className="follows-title">STREAM TITLE</div> */}
+                            {/* <div className="channel-title"> */}
+                            
+                                
+                            {/* </div> */}
                             
                             <div className="update-card">
                                 UPDATE CHANNEL
@@ -178,7 +232,7 @@ class ChannelStatus extends Component{
 
                 
                 <div onClick={()=>{
-                            console.log(this.state.newGame)
+                            console.log("MY OAUTH IN PUT", this.props.oauth)
                     axios({
                         method: 'put', //you can set what request you want to be
                         url: 'https://api.twitch.tv/kraken/channels/'+this.state.channel.userID,
