@@ -21,7 +21,7 @@ class App extends Component {
         <div>
           <Route path="/success" component={Success} exact/>
           <Route path="/login" exact component={TwitchLogin}/>
-          <Route path="/" exact component={StreamPanel}/>
+          <Route path="/app" exact component={StreamPanel}/>
 
           <Route path="/panel" component={StreamPanel}/>
           <Route path="/about" component={about}/>

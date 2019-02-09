@@ -1,9 +1,13 @@
 const session = require('express-session'),
       config = require('../../common_config/config'),
-      twitchCredentials = config.TwitchCredentials,
       ApiHelper = require('../helpers/api_helpers'),
       UserManager = require('../models/usermanager'),
       RequestManager = require('../controllers/requests');
+const twitchCltId = config.TwitchCredentials.twitchCltId,
+      twitchSecret = config.TwitchCredentials.twitchSecret,
+      randState = config.TwitchCredentials.randState,
+      redirectUri = config.TwitchCredentials.redirectUri,
+      responseStr = "https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=" + twitchCltId + "&redirect_uri=" + redirectUri + "&scope=channel_editor+channel_read+chat:read+chat:edit+viewing_activity_read+user:read:email+bits:read&state=" + randState;
 
 module.exports = {
     isAuthenticated: async (req, res, next) => {
@@ -174,7 +178,13 @@ module.exports = {
             res.json(UserManager.saveFailMessage());
             return
         }
+        if (UserManager.userNotInSession(user)) {
+            req.session.userId = user._id;
+        }
         let tokens = UserManager.getOnlyTokens(user)
         res.json({ message: "Success", data: tokens });
-    }
+    },
+    returnResponseString: async (req, res) => {
+        res.json({ message: "Success", responseString: responseStr });
+    },
 }

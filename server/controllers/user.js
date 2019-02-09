@@ -59,7 +59,7 @@ module.exports = {
             let jsonResponse = await RequestManager.returnJSONFromTwitch(opts);
             if (jsonResponse.message !== "Success") {
                 console.log('Error getting info from Twitch ' + jsonResponse.err);
-                res.redirect('/home');
+                res.json(RequestManager.twitchFailMessage());
             }
 
             twitchUser.accessToken = jsonResponse.data["access_token"];
@@ -79,24 +79,18 @@ module.exports = {
 
             jsonResponse = await RequestManager.returnJSONFromTwitch(opts);
             if (!jsonResponse || jsonResponse.message === 'Error') {
-                res.redirect('/home');
-                return
+                res.json(RequestManager.twitchFailMessage());
             }
             let userIsNew = await UserManager.isNewUserByTwitchId(jsonResponse.data.data[0]["id"]);
             if (userIsNew.results === null) {
-                res.redirect('/home');
+                console.log('invalid data provided by user');
+                res.json(RequestManager.twitchFailMessage());
             } else if (userIsNew.results === false) {
                 let registeredUser = userIsNew.user;
                 req.session.userId = registeredUser._id;
+
                 // Check if the tokens have changed and update them
                 registeredUser = RequestManager.updateTwitchTokens(registeredUser, twitchUser);
-                // Check if user has already accepted the privacy agreement
-                if(registeredUser.acceptedPP === undefined) {
-                    await UserManager.saveUserWithoutReturn(registeredUser);
-                    res.redirect('/privacy-agreement');
-                    return
-                }
-
                 registeredUser = RequestManager.updateTwitchUserInfo(registeredUser, jsonResponse.data.data[0]);
 
                 const thirdTwitchUrl = "https://api.twitch.tv/kraken/channel";
@@ -109,6 +103,10 @@ module.exports = {
                     }
                 };
                 jsonResponse = await RequestManager.returnJSONFromTwitch(opts);
+                if (!jsonResponse || jsonResponse.message === 'Error') {
+                    res.json(RequestManager.twitchFailMessage());
+                }
+
                 registeredUser = RequestManager.updateTwitchChannelInfo(registeredUser, jsonResponse.data);
                 console.log('registered user = ', registeredUser);
                 let savedSuccessfully = UserManager.saveUserWithoutReturn(registeredUser);
@@ -120,8 +118,7 @@ module.exports = {
                 }
             } else if (userIsNew.results === true) {
                 if (!permittedUsers[jsonResponse.data.data[0]["email"]]) {
-                    res.redirect('/home');
-                    return;
+                    res.json(RequestManager.twitchFailMessage());
                 }
                 // Register new user
                 twitchUser.twitchId = jsonResponse.data.data[0]["id"];
@@ -140,11 +137,13 @@ module.exports = {
                 let saved = await UserManager.saveUserReturnUser(twitchUser);
                 if(saved.message === 'Success') {
                     req.session.userId = saved.data._id;
-                    res.redirect(`/user/${saved.data.displayName}`);
+                    res.json({ message: "Success", data: twitchUser });
                 } else {
-                    res.redirect('/home');
+                    res.json(UserManager.saveFailMessage());
                 }
             }
+        } else {
+            res.json(RequestManager.twitchFailMessage())
         }
     },
     pay: (req, res) => {
@@ -443,7 +442,7 @@ module.exports = {
                             winMsg: foundUser.winMsg
                         };
                         // render the application
-                        res.json({ message: "success", user: user});
+                        res.json({ message: "success", data: user});
                     }
                 }
             }
