@@ -140,6 +140,7 @@
   
   .command-text{
     display: flex;
+    text-align: left;
     width:60%;
     height: 100%;
     color:rgb(255, 255, 255);

@@ -226,22 +226,23 @@ border:0.5px solid white;
   z-index: 0;
 }
 
-.update-card{
+.message-center{
     /* width: 100%; */
     /* font-family: 'Titillium Web', sans-serif; */
-    font-family: 'Staatliches', cursive;
-    height: 40%;
-    background-color:  rgba(165, 116, 255, 0.795);
+    font-family: 'Orbitron', sans-serif;
+    font-weight: medium;
+    height: 30%;
+    background-color:  rgba(46, 46, 46, 0.803);
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    color:#000000;
+    color:#3DEC61;
     
     
 }
 .status-info{
-    height: 60%;
+    height: 70%;
     background-color: rgba(46, 46, 46, 0.493);
 }
 .status-bg{

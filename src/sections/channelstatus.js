@@ -5,6 +5,7 @@ import {streamer, streamerID} from '../helpers/dummydata'
 import {Modal, Row, Autocomplete} from 'react-materialize'
 import { setInterval, setTimeout } from 'timers';
 import bigGameList from '../helpers/gamelist'
+import { MyContext } from '../helpers/provider';
 
 class ChannelStatus extends Component{
     gamesList={}
@@ -180,12 +181,21 @@ favorite
                                 
                             {/* </div> */}
                             
-                            <div className="update-card">
-                                UPDATE CHANNEL
-                                <i className="material-icons">
-                                    update
-                                    </i>
+                            
+                                <MyContext.Consumer>
+                                    {context=>
+                                    <div className="message-center" onClick={(e)=>{
+                                        e.stopPropagation();
+                                        context.newMessage("Batman")
+                                        console.log(context.state.messageCenter)
+                                    }}>
+                                        <div className={context.state.messageCenter.class} >{context.state.messageCenter.m}</div>
+                                        
                             </div>
+                                        
+                                    }
+                                </MyContext.Consumer>
+                                
                             
                         </div>}>
                         

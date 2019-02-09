@@ -4,6 +4,7 @@ import {streamer} from "../helpers/dummydata"
 import CommandsModal from './commandsModal'
 import {Modal} from 'react-materialize'
 import Commands from './commands'
+import {MyContext} from '../helpers/provider'
 // import SceneBtn from './scenebtn'
 // import {twitchBtns} from '../helpers/dummydata'
 
@@ -49,11 +50,13 @@ getChatMode=()=>{
             
             
             
-            this.client.commercial(streamer, 30).then(function(data) {
+            this.client.commercial(streamer, 30).then(data=> {
                 // data returns [channel, seconds]
-            }).catch(function(err) {
+                this.props.newMessage(data)
+
+            }).catch(err=> {
                 //
-                console.log(err)
+                this.props.newMessage(`Cannot run ad: "${err}"`)
             });
             
         }
@@ -69,6 +72,7 @@ getChatMode=()=>{
         }
 
         render(){
+
             let modal= null
             if(this.state.showModal){
                 modal = 
@@ -78,9 +82,17 @@ getChatMode=()=>{
                     showModal: !this.state.showModal
                 })}}></div><CommandsModal/></Fragment>
             }
-            return (<div className='source-panel'>
+
+
+
+
+            
+            return (
+                
+                
+            <div className='source-panel'>
             {modal}
-            <div className="twitch-btn"  onClick={()=>{this.runAd()}}>
+            <div className="twitch-btn"  onClick={()=>{this.runAd() }}>
                 <i className="material-icons">
                 monetization_on
                 </i>
@@ -111,7 +123,9 @@ getChatMode=()=>{
                 </div>
             </div>
         
-    </div>)
+    </div>
+    
+    )
         }
         
     

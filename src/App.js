@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import StreamPanel, {MyProvider} from './views/streampanel'
-
+import StreamPanel from './views/streampanel'
+import {MyProvider, MyContext} from './helpers/provider'
 import TwitchLogin from './views/twitchlogin'
 import Success from './views/success'
 import about from './views/about'
@@ -16,6 +16,7 @@ class App extends Component {
 
   render() {
     return (
+      
       <BrowserRouter 
       // forceRefresh="true"
       >

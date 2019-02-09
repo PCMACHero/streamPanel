@@ -89,7 +89,8 @@ class ScenePanel extends Component{
     handleServerEvent(newEventData){
         
         
-        console.log("EVENT FIRED", newEventData);
+        console.log("EVENT FIRED 44", this.props.event);
+        
         if(newEventData["update-type"]==="SceneItemVisibilityChanged" || newEventData["update-type"]==="SwitchScenes"){
             this.getFirstScenesAndSources()
 
@@ -154,10 +155,18 @@ class ScenePanel extends Component{
             }
             
     }
+    componentDidUpdate(){
+        if(this.props.event && this.props.event["update-type"]==="SwitchScenes"){
+            this.getFirstScenesAndSources()   
+        }
+          
+    }
     
     componentDidMount(){
         setTimeout(() => {
-            // this.server.addMessageListener( this.handleServerEvent.bind(this));
+            // console.log("mounted scenes", this.props.event)
+            // this.props.listener(this.handleServerEvent(this.props.event))
+            // this.handleServerEvent(this.props.event);
             this.getFirstScenesAndSources() 
         }, 1000);
         
@@ -166,6 +175,7 @@ class ScenePanel extends Component{
     }
     
     render(){
+        console.log("eventscene", this.props.event)
         return (<div className='scene-panel' >
         
         {this.scenes}

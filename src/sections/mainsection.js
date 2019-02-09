@@ -10,12 +10,14 @@ import TwitchPanel from "./twitchpanel"
 import Chat from "./chatsection"
 import axios from 'axios'
 import { clientID } from '../common/common';
-import {MyContext} from "../views/streampanel"
+import {MyContext} from "../helpers/provider"
 // import {Modal, Button, Icon} from "react-materialize"
 
 class MainSection extends Component{
+    
     srcClass = null;
     server = new Obs();
+    
     messageList = {};
     ad = false;
     options = {
@@ -33,7 +35,7 @@ class MainSection extends Component{
     };
     client = new tmi.client(this.options);
     state = {
-        
+        // sceneComp:null,
         channel:{
             
             // game:null,
@@ -102,17 +104,23 @@ class MainSection extends Component{
     
 
   
-    
+    // listener = (handler)=>{
+    //     this.server.addMessageListener(handler)
+    // }
 
     connectOBS = ()=>{
         this.server.connect()
     }
            
-      
-    handleServerEvent(newEventData){
+    // childHandler=(e, callback)=>{
+    //     callback(e)
+    // }  
+
+    handleServerEvent=(newEventData)=>{
+        // this.childHandler(newEventData,)
         
+        console.log("EVENT FIRED 9", newEventData);
         
-        // console.log("EVENT FIRED 9", newEventData);
         
         
         this.setState({
@@ -123,14 +131,15 @@ class MainSection extends Component{
     }
            
             
-           
-           
+          
            componentDidMount(){
                console.log("MAIN HAS MOUNTED")
             this.server.connect()
-            // setTimeout(() => {
-            this.server.addMessageListener(this.handleServerEvent.bind(this)); 
-            // }, 1000);
+            setTimeout(() => {
+                this.server.addMessageListener(this.handleServerEvent)
+                
+            
+            }, 1000);
             
             //    this.disableAC()
             this.getUserID()
@@ -156,17 +165,18 @@ class MainSection extends Component{
            
     
     render(){
-        console.log("RERENDERED MAINSECTION")
+        // console.log("RERENDERED MAINSECTION")
         return (
-            
+            <MyContext.Consumer>
+    {context =>
             <Fragment>
             <div className='main-section'>
             <div className="cover"><div className="brand"><div className="brand-user">{this.state.channel.name}</div><div className="powered">  powered by  </div><div className="brand-title"> STREAMPANEL APP</div></div></div>
-            <ScenePanel server={this.server} event={this.state.event}scenes={this.state.scenes} func={this.setSceneAndSourcesOnClick} currentScene={this.state.currentScene}/>
+            <ScenePanel server={this.server}  event={this.state.event} scenes={this.state.scenes} func={this.setSceneAndSourcesOnClick} currentScene={this.state.currentScene}/>
             <div className="mid-section">
-                <SourcePanel server={this.server}  func={this.toggleSource} srcClass={this.state.srcClass} />
+                <SourcePanel server={this.server}  event={this.state.event} func={this.toggleSource} srcClass={this.state.srcClass} />
                 <VideoBox channel={streamer}></VideoBox>
-                <TwitchPanel client={this.client} oauth={this.props.oauth} runAd={this.runAd}/>
+                <TwitchPanel client={this.client} oauth={this.props.oauth} newMessage={context.newMessage} runAd={this.runAd}/>
                 
             </div>
             
@@ -175,22 +185,22 @@ class MainSection extends Component{
         </div> 
             
             <Chat-Section id="chat-section">
-            <MyContext.Consumer>
-    {context =>
+            
       
-        <Chat key={19000} client={this.client} chanBadges={this.props.chanBadges} partner={this.state.channel.partner} 
+        <Chat client={this.client} chanBadges={this.props.chanBadges} partner={this.state.channel.partner} 
         context={context} />
       
       
   
-    }
-  </MyContext.Consumer>
+    
              
 
            
 
              </Chat-Section> 
             </Fragment>
+            }
+            </MyContext.Consumer>
             
         )
         

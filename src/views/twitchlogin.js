@@ -30,7 +30,7 @@ class twitchLogin extends Component{
 lineCounter = 0
 lines=["All-in-one soution for Twitch Streaming", "Control OBS and Twitch from one place", "Feature rich, with more to come", "Works on any device on your network", "Use your tablet, laptop or desktop", "Easy to use, clean, and fast to get started"]
 URL = `https://id.twitch.tv/oauth2/authorize?client_id=${
-clientID}&redirect_uri=http://192.168.2.8:3000/panel&response_type=token&scope=channel_editor+channel_read+chat:read+chat:edit+user:edit+communities_moderate+channel:moderate`
+clientID}&redirect_uri=http://192.168.2.2:3000/panel&response_type=token&scope=channel_editor+channel_read+chat:read+chat:edit+user:edit+communities_moderate+channel:moderate`
 
 niceThings=()=>{
   if(this.lineCounter===this.lines.length){
@@ -51,12 +51,14 @@ componentDidMount(){
 }
 render(){
   return (
-    <div className="App">
-      <nav>
+    <div className="fp">
+
+
+      {/* <nav>
   <div className="nav-wrapper">
   <div className="brand-logo left"><div className="name-and-logo right"><div id="sp">STREAMPANEL</div>
   <div className="brand-img"></div></div></div>
-    {/* <a href="#" class="brand-logo ">StreamPanel.app</a> */}
+    
     <ul id="nav-mobile" className="left ">
     
       <li><Link to="/">HOME</Link></li>
@@ -65,7 +67,23 @@ render(){
       
     </ul>
   </div>
-</nav>
+</nav> */}
+<div className="navbar-fixed">
+<nav>
+    <div class="nav-wrapper">
+    
+      <a href="#" class="brand-logo right"><div className="sp">StreamPanel</div><div className="brand-img"></div></a>
+      <ul id="nav-mobile" class="left hide-on-med-and-down">
+      <li><Link to="/">HOME</Link></li>
+      <li><Link to="/setup">SETUP</Link></li>
+      <li><Link to="/about">ABOUT</Link></li>
+      </ul>
+    </div>
+  </nav>
+</div>
+  
+
+
       <div className="login-container">
           
            
@@ -110,7 +128,11 @@ videocam
         <div className="fp-img-box"><div className="fp-img" style={{backgroundImage:`url(../images/fp-1.jpg)`}}></div></div>
         
         </div>
-        <div className="page-section">
+        
+       
+      </div>
+      <div className="page-space">
+      <div className="page-section">
         
         <InfoPane title="TWITCH CONTROL" body={this.info.b2} icon={<i class="material-icons">
 mic
@@ -120,7 +142,6 @@ videocam
 <div className="fp-img-box"><div className="fp-img" style={{backgroundImage:`url(../images/twitch.png)`}}></div></div>
         
         </div>
-       
       </div>
       <div className="page-space">
        <InfoPane title="BOT COMMANDS" body={this.info.b3} icon={<i class="material-icons">
@@ -154,7 +175,7 @@ wifi
                 <ul>
                   <li><a class="grey-text text-lighten-3" href="https://twitter.com/stream_panel" target="_blank">Twitter</a></li>
                   <li><a class="grey-text text-lighten-3" href="mailto:streampanelapp@gmail.com" target="_blank">Contact</a></li>
-                  <li><a class="grey-text text-lighten-3" href="youtube.com">Youtube</a></li>
+                  <li><a class="grey-text text-lighten-3" href="https://youtube.com" target="_blank">Youtube</a></li>
                   
                 </ul>
               </div>
