@@ -93,18 +93,19 @@ toggleSource = (sourceToToggle)=>{
 
 makeDivs(mics, cams){
     console.log("MY MICS AS OBJ",mics)
+    // mics.reverse()
          this.sources = []
         for (let i=0; i<mics.length; i++){
             
-            if(mics[i].muted===true){
+            if(mics[i].muted===false){
                 this.srcClass = "src-btn-active"
                 this.icon = "mic"
             } else {
                 this.srcClass = "src-btn-inactive"
                 this.icon = "mic_off"
             }
-            this.sources.push(
-                <div className={this.srcClass} key={100+i} onClick={()=>{this.toggleMic(mics[i])}}>
+            this.sources.unshift(
+                <div className={this.srcClass} key={i} onClick={()=>{this.toggleMic(mics[i])}}>
         
             <div className='label'>{mics[i].name.toUpperCase()}
             </div>

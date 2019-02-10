@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import CommandInput from './commandsinput'
-import {MyContext, MyProvider} from '../views/streampanel'
+import {MyContext} from '../helpers/provider'
 import "./modals.css"
 
 export default class CommandsModal extends Component{

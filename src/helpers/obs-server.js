@@ -19,7 +19,7 @@ export default class OBSRemote extends EventEmitter {
 	 *
 	 * @returns {Promise}
 	 */
-	connect(host = 'localhost', port = 4444) {
+	connect(host = '192.168.2.2', port = 4444) {
 		if (this._socket) {
 			this._socket.onopen = null
 			this._socket.onmessage = null
@@ -42,7 +42,7 @@ export default class OBSRemote extends EventEmitter {
 		})
 	}
     addMessageListener( listener ){
-        // console.log('new listener added: ',listener);
+        console.log('new listener added: ',listener);
         this.messageListener = listener;
     }
 	/**

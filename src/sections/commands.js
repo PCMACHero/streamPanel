@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import CommandInput from './commandsinput'
-import {MyContext, MyProvider} from '../views/streampanel'
+import {MyContext} from '../helpers/provider'
 
 export default class Commands extends Component{
     

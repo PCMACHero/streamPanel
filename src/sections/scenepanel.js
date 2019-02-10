@@ -89,7 +89,8 @@ class ScenePanel extends Component{
     handleServerEvent(newEventData){
         
         
-        console.log("EVENT FIRED", newEventData);
+        console.log("EVENT FIRED 44", this.props.event);
+        
         if(newEventData["update-type"]==="SceneItemVisibilityChanged" || newEventData["update-type"]==="SwitchScenes"){
             this.getFirstScenesAndSources()
 
@@ -131,6 +132,12 @@ class ScenePanel extends Component{
     makeDivs(sceneArr, current){
         this.scenes = []
         console.log("MAKE DIVS SCENE ARR,", sceneArr)
+        let style = null
+        if(sceneArr.length<6){
+            style = {width:`${100/sceneArr.length}%`}
+        } else {
+            style = {width:`16.666%`}
+        }
         for (let i=0; i<sceneArr.length; i++){
             
             if(current===sceneArr[i].name){
@@ -138,7 +145,7 @@ class ScenePanel extends Component{
             } else 
                 {this.btnClass = "scene-btn"}
             this.scenes.push(
-            <div className={this.btnClass} key={i} onClick={()=>{this.setSceneAndSourcesOnClick(this.state.scenes[i].name)}}>
+            <div className={this.btnClass} key={i} style={style} onClick={()=>{this.setSceneAndSourcesOnClick(this.state.scenes[i].name)}}>
                 <i className="material-icons">
                 {/* {props.icon} */}
                 </i>
@@ -148,10 +155,18 @@ class ScenePanel extends Component{
             }
             
     }
+    componentDidUpdate(){
+        if(this.props.event && this.props.event["update-type"]==="SwitchScenes"){
+            this.getFirstScenesAndSources()   
+        }
+          
+    }
     
     componentDidMount(){
         setTimeout(() => {
-            this.server.addMessageListener( this.handleServerEvent.bind(this));
+            // console.log("mounted scenes", this.props.event)
+            // this.props.listener(this.handleServerEvent(this.props.event))
+            // this.handleServerEvent(this.props.event);
             this.getFirstScenesAndSources() 
         }, 1000);
         
@@ -160,7 +175,8 @@ class ScenePanel extends Component{
     }
     
     render(){
-        return (<div className='scene-panel'>
+        console.log("eventscene", this.props.event)
+        return (<div className='scene-panel' >
         
         {this.scenes}
     </div>)

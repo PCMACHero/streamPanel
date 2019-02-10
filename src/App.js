@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import StreamPanel from './views/streampanel'
+import {MyProvider, MyContext} from './helpers/provider'
 import TwitchLogin from './views/twitchlogin'
 import Success from './views/success'
 import about from './views/about'
@@ -15,18 +16,22 @@ class App extends Component {
 
   render() {
     return (
+      
       <BrowserRouter 
       // forceRefresh="true"
       >
-        <div>
+      <MyProvider>
+      <div>
           <Route path="/success" component={Success} exact/>
-          <Route path="/login" exact component={TwitchLogin}/>
-          <Route path="/app" exact component={StreamPanel}/>
+          <Route path="/" exact component={TwitchLogin}/>
+          <Route path="/panel" exact component={StreamPanel}/>
 
-          <Route path="/panel" component={StreamPanel}/>
+          
           <Route path="/about" component={about}/>
           <Route path="/setup" component={setup}/>
         </div>
+        </MyProvider>
+        
           
         
       </BrowserRouter>
