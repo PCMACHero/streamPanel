@@ -6,6 +6,9 @@ const path = require('path');
 const session = require('express-session');
 const config = require('../../common_config/config')
 const permittedUsers = config.PermittedUsers;
+const React = require('react'),
+      ReactDOM = require('react-dom'),
+      App = require('../../src/App');
 const twitchCltId = config.TwitchCredentials.twitchCltId,
       twitchSecret = config.TwitchCredentials.twitchSecret,
       randState = config.TwitchCredentials.randState,
@@ -111,10 +114,9 @@ module.exports = {
                 console.log('registered user = ', registeredUser);
                 let savedSuccessfully = UserManager.saveUserWithoutReturn(registeredUser);
                 if (savedSuccessfully === false) {
-                    res.redirect('/home');
-                    return
+                    return savedSuccessfully;
                 } else {
-                    res.redirect(`/user/${registeredUser.displayName}`);
+                    res.send(ReactDOM.renderToString(<App data={registeredUser} session={false}/>))
                 }
             } else if (userIsNew.results === true) {
                 if (!permittedUsers[jsonResponse.data.data[0]["email"]]) {
@@ -136,8 +138,7 @@ module.exports = {
                 twitchUser = RequestManager.updateTwitchChannelInfo(twitchUser, jsonResponse.data);
                 let saved = await UserManager.saveUserReturnUser(twitchUser);
                 if(saved.message === 'Success') {
-                    req.session.userId = saved.data._id;
-                    res.json({ message: "Success", data: twitchUser });
+                    res.send(ReactDOM.renderToString(<App data={twitchUser} session={false}/>))
                 } else {
                     res.json(UserManager.saveFailMessage());
                 }

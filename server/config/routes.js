@@ -19,9 +19,7 @@ module.exports = function(app) {
     app.post('/api/getresponsestring', api.returnResponseString);
     
     // React Routes
-    
-    app.all('/app/*', users.renderReact);
-    app.all('*', users.fourohfour);
+    // app.all('*', users.renderReact);
     
     // Old Routes
 
