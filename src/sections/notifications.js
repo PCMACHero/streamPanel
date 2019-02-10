@@ -127,7 +127,7 @@ render(){
                 {/* <div className="follows">{this.state.arrayOfSubs}</div> */}
                 
             </div>
-            <div className="subs-container">
+            {/* <div className="subs-container">
             
                 <div className="tweet-container">
                     <div className="tweet-btn">
@@ -137,7 +137,7 @@ render(){
                     
                 </div>
                 <Link to="/login" className="sp-logo"><div></div></Link>
-            </div>
+            </div> */}
             
             
         </div>

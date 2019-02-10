@@ -10,11 +10,14 @@ import TwitchPanel from "./twitchpanel"
 import Chat from "./chatsection"
 import axios from 'axios'
 import { clientID } from '../common/common';
+import {MyContext} from "../helpers/provider"
 // import {Modal, Button, Icon} from "react-materialize"
 
 class MainSection extends Component{
+    
     srcClass = null;
     server = new Obs();
+    
     messageList = {};
     ad = false;
     options = {
@@ -32,7 +35,7 @@ class MainSection extends Component{
     };
     client = new tmi.client(this.options);
     state = {
-        
+        // sceneComp:null,
         channel:{
             
             // game:null,
@@ -45,7 +48,7 @@ class MainSection extends Component{
             // views: null,
 
         },
-        event:{},
+        event:null,
         statusMessage:null,
         streamingStatus: null,
         currentScene: "",
@@ -100,30 +103,51 @@ class MainSection extends Component{
    
     
 
-    toggleStream = ()=>{
-        console.log("CLICKED TOGGLESTREAM")
-        this.server.send({'request-type': 'StartStopStreaming'}).then(data=>{
-            console.log("TOGGLESTREAM RESP DATA", data)
-    })
-
-}
-    
+  
+    // listener = (handler)=>{
+    //     this.server.addMessageListener(handler)
+    // }
 
     connectOBS = ()=>{
         this.server.connect()
     }
            
-                
+    // childHandler=(e, callback)=>{
+    //     callback(e)
+    // }  
+
+    handleServerEvent=(newEventData)=>{
+        // this.childHandler(newEventData,)
+        
+        console.log("EVENT FIRED 9", newEventData);
+        
+        
+        
+        this.setState({
+            event: newEventData
+        })
+        
+        
+    }
            
             
-           
-           
+          
            componentDidMount(){
+               console.log("MAIN HAS MOUNTED")
             this.server.connect()
+            setTimeout(() => {
+                this.server.addMessageListener(this.handleServerEvent)
+                
+            
+            }, 1000);
+            
             //    this.disableAC()
             this.getUserID()
             
-            this.client.connect();
+            
+                this.client.connect();
+            
+            
             
                 
             
@@ -141,25 +165,42 @@ class MainSection extends Component{
            
     
     render(){
-        console.log("RERENDERED MAINSECTION")
+        // console.log("RERENDERED MAINSECTION")
         return (
+            <MyContext.Consumer>
+    {context =>
             <Fragment>
             <div className='main-section'>
-            <div className="cover"><div className="brand"><div>STREAMPANEL app</div></div></div>
-            <ScenePanel server={this.server} scenes={this.state.scenes} func={this.setSceneAndSourcesOnClick} currentScene={this.state.currentScene}/>
+            <div className="cover"><div className="brand"><div className="brand-user">{this.state.channel.name}</div><div className="powered">  powered by  </div><div className="brand-title"> STREAMPANEL APP</div></div></div>
+            <ScenePanel server={this.server}  event={this.state.event} scenes={this.state.scenes} func={this.setSceneAndSourcesOnClick} currentScene={this.state.currentScene}/>
             <div className="mid-section">
-                <SourcePanel server={this.server}  func={this.toggleSource} srcClass={this.state.srcClass} />
+                <SourcePanel server={this.server}  event={this.state.event} func={this.toggleSource} srcClass={this.state.srcClass} />
                 <VideoBox channel={streamer}></VideoBox>
-                <TwitchPanel client={this.client} oauth={this.props.oauth} runAd={this.runAd}/>
+                <TwitchPanel client={this.client} oauth={this.props.oauth} newMessage={context.newMessage} runAd={this.runAd}/>
                 
             </div>
             
-            <BottomPanel func={this.toggleStream} channelOBJ={this.state.channel} client={this.client} OBSOBJ={this.state} oauth={this.props.oauth} micSources={this.state.micSources}/> 
+            <BottomPanel event={this.state.event} server={this.server} channelOBJ={this.state.channel} client={this.client} OBSOBJ={this.state} oauth={this.props.oauth} micSources={this.state.micSources}/>
             
         </div> 
-            <Chat-Section id="chat-section"><Chat key={19000} client={this.client} chanBadges={this.props.chanBadges} partner={this.state.channel.partner} 
-             oauth={this.props.oauth}/></Chat-Section> 
+            
+            <Chat-Section id="chat-section">
+            
+      
+        <Chat client={this.client} chanBadges={this.props.chanBadges} partner={this.state.channel.partner} 
+        context={context} />
+      
+      
+  
+    
+             
+
+           
+
+             </Chat-Section> 
             </Fragment>
+            }
+            </MyContext.Consumer>
             
         )
         

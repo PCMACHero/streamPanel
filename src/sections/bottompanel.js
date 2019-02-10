@@ -7,18 +7,52 @@ import Numbers from './numbers'
 class BottomPanel extends Component{
     
     
-    
+        server=this.props.server
+        stream = null
         oauth= this.props.oauth
-        statusText = null
+        
+        fps=null
+        droppedFrames = null
+        cpuUsage = null
+        bitRate = null
+        streamTime = null
+
+        status = null
         btnClass= null
         icon=null
         iconStyle = {}
-    
+        state={
+            streaming: null,
+            recording: null,
+            event:this.props.event
+        }
         
+
+        getOBSStreamStatus(){
+            this.server.send({'request-type': 'GetStreamingStatus'}).then(data=>{
+                this.setState({
+                    streaming: data.streaming,
+                    recording: data.recording
+                })
+                
+            })
+        }
+
+        toggleStream = ()=>{
+            console.log("CLICKED TOGGLESTREAM")
+            this.server.send({'request-type': 'StartStopStreaming'}).then(data=>{
+                console.log("TOGGLESTREAM RESP DATA", data)
+        })
     
+    }
 
     componentDidMount(){
+        setInterval(() => {
+            this.getOBSStreamStatus() 
+        }, 1000);
         
+        console.log("EVENT IN BOTTOM", this.state.event)
+        // this.props.server.addMessageListener( this.handleServerEvent);
         console.log("MY SREAMINGSTATUS IN BOPA",this.props.OBSOBJ.streamingStatus)
     
     console.log("MY STATE IN BOTOMPANEL", this)
@@ -31,9 +65,9 @@ class BottomPanel extends Component{
     
 render(){
     // console.log("my chan obj", this.props.channelOBJ)
-    if(this.props.OBSOBJ.streamingStatus){
-        
-        this.statusText ="You are streaming"
+    if(this.state.streaming){
+        this.stream = "STOP STREAM"
+        this.status ="You are streaming"
         this.btnClass ="streaming"
         this.icon="cast_connected"
         this.iconStyle={"color":"green",
@@ -44,8 +78,8 @@ render(){
 
 } else {
 
-    
-        this.statusText ="You are not streaming"
+        this.stream = "START STREAM"
+        this.status="You are not streaming"
         this.btnClass ="not-streaming"
         this.icon="cast"
         this.iconStyle={"color":"white",
@@ -54,25 +88,58 @@ render(){
     
                             
 }
-if (this.props.OBSOBJ.statusMessage!==null){
-    this.statusText=null
+
+if(this.props.event && this.props.event["update-type"]){
+    // console.log(this.props.event)
+    if(this.props.event["update-type"]==="StreamStarting"){
+
+        this.status = "Stream is starting..."
+    }
+    else if(this.props.event["update-type"]==="StreamStarted"){
+        this.stream = "STOP STREAM"
+        this.status = "You are streaming"
+    }
+    else if(this.props.event["update-type"]==="StreamStopping"){
+        this.status = "Stream is stopping..."
+    }
+    else if(this.props.event["update-type"]==="StreamStopped"){
+        this.stream = "START STREAM"
+        this.status = "You are not streaming"
+    }
+
 }
+
+if(this.props.event && this.props.event["update-type"]==="StreamStatus"){
+    this.fps = this.props.event.fps
+    this.droppedFrames = this.props.event["num-dropped-frames"]
+    this.cpuUsage = this.props.event.strain
+    this.bitRate = this.props.event["kbits-per-sec"]
+    this.streamTime = this.props.event["total-stream-time"].toString()
+
+}
+
     return(
         
         <div className="bottom-panel" >
+        
             <div className="bottom-left-container">
-                <div className={this.btnClass} onClick={()=>{this.props.func()
+                <div className={this.btnClass} onClick={()=>{this.toggleStream()
                 }}>
-                    <div className="label2">{this.props.OBSOBJ.statusMessage}{this.statusText}
+                    
+                    <div className="label2">{this.status}
                     </div>
+                    <div className="stream">{this.stream}</div>
                     <i className="material-icons" style={this.iconStyle}>
                     {this.icon}
                     </i>
                 </div>
                 <div className="profiles-btn">
-                {/* <div>{this.props.micSources.name}</div>
-                <div> {this.props.micSources.muted.toString()}</div> */}
                 <Numbers channelOBJ={this.props.channelOBJ} />
+                <div className="label2">CPU: {this.cpuUsage}</div>
+                <div className="label2">Bit-rate: {this.bitRate}</div>
+                <div className="label2">Dropped: {this.droppedFrames}</div>
+                <div className="label2">Uptime: {this.streamTime}</div>
+                
                 </div>
                 
             </div>

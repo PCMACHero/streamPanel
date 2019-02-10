@@ -2,9 +2,13 @@ import React, {Component} from 'react';
 
 import {MyContext, MyProvider} from '../views/streampanel'
 import axios from 'axios'
+import './twitchpanel.css'
+import { streamerID } from '../helpers/dummydata';
 
 export default class CommandsInput extends Component{
     counter=1
+    oauth = this.props.context.state.myOauth
+    id = this.props.context.state.myId
     // counter2=70000
     objForLS = {}
     getLocalStorageCommands = {}
@@ -36,8 +40,8 @@ export default class CommandsInput extends Component{
         this.dbCommands.splice(item,1);
         
 
-        axios.put(`/spuser/${this.props.context.state.myId}`,{
-            _id: this.props.context.state.myId,
+        axios.put(`/spuser/${this.id}`,{
+            _id: this.id,
             username: this.props.context.state.username,
             commands: this.dbCommands,
             email: this.props.context.state.email,
@@ -91,7 +95,7 @@ export default class CommandsInput extends Component{
                         <div>{makeObj.name}</div>
                     </div>
                     <div className="command-text">"{makeObj.response}"</div>
-                    <div className="s1 btn right-align red" onClick={()=>{
+                    <div className="btn del " onClick={()=>{
                         console.log("clicked to delete: ",makeObj)
                         this.deleteCommand(i)
                         
@@ -124,8 +128,8 @@ export default class CommandsInput extends Component{
         this.dbCommands.push(commandToAdd)
 
 
-        axios.put(`/spuser/${this.props.context.state.myId}`,{
-            _id: this.props.context.state.myId,
+        axios.put(`/spuser/${this.id}`,{
+            _id: this.id,
             username: this.props.context.state.username,
             commands: this.dbCommands,
             email: this.props.context.state.email,
@@ -157,10 +161,10 @@ export default class CommandsInput extends Component{
         
     }
     componentDidMount(){
+        console.log("commands context", this.props.context)
         
-        
-            console.log("MY CONTEXT",this.props.context)
-            this.getCommandsFromDB(197845795)   
+            
+            this.getCommandsFromDB(this.id)   
         
         
 
@@ -168,20 +172,23 @@ export default class CommandsInput extends Component{
     render(){
        
         return (
-            <div  className="commands-box" 
-            // key={this.counter+=5}
-            >
-            
+            <div  className="commands-box">
+                <div className="modal-title">COMMAND MAKER</div>
                 <form className="commands-input">
-                    <div className="input-field">
-                        <input className="input-name" name="name" autoComplete="off" id="name"placeholder="" type="text" onChange={this.changeHandler} value={this.state.name}/>
-                        {/* <label for="name">Command Name</label> */}
-                    </div>
-                    <div className="input-field command-input-text">
-                        <input className="input-name" name="response" autoComplete="off" id="response" placeholder={``} type="text" onChange={this.changeHandler} value={this.state.response}/>
-                        {/* <label for="response">Command Response</label> */}
-                    </div>
-                    <div onClick={this.addCommand} className="s1 btn right-align purple" waves='light'>ADD</div>
+                <div className="input-pair">
+                <div className="input-field">
+                    
+                    <input className="input-name" name="name" autoComplete="off" id="name"placeholder="" type="text" onChange={this.changeHandler} value={this.state.name}/>
+                    {/* <label for="name">Command Name</label> */}
+                </div>
+                <div className="input-field command-input-text">
+                    <input className="input-name" name="response" autoComplete="off" id="response" placeholder={``} type="text" onChange={this.changeHandler} value={this.state.response}/>
+                    {/* <label for="response">Command Response</label> */}
+                </div>
+                </div>
+                    
+                    <div className="btn-box"><div onClick={this.addCommand} className="btn" waves='light'>ADD</div></div>
+                    
                 </form>
                 <div className="commands" >
                     {this.commandsToShow}
@@ -192,4 +199,4 @@ export default class CommandsInput extends Component{
     }
 }
 
-CommandsInput.contextType = MyContext;
+// CommandsInput.contextType = MyContext;
