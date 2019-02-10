@@ -3,17 +3,9 @@ const users = require('../controllers/user'),
 
 module.exports = function(app) {
 
-    // Static Website
+    // Twitch
 
-    app.get('/', users.root);
-    app.get('/home', users.index);
     app.get('/success/payment-portal', users.twitch);
-    app.get('/privacy-agreement', users.beta);
-    app.post('/privacy-accepted', users.privacy);
-    app.post('/newUrl', users.manualUpdate);
-    app.post('/newIp', users.autoUpdate);
-    app.post('/update-password/:id', users.password);
-    app.get('/user/:username', users.dashboard);
     
     // API Routes
     
@@ -24,6 +16,7 @@ module.exports = function(app) {
     app.delete('/api/command', api.deleteCommand);
     app.post('/api/updatewinmessage', api.updateWinMessage);
     app.post('/api/getuserinfo', api.getUserInfo);
+    app.post('/api/getresponsestring', api.returnResponseString);
     
     // React Routes
     
@@ -31,6 +24,17 @@ module.exports = function(app) {
     app.all('*', users.fourohfour);
     
     // Old Routes
+
+        // Static Website
+
+    // app.get('/', users.root);
+    // app.get('/home', users.index);
+    // app.get('/privacy-agreement', users.beta);
+    // app.post('/privacy-accepted', users.privacy);
+    // app.post('/newUrl', users.manualUpdate);
+    // app.post('/newIp', users.autoUpdate);
+    // app.post('/update-password/:id', users.password);
+    // app.get('/user/:username', users.dashboard);
     
     // app.get('/payment', users.pay);
     // app.post('/paypal-accepted/:purchaseId', users.paid);

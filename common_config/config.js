@@ -5,6 +5,19 @@ const TwitchCredentials = {
     redirectUri : "http://localhost:8000/success/payment-portal",
 }
 
+const PermittedUsers = {
+    "twboapp@gmail.com": true,
+    "twboapp": true
+}
+
+const SessionCredentials = {
+    secret: "77bfce89f4169e4e4e79d45af98d0c04",
+    name: "Stream Daddy",
+    maxAge: 3600000
+}
+
 module.exports = {
     TwitchCredentials,
+    PermittedUsers,
+    SessionCredentials
 }

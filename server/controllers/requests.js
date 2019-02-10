@@ -109,5 +109,8 @@ module.exports = {
             }
         };
         return opts;
+    },
+    twitchFailMessage: () => {
+        return { message: "Error", err: "Error connecting with Twitch" }
     }
 }

@@ -3,22 +3,20 @@ var path = require('path');
 var bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
+const SessionCredentials = require('./common_config/config').SessionCredentials;
 var app = express();
 var port = 8000;
 
 app.use(bodyParser.urlencoded({extended:true}));
-app.use(express.static(path.join(__dirname, './client/static')));
-app.use('/app', express.static(path.join(__dirname, './build/static')));
-app.set('views', path.join(__dirname, './client/views'));
-app.set('view engine', 'ejs');
+app.use(express.static(path.join(__dirname, './build/static')));
 
 app.use(session({
-    secret: "77bfce89f4169e4e4e79d45af98d0c04",
-    name: "Stream Daddy",
+    secret: SessionCredentials.secret,
+    name: SessionCredentials.name,
     proxy: true,
     resave: true,
     saveUninitialized: true,
-    maxAge  : new Date(Date.now() + 3600000)
+    maxAge  : new Date(Date.now() + SessionCredentials.maxAge)
 }));
 
 app.use(cors());

@@ -26,6 +26,7 @@ class App extends Component {
           <Route path="/" exact component={TwitchLogin}/>
           <Route path="/panel" exact component={StreamPanel}/>
 
+
           
           <Route path="/about" component={about}/>
           <Route path="/setup" component={setup}/>
