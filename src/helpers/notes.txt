@@ -56,3 +56,23 @@ const mapDispatchToProps = dispatch => {
   }
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Component)
+
+
+
+
+
+
+
+MyContext boilerplate
+
+<MyContext.Consumer>
+  {context=>
+    <div onClick={(e)=>{
+      e.stopPropagation();
+      context.newMessage("Batman")
+      console.log(context.state.messageCenter)
+      }}>
+    </div>
+              
+  }
+</MyContext.Consumer>

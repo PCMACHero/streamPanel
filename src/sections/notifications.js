@@ -94,8 +94,11 @@ getRecentFollows=()=>{
 }
 
 componentDidMount(){
+    setTimeout(() => {
+        this.getSubs()
+    }, 3000);
 
-    this.getSubs()
+    
     // this.getResubs()
 
     // this.props.client.on("subscription", function (channel, username, method, message, userstate) {

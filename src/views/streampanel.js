@@ -3,6 +3,7 @@ import MainSection from '../sections/mainsection'
 import {streamer} from "../helpers/dummydata"
 import {clientID} from "../common/common"
 import axios from "axios"
+import { MyContext } from '../helpers/provider';
 
 
 
@@ -120,8 +121,13 @@ class StreamPanel extends Component {
             </div>
         </div>
 
+        <MyContext.Consumer>{
+            context=>
+            <MainSection chanBadges={this.state.badges} context={context}/>
+        }
 
-        <MainSection chanBadges={this.state.badges} oauth={this.token}/>
+        </MyContext.Consumer>
+        
       </div>
 
        

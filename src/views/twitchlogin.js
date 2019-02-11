@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom'
-
+import axios from 'axios';
 import {clientID} from '../common/common'
 // import getScenes from './sections/obsscenes'
 import './twitchlogin.css';
@@ -11,6 +11,7 @@ import Features from '../sections/features'
 
 
 class twitchLogin extends Component{
+
 
 
   state={
@@ -29,8 +30,20 @@ class twitchLogin extends Component{
   counter=0
 lineCounter = 0
 lines=["All-in-one soution for Twitch Streaming", "Control OBS and Twitch from one place", "Feature rich, with more to come", "Works on any device on your network", "Use your tablet, laptop or desktop", "Easy to use, clean, and fast to get started"]
-URL = `https://id.twitch.tv/oauth2/authorize?client_id=${
-clientID}&redirect_uri=http://192.168.2.2:3000/panel&response_type=token&scope=channel_editor+channel_read+chat:read+chat:edit+user:edit+communities_moderate+channel:moderate`
+// URL = `https://id.twitch.tv/oauth2/authorize?client_id=${
+// clientID}&redirect_uri=http://192.168.2.2:3000/panel&response_type=token&scope=channel_editor+channel_read+chat:read+chat:edit+user:edit+communities_moderate+channel:moderate`
+URL = ""
+
+getTwitchLink=()=>{
+  console.log("twitch link 1")
+  axios.post("/api/getresponsestring").then(data=>{
+    if(data.data.message==="Success"){
+      this.URL = data.data.responseString
+      console.log("linky",data)
+    }
+    
+  })
+}
 
 niceThings=()=>{
   if(this.lineCounter===this.lines.length){
@@ -44,6 +57,8 @@ niceThings=()=>{
   this.counter++
 }
 componentDidMount(){
+  console.log("QQQQ", this.data)
+  this.getTwitchLink()
   setInterval(() => {
     this.niceThings()
   }, 4000);

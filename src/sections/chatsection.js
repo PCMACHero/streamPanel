@@ -8,6 +8,7 @@ import {clientID} from "../common/common"
 import { isIPv4 } from 'net';
 import './chat.css'
 import ChatModal from './chatmodal'
+import { MyContext } from '../helpers/provider';
 // import $ from 'jquery'
 
 
@@ -23,7 +24,7 @@ export default class Chat extends Component {
         }
         this.context=this.props.context
         this.id = this.props.id
-        this.oauth = this.props.oauth
+        this.oauth = null
         this.commands = []
         this.modDBObj={}
         this.badgeDivArray=[]
@@ -361,7 +362,7 @@ modDB=(user, status)=>{
 chatListner=()=>{
     // console.log("CHAT CONTEXT LISTENER", this.props.context.state.loadListener)
         
-           console.log("LISTENER PRE")
+           console.log("LISTENER PRE", this.props.client)
            this.props.client.on("action",  (channel, userstate, message, self)=> {
             this.makeMessageDivs(channel,"You",message,self)
             
@@ -410,24 +411,36 @@ chatListner=()=>{
                 
             })
         
-}
+}   
 
+componentDidUpdate(prevProps){
+    console.log("prev",prevProps)
+    if(prevProps.client === null && this.props.client){
+        this.getCommands()
+        this.getGlobalBadges()
+this.getChannelBadges()
+this.getSubscriberBadges()
+    this.chatListner()
+
+    }
+}
     componentDidMount(){
         
             console.log("CHAT CONTEXT", this.props.context)
             setTimeout(() => {
                 console.log("CHAT CONTEXT waited", this.props.context)
-                this.getCommands()
-            this.chatListner()
-            }, 1000);
+        //         this.getCommands()
+        //         this.getGlobalBadges()
+        // this.getChannelBadges()
+        // this.getSubscriberBadges()
+        //     this.chatListner()
+            }, 3000);
             
        
             
         
         
-        this.getGlobalBadges()
-        this.getChannelBadges()
-        this.getSubscriberBadges()
+        
         
         
         
@@ -436,9 +449,21 @@ chatListner=()=>{
     render(){
         let modal = null
         if(this.state.showModal){
-            modal= <div className="commands-container" onClick={()=>{this.setState({showModal:false})}}>
-                <ChatModal username={this.state.clickedUser} client={this.props.client} modDB={this.modDBObj}/>
-            </div> 
+            
+            modal= 
+            <Fragment>
+                    <div className="modal-back" onClick={()=>{this.setState({showModal:false})}}></div> 
+            <MyContext.Consumer>{
+                context=>
+                <ChatModal username={this.state.clickedUser} client={context.state.client} newMessage={context.newMessage} modDB={this.modDBObj}/>
+            }
+
+
+            </MyContext.Consumer>
+            </Fragment>
+            
+                
+            
         }
         return (
             <Fragment>

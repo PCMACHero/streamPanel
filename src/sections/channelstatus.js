@@ -34,7 +34,8 @@ class ChannelStatus extends Component{
             }
         }).then(data=>{
             if(data.data.stream){
-                console.log("$$$", data.data.stream._id)
+                this.getGameCover(data.data.stream)
+                console.log("$$$", data)
             this.setState({
                 channel: {
                     _id: data.data.stream._id,
@@ -55,8 +56,8 @@ class ChannelStatus extends Component{
         
     }
     getGameCover=(game)=>{
-        axios.get("https://api.twitch.tv/helix/games?name="+game,this.headers).then(data=>{
-        console.log("game cover---->", data)  
+        axios.get("https://api.twitch.tv/helix/games?name="+game.game,this.headers).then(data=>{
+        console.log("game cover---->", game)  
         
         let boxURL = data.data.data[0].box_art_url.split("")
                 boxURL.splice(boxURL.length-20)
@@ -70,8 +71,10 @@ class ChannelStatus extends Component{
         })
     }
 
-    getChannelStatus=()=>{
-        const oauth = this.props.oauth
+    getTitleAndGame=()=>{
+        //Get Title, and game
+        console.log("CONTEXT IN STATUS", this.props.context)
+        const oauth = this.props.context.state.myOauth
         // const oauth = "xp5b0vv17q14ue9l0zw9x8hpreznkn"
         const headers = {"headers":{
             "Client-ID": clientID,
@@ -84,19 +87,19 @@ class ChannelStatus extends Component{
             this.setState({
                 currentGame: data.data.game,
                 currentTitle: data.data.status,
-                channel: {
+                // channel: {
                     
                     
                     
-                    userID: data.data["_id"],
-                    partner:data.data.partner,
-                    name: data.data.name,
-                    email: data.data.email,
-                    mature: data.data.mature,
-                    views: data.data.views,
-                    streamKey: data.data.stream_key
+                //     userID: data.data["_id"],
+                //     partner:data.data.partner,
+                //     name: data.data.name,
+                //     email: data.data.email,
+                //     mature: data.data.mature,
+                //     views: data.data.views,
+                //     streamKey: data.data.stream_key
 
-                }
+                // }
                 
             })
         })
@@ -129,15 +132,19 @@ class ChannelStatus extends Component{
             //   })
             
             }
-
+  
 
     componentDidMount(){
-        this.getStreamData()
+        
         setInterval(() => {
+            
             this.getStreamData()
         }, 15000);
+        setTimeout(() => {
+            this.getStreamData()
+            this.getTitleAndGame()
+        }, 2000);
         
-        this.getChannelStatus()
         
         
         this.getGamesList()
@@ -221,6 +228,7 @@ favorite
                                 
                                 
                                 
+                                
                             />
                             
                         </Row>
@@ -229,7 +237,7 @@ favorite
                             <label for="new-name">Update Game</label>
                         </div> */}
                         <div className="input-field command-input-text">
-                            <input className="input-name" name="newTitle" autoComplete="off" id="new-title"placeholder={`Enter Title ex: ${this.props.channelOBJ.status}`} type="text" onChange={this.changeHandler} value={this.state.newTitle}/>
+                            <input className="input-name" name="newTitle" autoComplete="off" id="new-title"placeholder={`Enter Title ex: ${this.state.currentTitle}`} type="text" onChange={this.changeHandler} value={this.state.newTitle}/>
                             {/* <label for="new-title">Update Title</label> */}
                         </div>
                         
@@ -242,16 +250,29 @@ favorite
 
                 
                 <div onClick={()=>{
-                            console.log("MY OAUTH IN PUT", this.props.oauth)
+                    let title = null
+                    if(this.state.newTitle===""){
+                        title = this.state.currentTitle
+                    } else {
+                        title = this.state.newTitle
+                    }
+
+                    let game = null
+                    if(this.state.newGame===""){
+                        title = this.state.currentGame
+                    } else {
+                        title = this.state.newGame
+                    }
+                            console.log("MY OAUTH IN PUT", this.props.context.state.myOauth)
                     axios({
                         method: 'put', //you can set what request you want to be
-                        url: 'https://api.twitch.tv/kraken/channels/'+this.state.channel.userID,
+                        url: 'https://api.twitch.tv/kraken/channels/'+this.props.context.state.myId,
                         data: {"channel": {"status": this.state.newTitle, "game": this.state.newGame}},
                         headers: {
                             "Accept": "application/vnd.twitchtv.v5+json",
                             "Client-ID": clientID,
                             // "Authorization": 'OAuth ' + "xp5b0vv17q14ue9l0zw9x8hpreznkn",
-                            "Authorization": 'OAuth ' + this.props.oauth,
+                            "Authorization": 'OAuth ' + this.props.context.state.myOauth,
                             // this.props.channelOBJ.oauth,
                             'Content-Type': 'application/json'
                         }

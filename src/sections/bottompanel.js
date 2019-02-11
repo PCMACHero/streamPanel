@@ -3,6 +3,7 @@ import './bottompanel.css';
 import ChannelStatus from './channelstatus'
 import Notifications from './notifications'
 import Numbers from './numbers'
+import { MyContext } from '../helpers/provider';
 
 class BottomPanel extends Component{
     
@@ -119,8 +120,11 @@ if(this.props.event && this.props.event["update-type"]==="StreamStatus"){
 }
 
     return(
-        
-        <div className="bottom-panel" >
+        <MyContext.Consumer>
+        {context=>
+
+
+                <div className="bottom-panel" >
         
             <div className="bottom-left-container">
                 <div className={this.btnClass} onClick={()=>{this.toggleStream()
@@ -141,18 +145,32 @@ if(this.props.event && this.props.event["update-type"]==="StreamStatus"){
                 <div className="label2">Uptime: {this.streamTime}</div>
                 
                 </div>
+                <div className="profiles-btn" onClick={(e)=>{console.log(e.type)}}>
+                
+                <div className="label2">CPU: {this.cpuUsage}</div>
+                <div className="label2">Bit-rate: {this.bitRate}</div>
+                <div className="label2">Dropped: {this.droppedFrames}</div>
+                <div className="label2">Uptime: {this.streamTime}</div>
+                
+                </div>
                 
             </div>
             <div className="bottom-middle-container">
-                <ChannelStatus channelOBJ={this.props.channelOBJ} oauth={this.oauth}/>
+                <ChannelStatus channelOBJ={this.props.channelOBJ} context={context}/>
             </div>
             <div className="bottom-right-container">
-                <Notifications userID={this.props.channelOBJ.userID} client={this.props.client}/>
+                <Notifications userID={context.state.myId} client={context.state.client}/>
                 
             </div>
             
             
         </div>
+
+            }
+        
+
+        </MyContext.Consumer>
+        
     )
 }
     

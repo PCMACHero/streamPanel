@@ -1,5 +1,6 @@
 var express = require('express');
 var path = require('path');
+const fs = require('fs');
 var bodyParser = require('body-parser');
 const cors = require('cors');
 const session = require('express-session');
@@ -8,8 +9,13 @@ var app = express();
 var port = 8000;
 
 app.use(bodyParser.urlencoded({extended:true}));
+// app.use('/assets', express.static(path.resolve(__dirname, 'assets')));
+// app.use('/media', express.static(path.resolve(__dirname, 'media')));
+
+// hide powered by express
+app.disable('x-powered-by');
 app.use(bodyParser.json())
-app.use(express.static(path.join(__dirname, './build/static')));
+app.use(express.static(path.join(__dirname, './build')));
 
 app.use(session({
     secret: SessionCredentials.secret,

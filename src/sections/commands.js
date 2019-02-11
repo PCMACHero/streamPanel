@@ -9,7 +9,7 @@ export default class Commands extends Component{
 
     <MyContext.Consumer>
     {context =>
-      <div className="commands-container">
+      <div className="modal-back">
       <CommandInput context={context} />
   </div>
     }

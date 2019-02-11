@@ -7,19 +7,26 @@ import about from './views/about'
 import setup from './views/setup'
 import {BrowserRouter, Route} from 'react-router-dom'
 import './App.css';
+import Axios from 'axios';
 
 
 class App extends Component {
 
+getAuth=()=>{
+  Axios.post("/api/isuserauthenticated").then(data=>{
+    console.log("AUTH DATA", data)
+    
 
-
+  })
+}
+componentDidMount(){
+this.getAuth()
+}
 
   render() {
     return (
       
-      <BrowserRouter 
-      // forceRefresh="true"
-      >
+      <BrowserRouter>
       <MyProvider>
       <div>
           <Route path="/success" component={Success} exact/>

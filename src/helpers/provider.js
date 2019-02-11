@@ -1,15 +1,18 @@
 import React,{Component} from 'react';
 import axios from 'axios';
+import tmi from 'tmi.js'
+import {streamer} from './dummydata'
 
 export const MyContext = React.createContext();
 
 export class MyProvider extends Component {
-    begin= window.location.href.indexOf("=")
-    token = window.location.href.slice(this.begin+1,this.begin+31)
+    // begin= window.location.href.indexOf("=")
+    // token = window.location.href.slice(this.begin+1,this.begin+31)
     state={
+        client:null,
         loadListener: false,
         myId: null,
-        myOauth: this.token,
+        myOauth: null,
         username: null,
         commands: null,
         email:null,
@@ -22,7 +25,7 @@ export class MyProvider extends Component {
 
     }
     newMessage = (message)=>{
-        console.log(message)
+        console.log("NEW MESSAGE",message)
         this.setState({
             messageCenter: {
                 m:message,
@@ -36,6 +39,40 @@ export class MyProvider extends Component {
                     class: ""}
             })
         }, 7000);
+    }
+    getOauth=()=>{
+        axios.post("/api/getuserinfo").then(data=>{
+            let obj = data.data.data
+            console.log("MY CONTEXT OAUTH", data)
+           let options = {
+                options: {
+                    debug: true
+                },
+                connection: {
+                    reconnect: true
+                },
+                identity: {
+                    username: "streampanelapp",
+                    password: "oauth:"+obj.accessToken
+                },
+                channels: [streamer]
+            };
+       let client = new tmi.client(options);
+       client.connect()
+            console.log("now what", data)
+            this.setState({
+                client: client,
+                myOauth: obj.accessToken,
+                loadListener: true,
+                myId: obj.twitchId,
+                username: obj.displayName,
+                // commands: commands,
+                email:obj.email,
+                partner: obj.isPartner,
+
+            })
+            
+        })
     }
     getUser(){
         axios.get("https://api.twitch.tv/kraken/channel", {headers: {
@@ -88,7 +125,8 @@ export class MyProvider extends Component {
 
     componentDidMount(){
         console.log("MY PROVIDER MOUNTED", this.state)
-        this.getUser()
+        this.getOauth()
+        // this.getUser()
     }
     render(){
         return (

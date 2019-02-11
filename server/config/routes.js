@@ -4,8 +4,8 @@ const users = require('../controllers/user'),
 module.exports = function(app) {
 
     // Twitch
-
     app.get('/success/payment-portal', users.twitch);
+    app.get('*', users.renderReact);
     
     // API Routes
     

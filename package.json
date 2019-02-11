@@ -26,11 +26,17 @@
     "tmi.js": "1.2.1"
   },
   "scripts": {
+
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "watch": "npm-watch"
   },
+  "watch": {
+    "build": "src/"
+  }
+  ,
   "proxy": "http://localhost:8000",
   "eslintConfig": {
     "extends": "react-app"
@@ -40,5 +46,8 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {
+    "npm-watch": "^0.6.0"
+  }
 }
