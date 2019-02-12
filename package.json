@@ -26,17 +26,13 @@
     "tmi.js": "1.2.1"
   },
   "scripts": {
-
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "watch": "npm-watch"
+    "watch": "cra-build-watch"
   },
-  "watch": {
-    "build": "src/"
-  }
-  ,
+ 
   "proxy": "http://localhost:8000",
   "eslintConfig": {
     "extends": "react-app"
@@ -48,6 +44,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "cra-build-watch": "^1.4.0",
     "npm-watch": "^0.6.0"
   }
 }

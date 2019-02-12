@@ -27,7 +27,6 @@ const idOBJ={
   streampanelapp: "277053577",
   katgunn: "23822990",
   callofduty: "501281",
-  mrsnewbhero: "74527399",
   fathersongaming: "219249",
   sandyravage: "8957332"
 
