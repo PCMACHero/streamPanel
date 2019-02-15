@@ -1,9 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import MainSection from '../sections/mainsection'
 import {streamer} from "../helpers/dummydata"
 import {clientID} from "../common/common"
 import axios from "axios"
 import { MyContext } from '../helpers/provider';
+import BlurScreen from '../sections/blurscreen';
+import Presets from '../sections/presets';
 
 
 
@@ -111,9 +113,35 @@ class StreamPanel extends Component {
   render() {
       console.log("STREAMPANEL RENDERED")
     return (
-        
+        <MyContext.Consumer>{
+            (context)=> {
+                if(context.state.profileScreen){
+                    return (
+                        <Fragment>
+                            <BlurScreen title="PRESETS" color="rgba(0,0,0, 0.4)" show={true} close={context.showHideProfileScreen} content={<Presets server={context.state.OBSServer} context={context} show={context.state.profileScreen}/>}/>
+
+                            
+                        <div className="stream-panel panel-container" style={{animation:"blurIn 2s forwards"}}>
+            <div className={this.state.startClass}>
+                <div className="start-banner">STREAM PANEL</div>
+                <div className="progress">
+                    <div className="indeterminate green"></div>
+                </div>
+            </div>
+    
             
-            <div className="stream-panel panel-container">
+                <MainSection chanBadges={this.state.badges} context={context} server={context.state.OBSServer}/>
+            </div>
+                        </Fragment>
+                        
+            )
+            }else{
+                return (
+                    <Fragment>
+                        <BlurScreen title="PRESETS" color="#8282826b" show={false} close={context.showHideProfileScreen} content={<Presets server={context.state.OBSServer} context={context} show={context.state.profileScreen}/>}/>
+
+                        
+                    <div className="stream-panel panel-container" >
         <div className={this.state.startClass}>
             <div className="start-banner">STREAM PANEL</div>
             <div className="progress">
@@ -121,16 +149,19 @@ class StreamPanel extends Component {
             </div>
         </div>
 
-        <MyContext.Consumer>{
-            context=>
-            <MainSection chanBadges={this.state.badges} context={context}/>
-        }
-
-        </MyContext.Consumer>
         
-      </div>
-
-       
+            <MainSection chanBadges={this.state.badges} context={context} server={context.state.OBSServer}/>
+        </div>
+                    </Fragment>
+        )
+            }
+            
+                
+            }
+            
+            
+    }
+      </MyContext.Consumer>
       
     );
   }

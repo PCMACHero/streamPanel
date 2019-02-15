@@ -30,7 +30,7 @@ class BottomPanel extends Component{
         
 
         getOBSStreamStatus(){
-            this.server.send({'request-type': 'GetStreamingStatus'}).then(data=>{
+            this.props.server.send({'request-type': 'GetStreamingStatus'}).then(data=>{
                 this.setState({
                     streaming: data.streaming,
                     recording: data.recording
@@ -41,16 +41,17 @@ class BottomPanel extends Component{
 
         toggleStream = ()=>{
             console.log("CLICKED TOGGLESTREAM")
-            this.server.send({'request-type': 'StartStopStreaming'}).then(data=>{
+            this.props.server.send({'request-type': 'StartStopStreaming'}).then(data=>{
                 console.log("TOGGLESTREAM RESP DATA", data)
         })
     
     }
-
+    componentDidUpdate(prev){
+        if(this.props.server !== prev.server)
+        this.getOBSStreamStatus() 
+    }
     componentDidMount(){
-        setInterval(() => {
-            this.getOBSStreamStatus() 
-        }, 1000);
+        
         
         console.log("EVENT IN BOTTOM", this.state.event)
         // this.props.server.addMessageListener( this.handleServerEvent);
@@ -127,6 +128,7 @@ if(this.props.event && this.props.event["update-type"]==="StreamStatus"){
                 <div className="bottom-panel" >
         
             <div className="bottom-left-container">
+                <div className="profiles-btn">
                 <div className={this.btnClass} onClick={()=>{this.toggleStream()
                 }}>
                     
@@ -137,6 +139,8 @@ if(this.props.event && this.props.event["update-type"]==="StreamStatus"){
                     {this.icon}
                     </i>
                 </div>
+                </div>
+                
                 <div className="profiles-btn">
                 <Numbers channelOBJ={this.props.channelOBJ} />
                 <div className="label2">CPU: {this.cpuUsage}</div>
@@ -145,12 +149,12 @@ if(this.props.event && this.props.event["update-type"]==="StreamStatus"){
                 <div className="label2">Uptime: {this.streamTime}</div>
                 
                 </div>
-                <div className="profiles-btn" onClick={(e)=>{console.log(e.type)}}>
+                <div className="profiles-btn" onClick={(e)=>{console.log(e.type)
+                context.showHideProfileScreen()}}>
                 
-                <div className="label2">CPU: {this.cpuUsage}</div>
+                <div className="label">PRESETS</div>
                 <div className="label2">Bit-rate: {this.bitRate}</div>
-                <div className="label2">Dropped: {this.droppedFrames}</div>
-                <div className="label2">Uptime: {this.streamTime}</div>
+                
                 
                 </div>
                 

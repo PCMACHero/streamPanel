@@ -18,12 +18,12 @@ class SourcePanel extends Component {
 getSources(){
 
 }  
-toggleMic(mic){
-    this.server.send({'request-type': 'ToggleMute','source':mic.name})
-    this.getMic()
+toggleMic(mic,server){
+    server.send({'request-type': 'ToggleMute','source':mic.name})
+    this.getMic(server)
 }
-getMic(){
-    this.server.send({'request-type': 'GetSourcesList'})
+getMic(server){
+    server.send({'request-type': 'GetSourcesList'})
     .then(data=>{
             console.log("MY MIC DATA", data.sources)
 
@@ -37,7 +37,7 @@ getMic(){
             console.log("MY MIC ARRAY", arrayOfMics)
             for(let i=0; i<arrayOfMics.length;i++){
                 
-                this.server.send({'request-type': 'GetMute','source':arrayOfMics[i].name}).then(data2=>{
+                server.send({'request-type': 'GetMute','source':arrayOfMics[i].name}).then(data2=>{
                     console.log("DATA2, ",data2)
                     finalArrayOfMics.push(data2)
                     this.makeDivs(finalArrayOfMics)
@@ -77,7 +77,7 @@ toggleSource = (sourceToToggle)=>{
                 
             } 
             
-        } this.getMic()
+        } this.getMic(this.props.server)
         
         
     })
@@ -105,7 +105,7 @@ makeDivs(mics, cams){
                 this.icon = "mic_off"
             }
             this.sources.unshift(
-                <div className={this.srcClass} key={i} onClick={()=>{this.toggleMic(mics[i])}}>
+                <div className={this.srcClass} key={i} onClick={()=>{this.toggleMic(mics[i],this.props.server)}}>
         
             <div className='label'>{mics[i].name.toUpperCase()}
             </div>
@@ -118,11 +118,16 @@ makeDivs(mics, cams){
         }
         
         
-        
+componentDidUpdate(prev){
+    console.log("BBBB", this.props.server)
+    if(this.props.server && prev.server===null){
+        console.log("yyy",prev.server)
+        console.log("ttt",this.props.server)
+        this.getMic(this.props.server)  
+    }
+}
 componentDidMount(){
-    setTimeout(() => {
-        this.getMic()   
-    }, 1000);
+    
 
 }
     

@@ -1,19 +1,31 @@
 import React,{Component} from 'react';
 import axios from 'axios';
 import tmi from 'tmi.js'
-import {streamer} from './dummydata'
+import {streamer, dumbData} from './dummydata'
+import Obs from './obs-server'
 
 export const MyContext = React.createContext();
 
 export class MyProvider extends Component {
+
+    
+    
     // begin= window.location.href.indexOf("=")
     // token = window.location.href.slice(this.begin+1,this.begin+31)
     state={
+        game:null,
+        title:null,
+        profileScreen: true,
+        OBSServer: null,
+        OBSConnected:false,
         client:null,
         loadListener: false,
-        myId: null,
-        myOauth: null,
-        username: null,
+        myId: dumbData.twitchId,
+        myOauth: dumbData.accessToken,
+        username: dumbData.displayName,
+        // myId: null,
+        // myOauth: null,
+        // username: null,
         commands: null,
         email:null,
         partner: null,
@@ -23,6 +35,20 @@ export class MyProvider extends Component {
         }
         
 
+    }
+    showHideProfileScreen=()=>{
+        
+        this.setState({
+                profileScreen: !this.state.profileScreen
+            })
+        
+        
+    }
+    updateStatus=(game,title)=>{
+        this.setState({
+            game:game,
+            title:title
+        })
     }
     newMessage = (message)=>{
         console.log("NEW MESSAGE",message)
@@ -40,10 +66,15 @@ export class MyProvider extends Component {
             })
         }, 7000);
     }
+    // getOBSServer=(server)=>{
+    //     this.setState({
+    //         OBSServer:server
+    //     })
+    // }
     getOauth=()=>{
         axios.post("/api/getuserinfo").then(data=>{
-            let obj = data.data.data
-            console.log("MY CONTEXT OAUTH", data)
+            // let obj = data.data.data
+            // console.log("MY CONTEXT OAUTH", data)
            let options = {
                 options: {
                     debug: true
@@ -53,7 +84,8 @@ export class MyProvider extends Component {
                 },
                 identity: {
                     username: "streampanelapp",
-                    password: "oauth:"+obj.accessToken
+                    // password: "oauth:"+obj.accessToken
+                    password: "oauth:"+dumbData.accessToken
                 },
                 channels: [streamer]
             };
@@ -62,13 +94,13 @@ export class MyProvider extends Component {
             console.log("now what", data)
             this.setState({
                 client: client,
-                myOauth: obj.accessToken,
+                // myOauth: obj.accessToken,
                 loadListener: true,
-                myId: obj.twitchId,
-                username: obj.displayName,
+                // myId: obj.twitchId,
+                // username: obj.displayName,
                 // commands: commands,
-                email:obj.email,
-                partner: obj.isPartner,
+                // email:obj.email,
+                // partner: obj.isPartner,
 
             })
             
@@ -122,9 +154,20 @@ export class MyProvider extends Component {
             })
         })
     }
-
+    makeOBS=()=>{
+        let server = new Obs();
+        server.connect()
+        setTimeout(() => {
+            this.setState({
+                OBSServer:server
+            })
+        }, 2000);
+        
+    }
     componentDidMount(){
         console.log("MY PROVIDER MOUNTED", this.state)
+        this.makeOBS()
+        
         this.getOauth()
         // this.getUser()
     }
@@ -132,8 +175,11 @@ export class MyProvider extends Component {
         return (
             <MyContext.Provider value={{
                 state: this.state,
+                getOBSServer: this.getOBSServer,
                 getOauth: this.getOauth,
                 newMessage: this.newMessage,
+                updateStatus:this.updateStatus,
+                showHideProfileScreen: this.showHideProfileScreen
             }}>
                 {this.props.children}
             </MyContext.Provider>

@@ -18,8 +18,8 @@ class ScenePanel extends Component{
     btnClass = null;
     scenes = [];
     
-    getAndMakeScenesAndSources(){
-        this.server.send({'request-type': 'GetSceneList'}).then(data=>{
+    getAndMakeScenesAndSources(server){
+        server.send({'request-type': 'GetSceneList'}).then(data=>{
             console.log("IS SERVER WORKING?", data)
             this.makeDivs(data.scenes, data["current-scene"]  )
             this.setState( { 
@@ -35,8 +35,8 @@ class ScenePanel extends Component{
 
     setSceneAndSourcesOnClick=(scene)=>{
         //get new current scene and scene sources
-        this.server.send({'request-type': 'SetCurrentScene', "scene-name": scene})
-        this.server.send({'request-type': 'GetCurrentScene', "scene-name": scene}).then(data2=>{
+        this.props.server.send({'request-type': 'SetCurrentScene', "scene-name": scene})
+        this.props.server.send({'request-type': 'GetCurrentScene', "scene-name": scene}).then(data2=>{
            console.log("my server data",data2)
            this.setState({
                currentScene:data2.name,
@@ -45,7 +45,7 @@ class ScenePanel extends Component{
             
         })
         //get new scenes array
-        this.server.send({'request-type': 'GetSceneList'}).then(data=>{
+        this.props.server.send({'request-type': 'GetSceneList'}).then(data=>{
             this.makeDivs(this.state.scenes, data["current-scene"])
             this.setState( { 
                 
@@ -58,28 +58,28 @@ class ScenePanel extends Component{
 
 
        getFirstScenesAndSources(){
-           console.log("check 1")
+           console.log("check 1", this.props)
         
         
-            this.getAndMakeScenesAndSources()
+            this.getAndMakeScenesAndSources(this.props.server)
             // this.getMic()
             
-            this.server.send({"request-type": "GetStreamingStatus"}).then(data=>{
+            this.props.server.send({"request-type": "GetStreamingStatus"}).then(data=>{
                 console.log("MY STREAM STATUS OBJ", data.streaming)
                 this.setState({
                     streamingStatus:data.streaming
                 })
             })
 
-            this.server.send({'request-type': 'GetCurrentScene'}).then(data2=>{
+            this.props.server.send({'request-type': 'GetCurrentScene'}).then(data2=>{
                 
                 this.setState( { 
                     sources: data2.sources
                 } )});
 
 
-            // this.server.send({'request-type': 'GetMute', source: 'newsub'})
-            // this.server.send({'request-type': 'ToggleMute', source: "Browser"})
+            // this.props.server.send({'request-type': 'GetMute', source: 'newsub'})
+            // this.props.server.send({'request-type': 'ToggleMute', source: "Browser"})
             
             
         
@@ -155,20 +155,21 @@ class ScenePanel extends Component{
             }
             
     }
-    componentDidUpdate(){
+    componentDidUpdate(prev){
+        console.log("event prop", this.props.event)
+        if(this.props.server && prev.server==undefined){
+            console.log("OBS CONNECTED")
+            this.getFirstScenesAndSources()  
+        }
         if(this.props.event && this.props.event["update-type"]==="SwitchScenes"){
+            console.log("SCENE SWITCHED", this.props.event)
             this.getFirstScenesAndSources()   
         }
           
     }
     
     componentDidMount(){
-        setTimeout(() => {
-            // console.log("mounted scenes", this.props.event)
-            // this.props.listener(this.handleServerEvent(this.props.event))
-            // this.handleServerEvent(this.props.event);
-            this.getFirstScenesAndSources() 
-        }, 1000);
+     
         
         
         

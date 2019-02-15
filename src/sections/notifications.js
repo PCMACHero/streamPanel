@@ -92,11 +92,15 @@ getRecentFollows=()=>{
     }) 
 
 }
-
-componentDidMount(){
-    setTimeout(() => {
+componentDidUpdate(pre){
+    if(this.props.client && pre.client !== this.props.client){
         this.getSubs()
-    }, 3000);
+        this.getRecentFollows()
+    }
+    
+}
+componentDidMount(){
+    
 
     
     // this.getResubs()

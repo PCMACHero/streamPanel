@@ -121,7 +121,7 @@ border:0.5px solid white;
     flex-direction: column;
     display: flex;
     width: 100%;
-    height: 33.33%;
+    height: 100%;
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
@@ -150,7 +150,7 @@ border:0.5px solid white;
     flex-direction: column;
     display: flex;
     width: 100%;
-    height: 33.33%;
+    height: 100%;
     flex-shrink: 0;
     align-items: center;
     justify-content: center;
@@ -196,9 +196,10 @@ border:0.5px solid white;
     align-items: center;
     text-align: center;
     /* border-radius: 2px; */
-    background-color: rgb(60, 60, 60);
-    color: rgb(255, 255, 255);
+    background-color: #0A55BD;
+    
     display: flex;
+    margin: .5px;
     
 }
 
@@ -248,7 +249,7 @@ border:0.5px solid white;
 .status-bg{
     position: absolute;
     height: 40%;
-    width: 28%;
+    /* width: 28%; */
     z-index: -1;
     /* filter: blur(1px); */
 }
@@ -322,4 +323,82 @@ padding-top: 5px;
     align-items: center;
     height:50%;
     width: 100%;
+}
+
+
+
+.blur-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:80%;
+    height: 80%;
+    flex-direction: column;
+}
+
+.preset-btn{
+    font-size: 2em;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:40%;
+    height:20%;
+    border: solid #4C99D9 5px;
+    /* border-radius: 10px; */
+    color:white;
+    margin: 5px;
+    background-color: #0A55BD;
+    
+}
+
+.preset-btn-current{
+    animation: pulse 3s infinite;
+    box-shadow: 0 0 0 2em rgba(#fff,0);
+    font-size: 2em;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width:40%;
+    height:20%;
+    border: solid rgb(255, 255, 255) 2px;
+    /* border-radius: 20px; */
+    color:rgb(255, 255, 255);
+    margin: 5px;
+    background: 90%;
+    /* background-image: linear-gradient(rgb(0, 60, 255),rgb(58, 225, 255)); */
+    
+    
+}
+
+@keyframes choose {
+    from {
+        
+        background-color: #0A55BD;
+    }
+    to {
+        
+        background-color:rgba(10, 85, 189, 0);
+    }
+}
+
+@keyframes pulsate
+{
+     0% {
+          box-shadow: 0 0 0 0px rgb(0, 238, 255);
+     }
+     100% {
+          box-shadow: 0 0 0 35px rgba(255, 255, 255, 0);
+     }
+}
+
+@keyframes blurIn
+{
+     0% {
+          filter:blur(0px);
+     }
+     100% {
+        filter:blur(5px);
+}
 }

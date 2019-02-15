@@ -7,7 +7,7 @@ const twitchCltId = config.TwitchCredentials.twitchCltId,
       twitchSecret = config.TwitchCredentials.twitchSecret,
       randState = config.TwitchCredentials.randState,
       redirectUri = config.TwitchCredentials.redirectUri,
-      responseStr = "https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=" + twitchCltId + "&redirect_uri=" + redirectUri + "&scope=channel_editor+channel_read+chat:read+chat:edit+viewing_activity_read+user:read:email+bits:read&state=" + randState;
+      responseStr = "https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=" + twitchCltId + "&redirect_uri=" + redirectUri + "&scope=channel_editor+channel_read+chat:read+chat:edit+viewing_activity_read+user:read:email+bits:read+clips:edit&state=" + randState;
 
 module.exports = {
     isAuthenticated: async (req, res, next) => {

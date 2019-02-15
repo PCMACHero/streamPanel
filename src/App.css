@@ -22,6 +22,7 @@ font-family: 'Rubik Mono One', sans-serif; */
 
 .App {
   text-align: center;
+  
 
 }
 .page-space{
@@ -36,6 +37,8 @@ font-family: 'Rubik Mono One', sans-serif; */
 .stream-panel{
   text-align: center;
   background-color: white;
+  overflow: hidden;
+  height: 100vh;
   /* font-size: .5em; */
 }
 .powered{

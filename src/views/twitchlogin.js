@@ -15,6 +15,7 @@ class twitchLogin extends Component{
 
 
   state={
+    twitchURL:null,
     lineDiv:<div key={this.counter}className="nice-line animated fadeIn">WELCOME TO STREAMPANEL APP</div>,
     info: {
       body1: ""
@@ -38,6 +39,9 @@ getTwitchLink=()=>{
   console.log("twitch link 1")
   axios.post("/api/getresponsestring").then(data=>{
     if(data.data.message==="Success"){
+      this.setState({
+        twitchURL:data.data.responseString
+      })
       this.URL = data.data.responseString
       console.log("linky",data)
     }
@@ -115,7 +119,7 @@ render(){
               
               </div>
               <div className="center">
-              <a className="twitch-btn-login" href= {this.URL}><div className="login">Login</div></a>
+              <a className="twitch-btn-login" href= {this.state.twitchURL}><div className="login">Login</div></a>
               </div>
           </div>
           

@@ -16,7 +16,7 @@ import {MyContext} from "../helpers/provider"
 class MainSection extends Component{
     
     srcClass = null;
-    server = new Obs();
+    
     client = null
     messageList = {};
     ad = false;
@@ -114,12 +114,10 @@ class MainSection extends Component{
 
   
     // listener = (handler)=>{
-    //     this.server.addMessageListener(handler)
+    //     this.props.server.addMessageListener(handler)
     // }
 
-    connectOBS = ()=>{
-        this.server.connect()
-    }
+
            
     // childHandler=(e, callback)=>{
     //     callback(e)
@@ -145,23 +143,21 @@ class MainSection extends Component{
               console.log("CRAP2", this.props.context)
             if(pp.client===null && this.props.context.state.client){
                 this.client.connect();
+                // this.props.server.connect()
+                
+            }
+            
+            if(this.props.server && pp.server===null){
+                
+                this.props.server.addMessageListener(this.handleServerEvent)
             }
           }
            componentDidMount(){
-               console.log("MAIN HAS MOUNTED")
-            this.server.connect()
-            setTimeout(() => {
-                // this.client.connect();
-                this.server.addMessageListener(this.handleServerEvent)
-                
-            
-            }, 2000);
-            
-            //    this.disableAC()
-            // this.getUserID()
+               console.log("MAIN HAS MOUNTED", this.props.context)
+           
             
             if(this.props.context.state.client){
-                this.client.connect();
+                // this.client.connect();
             }
                 
             
@@ -190,15 +186,15 @@ class MainSection extends Component{
             <Fragment>
             <div className='main-section'>
             <div className="cover"><div className="brand"><div className="brand-user">{context.state.username}</div><div className="powered">  powered by  </div><div className="brand-title"> STREAMPANEL APP</div></div></div>
-            <ScenePanel server={this.server}  event={this.state.event} scenes={this.state.scenes} func={this.setSceneAndSourcesOnClick} currentScene={this.state.currentScene}/>
+            <ScenePanel server={context.state.OBSServer}  event={this.state.event} scenes={this.state.scenes} func={this.setSceneAndSourcesOnClick} currentScene={this.state.currentScene}/>
             <div className="mid-section">
-                <SourcePanel server={this.server}  event={this.state.event} func={this.toggleSource} srcClass={this.state.srcClass} />
+                <SourcePanel server={context.state.OBSServer}  event={this.state.event} func={this.toggleSource} srcClass={this.state.srcClass} />
                 <VideoBox channel={streamer}></VideoBox>
                 <TwitchPanel client={context.state.client} oauth={this.props.oauth} newMessage={context.newMessage} runAd={this.runAd}/>
                 
             </div>
             
-            <BottomPanel event={this.state.event} server={this.server} channelOBJ={this.state.channel} client={this.client} OBSOBJ={this.state} oauth={this.props.oauth} micSources={this.state.micSources}/>
+            <BottomPanel event={this.state.event} server={context.state.OBSServer} channelOBJ={this.state.channel} client={this.client} OBSOBJ={this.state} oauth={this.props.oauth} micSources={this.state.micSources}/>
             
         </div> 
             

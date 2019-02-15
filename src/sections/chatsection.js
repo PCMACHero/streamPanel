@@ -306,12 +306,13 @@ getSubscriberBadges=()=>{
     })
 }
 getChannelBadges=()=>{
+    console.log("cbcb")
     axios.get(`https://api.twitch.tv/kraken/chat/${streamerID}/badges`,this.headers)
     .then(data=>{
                 let myOBJ=data
                 this.channelBadges=myOBJ.data
                 
-                console.log("Channel BADGES DATA:",this.channelBadges)
+                console.log("cbcb DATA:",this.channelBadges)
             })
 
 }
@@ -371,7 +372,7 @@ chatListner=()=>{
         });
         
             this.props.client.on('chat', (channel, user, message, self)=>{
-                console.log("MY READYSTATE length:",user)
+                
                 // if(user.badges && user.badges.moderator){
                     if(user.mod){
                     this.modDB(user.username, true)
@@ -414,7 +415,7 @@ chatListner=()=>{
 }   
 
 componentDidUpdate(prevProps){
-    console.log("prev",prevProps)
+    
     if(prevProps.client === null && this.props.client){
         this.getCommands()
         this.getGlobalBadges()

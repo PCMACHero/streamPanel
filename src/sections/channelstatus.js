@@ -34,8 +34,8 @@ class ChannelStatus extends Component{
             }
         }).then(data=>{
             if(data.data.stream){
-                this.getGameCover(data.data.stream)
-                console.log("$$$", data)
+                // this.getGameCover(data.data.stream.game)
+                console.log("$$$", data.data.stream)
             this.setState({
                 channel: {
                     _id: data.data.stream._id,
@@ -56,10 +56,12 @@ class ChannelStatus extends Component{
         
     }
     getGameCover=(game)=>{
-        axios.get("https://api.twitch.tv/helix/games?name="+game.game,this.headers).then(data=>{
-        console.log("game cover---->", game)  
+        if(game){
+            axios.get("https://api.twitch.tv/helix/games?name="+game,this.headers).then(data=>{
+        console.log("game cover game---->", game)  
+        console.log("game cover data---->", data.data.data)  
         
-        let boxURL = data.data.data[0].box_art_url.split("")
+            let boxURL = data.data.data[0].box_art_url.split("")
                 boxURL.splice(boxURL.length-20)
                 let boxURL2 = boxURL.join("")+"450x600.jpg"
 
@@ -68,7 +70,16 @@ class ChannelStatus extends Component{
         this.setState({
                 gameCover:boxURL2
             })
+        
+        
         })
+        } else {
+            let noGame = "https://static-cdn.jtvnw.net/ttv-boxart/Apex%20Legends-285x380.jpg"
+            this.setState({
+                gameCover:noGame
+            })
+        }
+        
     }
 
     getTitleAndGame=()=>{
@@ -81,7 +92,7 @@ class ChannelStatus extends Component{
             "Authorization": 'OAuth '+oauth
         }}
          axios.get("https://api.twitch.tv/kraken/channel",headers).then(data=>{
-            console.log("GET CHAN STATUS!!!!: ",data.data)
+            console.log("GET CHAN STATUS!!!!: ",data.data.game)
             this.getGameCover(data.data.game)
             
             this.setState({
@@ -132,7 +143,12 @@ class ChannelStatus extends Component{
             //   })
             
             }
-  
+    componentDidUpdate(prev){
+        if((prev.context.state.game !== this.props.context.state.game)||(prev.context.state.title !== this.props.context.state.title)){
+            this.getTitleAndGame()
+            console.log("bloop", prev.context.state.game, this.props.context.state.game)
+        }
+    }
 
     componentDidMount(){
         
@@ -156,8 +172,8 @@ class ChannelStatus extends Component{
         return(
             <Modal className="update-modal"
                 header='UPDATE CHANNEL'
-                trigger={<div className="channel-status-box" >
-                            <div className="status-bg" style={{backgroundImage: `url(${this.state.gameCover})`, backgroundSize: "cover", backgroundPosition: "center"}}></div>
+                trigger={<div className="channel-status-box" style={{backgroundImage: `url(${this.state.gameCover})`, backgroundSize: "cover", backgroundPosition: "center"}}>
+                            <div className="status-bg" ></div>
                             <div className="status-info">
                                 <div className="follows-title">STREAM STATUS</div>
                                 <div className="status-box">
@@ -165,12 +181,12 @@ class ChannelStatus extends Component{
                                 <div className="game-label">"{this.state.currentTitle}"</div>
                                 <div className="game-label"><i className="material-icons" style={{color:"black", fontSize: "1.5em"}}>
 face
-</i>Viewers:  <div style={{color: "#EE2B2A"}}>{this.state.channel.viewers}</div>
+</i>VIEWING:  <div style={{color: "#EE2B2A"}}>{this.state.channel.viewers}</div>
 </div>
-                                <div className="game-label">Total Views: {this.state.channel.totalViews}</div>
+                                <div className="game-label">VIEWS: {this.state.channel.totalViews}</div>
                                 <div className="game-label"><i className="material-icons" style={{color:"#EE2B2A", fontSize: "1.5em"}} >
 favorite
-</i>Total Follows: {this.state.channel.followers}</div>
+</i>FOLLOWS: {this.state.channel.followers}</div>
                             
                             
                             </div>
