@@ -7,14 +7,12 @@
     "animate": "1.0.0",
     "axios": "^0.18.0",
     "body-parser": "1.15.0",
-    "classnames": "^2.2.6",
     "cors": "2.8.4",
     "ejs": "2.4.1",
     "express": "4.13.4",
     "express-session": "1.15.6",
     "firebase": "5.7.0",
     "jquery": "3.3.1",
-    "materialize-css": "^1.0.0-rc.2",
     "mongoose": "5.0.16",
     "obs-websocket-js": "1.2.0",
     "prop-types": "^15.6.2",
@@ -34,6 +32,7 @@
     "eject": "react-scripts eject",
     "watch": "cra-build-watch"
   },
+ 
   "proxy": "http://localhost:8000",
   "eslintConfig": {
     "extends": "react-app"
@@ -46,7 +45,6 @@
   ],
   "devDependencies": {
     "cra-build-watch": "^1.4.0",
-    "npm-watch": "^0.6.0",
-    "resize-observer-polyfill": "^1.5.1"
+    "npm-watch": "^0.6.0"
   }
 }
