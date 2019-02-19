@@ -8,7 +8,6 @@ const SessionCredentials = require('./common_config/config').SessionCredentials;
 var app = express();
 var port = 8000;
 
-// app.use(cors())
 app.use(bodyParser.urlencoded({extended:true}));
 // app.use('/assets', express.static(path.resolve(__dirname, 'assets')));
 // app.use('/media', express.static(path.resolve(__dirname, 'media')));

@@ -20,12 +20,12 @@ export class MyProvider extends Component {
         OBSConnected:false,
         client:null,
         loadListener: false,
-        // myId: dumbData.twitchId,
-        // myOauth: dumbData.accessToken,
-        // username: dumbData.displayName,
-        myId: null,
-        myOauth: null,
-        username: null,
+        myId: dumbData.twitchId,
+        myOauth: dumbData.accessToken,
+        username: dumbData.displayName,
+        // myId: null,
+        // myOauth: null,
+        // username: null,
         commands: null,
         email:null,
         partner: null,
@@ -73,7 +73,7 @@ export class MyProvider extends Component {
     // }
     getOauth=()=>{
         axios.post("/api/getuserinfo").then(data=>{
-            let obj = data.data.data
+            // let obj = data.data.data
             // console.log("MY CONTEXT OAUTH", data)
            let options = {
                 options: {
@@ -84,8 +84,8 @@ export class MyProvider extends Component {
                 },
                 identity: {
                     username: "streampanelapp",
-                    password: "oauth:"+obj.accessToken
-                    // password: "oauth:"+dumbData.accessToken
+                    // password: "oauth:"+obj.accessToken
+                    password: "oauth:"+dumbData.accessToken
                 },
                 channels: [streamer]
             };
@@ -94,32 +94,15 @@ export class MyProvider extends Component {
             console.log("now what", data)
             this.setState({
                 client: client,
-                myOauth: obj.accessToken,
+                // myOauth: obj.accessToken,
                 loadListener: true,
-                myId: obj.twitchId,
-                username: obj.displayName,
+                // myId: obj.twitchId,
+                // username: obj.displayName,
                 // commands: commands,
                 // email:obj.email,
                 // partner: obj.isPartner,
 
             })
-            
-        })
-    }
-    getBizUser(){
-        axios.post(`/api/getuserinfo/`).then(res=>{
-            console.log("my greek", res)
-            let commands = res.data.data.custom
-            if(commands.length===0){
-                axios.post("/api/newcommand",{name:"!test", reply:"Succeeded yey"}).then(data=>{
-                    console.log("loaded new command")
-
-                })
-            }else{
-                this.setState({
-                    commands: commands
-                })
-            }
             
         })
     }
@@ -134,7 +117,7 @@ export class MyProvider extends Component {
                     let commands = data.data.commands
                     let username = data.data.display_name
                     let partner = data.data.partner
-            axios.post(`/api/getuserinfo/`).then(res=>{
+            axios.get(`/spuser/${id}`).then(res=>{
                 console.log("my greek", res)
                     
                 if(res.data===null){
@@ -186,7 +169,6 @@ export class MyProvider extends Component {
         this.makeOBS()
         
         this.getOauth()
-        this.getBizUser()
         // this.getUser()
     }
     render(){

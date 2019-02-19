@@ -15,7 +15,7 @@ const headers= {"headers": {
 // }
 export const dumbData = {
        
-  accessToken: "bwivcc7mjes0btlvhkmsuxv8acdjdo",
+  accessToken: "1phyqq4rbuf7tlg61vzasbciy7n7bb",
   
   displayName: "streampanelapp",
   
@@ -48,7 +48,7 @@ const idOBJ={
 }
 
 
-export const streamer = "shroud"
+export const streamer = "chocotaco"
 export const streamerID= idOBJ[streamer]
 export const OBSSceneObj = 
 { 'current-scene': 'In-Game',
