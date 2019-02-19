@@ -43,14 +43,14 @@ export default class Presets extends Component{
         this.preset1, 
         this.preset2, this.preset3, this.preset4]
     
-    changeClass=(btn)=>{
-        console.log("clicked", btn)
+    changeClass=(clicked)=>{
+        console.log("clicked", clicked)
         
         // this.setState({
             
         //     btnClicked:btn
         // })
-        this.makeDivs(this.presetArray,btn)
+        this.makeDivs(this.presetArray,true)
     }
 
     changeGameAndTitle=(preset)=>{
@@ -94,13 +94,14 @@ export default class Presets extends Component{
 
     }
 
-    makeDivs=(presetArray,btn)=>{
+    makeDivs=(presetArray,clicked)=>{
         let clickOff = null
-        if(btn>=0){
+        if(clicked){
             clickOff = {pointerEvents:"none"}
         }
-
+        let current= null
         this.props.server.send({'request-type': 'GetCurrentSceneCollection'}).then(data=>{
+            current = data["sc-name"]
             console.log("collection", data["sc-name"])
             
             console.log("made divs")
@@ -108,14 +109,14 @@ export default class Presets extends Component{
         for(let i=0; i<presetArray.length;i++){
 
             let myClass = "preset-btn"
-            if(btn>=0){
-                console.log("Run it")
-                if(btn===i){
+            // if(clicked){
+            //     console.log("Run it")
+            //     if(btn===i){
                     
-                    myClass= "preset-btn-current"
-                }
-            }
-            else 
+            //         myClass= "preset-btn-current"
+            //     }
+            // }
+            // else 
             if(presetArray[i].scnCollection===data["sc-name"]){
                 myClass= "preset-btn-current"
             }
@@ -125,15 +126,17 @@ export default class Presets extends Component{
                 // style={{backgroundImage:this.color[i]}} 
                 onClick={()=>{
                 console.log(i)
-                this.changeClass(i)
+                // this.changeClass(true)
+                // this.makeDivs(this.presetArray,true)
                 this.loadPreset(presetArray[i])
+                this.props.context.showHideProfileScreen()
                 
-                setTimeout(() => {
+                // setTimeout(() => {
                     
-                    // this.changeGameAndTitle(presetArray[i])
-                    this.changeClass("preset-btn")
-                    this.props.context.showHideProfileScreen()
-                }, 2000);
+                //     // this.changeGameAndTitle(presetArray[i])
+                    
+                //     this.props.context.showHideProfileScreen()
+                // }, 5000);
                 
             }}>{string.toUpperCase()}</div>)
         }
@@ -153,12 +156,12 @@ export default class Presets extends Component{
         console.log("did update", prev.show)
         console.log("did update", this.props.show)
         if(this.props.server && prev.server===null){
-            this.makeDivs(this.presetArray,this.state.class)
-            this.getCollection()
+            this.makeDivs(this.presetArray)
+            // this.getCollection()
             console.log("rendered presets")
         }
         if(prev.show !== this.props.show){
-            this.makeDivs(this.presetArray,this.state.class)
+            this.makeDivs(this.presetArray)
             console.log("rendered presets 2")
         }
         

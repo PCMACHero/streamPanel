@@ -1,10 +1,12 @@
 import React, {Component} from 'react';
+// import Slider from 'react-materialize/lib/Slider';
 // import SceneBtn from './scenebtn'
 // import {OBSSourcesObj} from '../helpers/dummydata'
 
 class SourcePanel extends Component {
         
         state = {
+            
             sources:[]
         }
         server = this.props.server
@@ -14,6 +16,15 @@ class SourcePanel extends Component {
         sourceMap = {
             'coreaudio_input_capture': 'mic',
             'av_capture_input' : 'videocam'
+        }
+
+        changeHandler = (event)=>{
+            console.log(event.target.value)
+            
+            this.setState({
+                [event.target.name]: event.target.value
+            })
+            
         }
 getSources(){
 
@@ -106,12 +117,15 @@ makeDivs(mics, cams){
             }
             this.sources.unshift(
                 <div className={this.srcClass} key={i} onClick={()=>{this.toggleMic(mics[i],this.props.server)}}>
-        
+                
+                
+             
             <div className='label'>{mics[i].name.toUpperCase()}
             </div>
             <i className="material-icons" style={{color:"white"}}>
         {this.icon}
         </i>
+        <input type="range" name={`slider${i}`} min="1" max="100" onChange={(e)=>this.changeHandler(e)} value={this.state[`slider${i}`]}></input>
         </div>)
         }
 
@@ -119,13 +133,19 @@ makeDivs(mics, cams){
         
         
 componentDidUpdate(prev){
-    console.log("BBBB", this.props.server)
+    console.log("BBBB", this.props)
     if(this.props.server && prev.server===null){
         console.log("yyy",prev.server)
         console.log("ttt",this.props.server)
         this.getMic(this.props.server)  
     }
+    if(this.props.event && this.props.event["sc-name"]){
+        console.log("FFFF", this.props.event)
+        this.getMic(this.props.server) 
+    }
 }
+
+
 componentDidMount(){
     
 
@@ -133,6 +153,7 @@ componentDidMount(){
     
         render(){
             return (<div className='source-panel'>
+                        
                         {this.sources}
                     </div>)
         }
