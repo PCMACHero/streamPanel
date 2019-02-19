@@ -13,10 +13,11 @@ module.exports = function(app) {
     app.post('/api/updatelocalip', api.updateUserLocalIP);
     app.post('/api/updateobspassword', api.updateOBSPassword);
     app.post('/api/newcommand', api.createNewCommand);
-    app.delete('/api/command/', api.deleteCommand);
+    app.delete('/api/command', api.deleteCommand);
     app.post('/api/updatewinmessage', api.updateWinMessage);
     app.post('/api/getuserinfo', api.getUserInfo);
     app.post('/api/getresponsestring', api.returnResponseString);
+    app.post('/api/testroute', api.testRoute);
     
     // React Routes
     // app.all('*', users.renderReact);
