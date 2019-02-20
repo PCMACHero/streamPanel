@@ -6,6 +6,16 @@ import './twitchpanel.css'
 import { streamerID } from '../helpers/dummydata';
 
 export default class CommandsInput extends Component{
+
+    state={
+        name:"",
+        reply: "",
+        commands: null,
+        id:null
+    }
+
+
+
     counter=1
     oauth = this.props.context.state.myOauth
     id = this.props.context.state.myId
@@ -19,67 +29,50 @@ export default class CommandsInput extends Component{
         if(!id){
             return
         }else{
-            axios.get(`/spuser/${id}`).then(res=>{
-                this.dbCommands = res.data.commands
-                console.log("MY DB COMMANDS", this.dbCommands)
-                // this.getLSObjAndArray()
-                // this.commandsTurnedToArray = this.dbCommands
-                this.showCommands(res.data.commands)
+
+
+
+            axios.post(`/api/getuserinfo/`).then(res=>{
+                console.log("my greek", res)
+                let commands = res.data.data.custom
+                // this.setState({
+                //     commands:commands
+                // })
+                this.showCommands(commands)
             })
+
+
+
+
         }
         
     }
     
-    state={
-        name:"",
-        response: "",
-        commands: this.commandsToShow,
-        id:null
-    }
-    deleteCommand(item){
-        this.dbCommands.splice(item,1);
+    
+    deleteCommand(i){
+        // this.dbCommands.splice(index,1);
         
 
-        axios.put(`/spuser/${this.id}`,{
-            _id: this.id,
-            username: this.props.context.state.username,
-            commands: this.dbCommands,
-            email: this.props.context.state.email,
-            partner: this.props.context.state.partner,
-        }).then(res=>{
-            this.dbCommands= res.data.commands
+        axios.delete(`/api/command/`,{data:{index:i}}).then(res=>{
+            // this.dbCommands= res.data.commands
+            console.log("delete ",res)
             // this.setState({
             //     name:"",
-            //     response:""
+            //     reply:""
             // })
-            this.showCommands(res.data.commands)
-            this.setState({
-                name:"",
-                response:""
-            })
+            // this.showCommands(res.data.commands)
+            // this.setState({
+            //     name:"",
+            //     reply:""
+            // })
             
             
+        }).catch((error) => {
+            console.warn('Not good man :(');
         })
 
         
     }
-    // LSArrayToOBj = ()=>{
-    //     this.objForLS = {}
-    //         console.log("before",this.objForLS)
-    //         for (let i=0; i<this.commandsTurnedToArray.length;i++){
-    //             this.objForLS[this.commandsTurnedToArray[i][0]] = this.commandsTurnedToArray[i][1];
-    //             console.log("this.commandsTurnedToArray", this.commandsTurnedToArray)
-    //             console.log("this.getlocalstoarage: ",this.getLocalStorageCommands )
-    //         } 
-    //         console.log("after",this.objForLS)
-    //         localStorage.setItem('commands', JSON.stringify(this.objForLS));
-
-    // }
-    // getLSObjAndArray = ()=>{
-    //     this.getLocalStorageCommands= JSON.parse(localStorage.getItem('commands'));
-    //     //  this.commandsTurnedToArray= Object.entries(JSON.parse(localStorage.getItem('commands')))
-    //     // this.commandsTurnedToArray= Object.entries(JSON.parse(this.dbCommands))
-    // }
 
     showCommands = (commands)=>{
         
@@ -94,7 +87,7 @@ export default class CommandsInput extends Component{
                     <div className="command-name">
                         <div>{makeObj.name}</div>
                     </div>
-                    <div className="command-text">"{makeObj.response}"</div>
+                    <div className="command-text">"{makeObj.reply}"</div>
                     <div className="btn del " onClick={()=>{
                         console.log("clicked to delete: ",makeObj)
                         this.deleteCommand(i)
@@ -108,7 +101,7 @@ export default class CommandsInput extends Component{
 
             )
         } this.setState({
-            commands:this.commandsToShow
+            commands:commands
         })
     }
     // checkIfLSEmpty = ()=>{
@@ -123,35 +116,25 @@ export default class CommandsInput extends Component{
     // }
    
     addCommand = ()=>{
-        let commandToAdd = {name:this.state.name, response: this.state.response}
+        // let commandToAdd = {name:this.state.name, reply: this.state.reply}
         // this.commandsTurnedToArray.push(this.dbCommands)
-        this.dbCommands.push(commandToAdd)
+        // this.dbCommands.push(commandToAdd)
 
+        console.log("loaded new command 1")
+        axios.post("/api/newcommand",{name:this.state.name, reply:this.state.reply}).then(data=>{
+            console.log("loaded new command2")
+            console.log("loaded new command3", data)
+            this.setState({
+                name:"",
+                reply:""
+            })
+            // this.showCommands(res.data.commands)
 
-        axios.put(`/spuser/${this.id}`,{
-            _id: this.id,
-            username: this.props.context.state.username,
-            commands: this.dbCommands,
-            email: this.props.context.state.email,
-            partner: this.props.context.state.partner,
-        }).then(res=>{
-            console.log("ADD CLICK", this.dbCommands)
-        
-        this.setState({
-            name:"",
-            response:""
         })
-        console.log("THIS IS GETLOCALSTORAGECOMMANDS: ", this.getLocalStorageCommands)
-        console.log("THIS IS COMMANDTURNEDTOARRAY: ", this.commandsTurnedToArray)
-        console.log("THIS IS COMMANDSTOSHOW:", this.commandsToShow)
-        this.showCommands(res.data.commands)
-        }
-
-        )
-
-        
-        
+    
     }
+
+
     changeHandler = (event)=>{
         console.log(event.target.value)
         
@@ -182,8 +165,8 @@ export default class CommandsInput extends Component{
                     {/* <label for="name">Command Name</label> */}
                 </div>
                 <div className="input-field command-input-text">
-                    <input className="input-name" name="response" autoComplete="off" id="response" placeholder={``} type="text" onChange={this.changeHandler} value={this.state.response}/>
-                    {/* <label for="response">Command Response</label> */}
+                    <input className="input-name" name="reply" autoComplete="off" id="reply" placeholder={``} type="text" onChange={this.changeHandler} value={this.state.reply}/>
+                    {/* <label for="reply">Command reply</label> */}
                 </div>
                 </div>
                     
