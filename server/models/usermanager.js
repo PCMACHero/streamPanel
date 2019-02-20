@@ -100,5 +100,9 @@ module.exports = {
             refreshToken: user.refreshToken,
             expiresIn: user.expiresIn
         }
-    }
+    },
+    updatePreset: (currentPresets, index, newPreset) => {
+        currentPresets[index] = newPreset;
+        return currentPresets
+    },
 }

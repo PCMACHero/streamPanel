@@ -18,6 +18,11 @@ module.exports = function(app) {
     app.post('/api/getuserinfo', api.getUserInfo);
     app.post('/api/getresponsestring', api.returnResponseString);
     app.post('/api/testroute', api.testRoute);
+    app.post('/api/preset', api.createNewPreset);
+    app.put('/api/preset', api.updatePreset);
+    app.delete('/api/preset', api.deletePreset);
+    app.post('/api/settings', api.createSetting);
+    app.delete('/api/settings', api.deleteSetting);
     
     // React Routes
     // app.all('*', users.renderReact);

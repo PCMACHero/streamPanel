@@ -196,4 +196,106 @@ module.exports = {
     returnResponseString: async (req, res) => {
         res.json({ message: "Success", responseString: responseStr });
     },
+    createNewPreset: async (req, res) => {
+        if (UserManager.userNotInSession(req.session)) {
+            res.json(UserManager.notLoggedInMessage());
+        } else if (!req.body.presetName || !req.body.scnCollection || !req.body.game || !req.body.title) {
+            res.json({ message: "Error. Must include a preset name, scene collection, game and title." })
+        } else {
+            let user = await UserManager.findUserByID(req.sessions.userId);
+            let newPreset = {
+                presetName: req.body.presetName,
+                scnCollection: req.body.scnCollection,
+                game: req.body.game,
+                title: req.body.title
+            }
+            user.data.presets.push(newPreset);
+            let savedSuccessfully = await UserManager.saveUserWithoutReturn(user.data);
+            if (savedSuccessfully) {
+                res.json({ message: "Success", data: user.data.presets });
+            } else {
+                res.json(UserManager.saveFailMessage());
+            }
+        }
+    },
+    deletePreset: async (req, res) => {
+        if (UserManager.userNotInSession(req.session)) {
+            res.json(UserManager.notLoggedInMessage());
+        } else if (!req.body.index) {
+            res.json({ message: "Error. Must include the index." });
+        } else {
+            let user = await UserManager.findUserByID(req.sessions.userId);
+            if (user.message === "Success") {
+                ApiHelper.removeFromArrayAtIndex(user.data.presets, req.body.index);
+                let savedSuccessfully = await UserManager.saveUserWithoutReturn(user.data);
+                if (savedSuccessfully === true) {
+                    res.json({ message: "Successfully removed preset from index " + req.body.index, data: user.data.presets });
+                } else {
+                    res.json(UserManager.saveFailMessage());
+                }
+            } else {
+                res.json(UserManager.invalidSessionMessage());
+            }
+        }
+    },
+    updatePreset: async (req, res) => {
+        if (UserManager.userNotInSession(req.session)) {
+            res.json(UserManager.notLoggedInMessage());
+        } else if (!req.body.index || !req.body.presetInfo) {
+            res.json({ message: "Error. Must include the index." });
+        } else {
+            let user = await UserManager.findUserByID(req.session.userId);
+            if (user.message === "Success") {
+                user.data.presets = UserManager.updatePreset(user.data.presets, req.body.index, req.body.presetInfo);
+                let savedSuccessfully = await UserManager.saveUserWithoutReturn(user.data);
+                if (savedSuccessfully === true) {
+                    res.json({ message: "Success", data: user.data.presets });
+                } else {
+                    res.json(UserManager.saveFailMessage());
+                }
+            } else {
+                res.json(UserManager.invalidSessionMessage())
+            }
+        }  
+    },
+    createSetting: async (req, res) => {
+        if (UserManager.userNotInSession(req.session)) {
+            res.json(UserManager.notLoggedInMessage());
+        } else if (!req.body.setting) {
+            res.json({ message: "Error. Must include the index." });
+        } else {
+            let user = await UserManager.findUserByID(req.session.userId);
+            if (user.message === "Success") {
+                user.data.settings.push(req.body.setting);
+                let savedSuccessfully = await UserManager.saveUserWithoutReturn(user.data);
+                if (savedSuccessfully === true) {
+                    res.json({ message: "Successfully created new setting.", data: user.data.settings });
+                } else {
+                    res.json(UserManager.saveFailMessage())
+                }
+            } else {
+                res.json(UserManager.invalidSessionMessage())
+            }
+        }
+    },
+    deleteSetting: async (req, res) => {
+        if (UserManager.userNotInSession(req.session)) {
+            res.json(UserManager.notLoggedInMessage());
+        } else if (!req.body.index) {
+            res.json({ message: "Error. Must include the index." });
+        } else {
+            let user = await UserManager.findUserByID(req.session.userId);
+            if (user.message === "Success") {
+                ApiHelper.removeFromArrayAtIndex(user.data.settings, req.body.index);
+                let savedSuccessfully = await UserManager.saveUserWithoutReturn(user.data);
+                if (savedSuccessfully === true) {
+                    res.json({ message: "Successfully deleted setting from index " + req.body.index });
+                } else {
+                    res.json(UserManager.saveFailMessage())
+                }
+            } else {
+                res.json(UserManager.invalidSessionMessage());
+            }
+        }
+    },
 }
