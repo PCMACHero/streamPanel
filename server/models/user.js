@@ -19,7 +19,9 @@ var UserSchema = new mongoose.Schema({
     custom: {type: Array, required: false},
     winMsg: {type: String, required: false},
     isPartner: {type: Boolean, required: false},
-    language: {type: String, required: false}
+    language: {type: String, required: false},
+    settings: {type: Array, default: []},
+    presets: [{presetName: String, scnCollection: String, game: String, title: String}]
 }, {timestamps: true});
 
 mongoose.model('User', UserSchema);
