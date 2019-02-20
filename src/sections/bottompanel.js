@@ -150,7 +150,7 @@ if(this.props.event && this.props.event["update-type"]==="StreamStatus"){
                 
                 </div>
                 <div className="profiles-btn" onClick={(e)=>{console.log(e.type)
-                context.showHideProfileScreen()}}>
+                context.showHideScreen("profile", true)}}>
                 
                 <div className="label">PRESETS</div>
                 <div className="label2">Bit-rate: {this.bitRate}</div>

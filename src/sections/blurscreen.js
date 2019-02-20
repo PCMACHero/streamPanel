@@ -10,12 +10,13 @@ export default class BlurScreen extends Component{
         })
     }
     render(){
+        console.log("blurry", this.props.show)
         if(this.props.show){
             return (
-                <div className="blur-container" onClick={()=>{
+                <div className="blur-container" style={{filter:"blur(5px)"}} onClick={()=>{
                     // this.changeClass()
                     
-                        this.props.close()
+                        this.props.close("all",false)
                     
                     
                 }} style={{height:"100vh", width:"100vw", zIndex:"5", position:"absolute", display:"flex", justifyContent:"center", alignItems:"center"}}>
@@ -29,12 +30,13 @@ export default class BlurScreen extends Component{
             )
         }else{
             return (
-                <div className="blur-container" style={{height:"0vh", width:"0vw", zIndex:"5", position:"absolute", display:"none", justifyContent:"center", alignItems:"center", visibility:"none"}}>
-                    <div className="blur-box" style={{height:"70%",width:"70%",display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column", backgroundColor:this.props.color, opacity:".5"}}>
-                        <div className="blur-title" style={{fontSize:"2em"}}>{this.props.title}</div>
-                        <div className="blur-content">{this.props.content}</div>
-                    </div>
-                </div>
+                null
+                // <div className="blur-container" style={{height:"0vh", width:"0vw", zIndex:"5", position:"absolute", display:"none", justifyContent:"center", alignItems:"center", visibility:"none"}}>
+                //     <div className="blur-box" style={{height:"70%",width:"70%",display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column", backgroundColor:this.props.color, opacity:".5"}}>
+                //         <div className="blur-title" style={{fontSize:"2em"}}>{this.props.title}</div>
+                //         <div className="blur-content">{this.props.content}</div>
+                //     </div>
+                // </div>
             )
         }
         

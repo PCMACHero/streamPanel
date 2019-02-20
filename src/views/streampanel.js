@@ -6,6 +6,7 @@ import axios from "axios"
 import { MyContext } from '../helpers/provider';
 import BlurScreen from '../sections/blurscreen';
 import Presets from '../sections/presets';
+import Mixer from '../sections/mixer';
 
 
 
@@ -114,14 +115,17 @@ class StreamPanel extends Component {
       console.log("STREAMPANEL RENDERED")
     return (
         <MyContext.Consumer>{
-            (context)=> {
-                if(context.state.profileScreen){
-                    return (
+            context=> 
+                
+                    
                         <Fragment>
-                            <BlurScreen title="PRESETS" color="rgba(0,0,0, 0.4)" show={true} close={context.showHideProfileScreen} content={<Presets server={context.state.OBSServer} context={context} show={context.state.profileScreen}/>}/>
+                            <BlurScreen title="MIXER" color="rgba(0,0,0, 0.4)" show={context.state.mixerScreen} close={context.showHideScreen} content={<Mixer server={context.state.OBSServer}/>}/>
+                            <BlurScreen title="PRESETS" color="rgba(0,0,0, 0.4)" show={context.state.profileScreen} close={context.showHideScreen} content={<Presets server={context.state.OBSServer} context={context} show={context.state.profileScreen}/>}/>
 
                             
-                        <div className="stream-panel panel-container" style={{animation:"blurIn 2s forwards"}}>
+                        <div className="stream-panel panel-container" style={context.state.blur ? {filter:"blur(5px"}: null}
+                        // style={{animation:"blurIn 2s forwards"}}
+                        >
             <div className={this.state.startClass}>
                 <div className="start-banner">STREAM PANEL</div>
                 <div className="progress">
@@ -134,34 +138,12 @@ class StreamPanel extends Component {
             </div>
                         </Fragment>
                         
-            )
-            }else{
-                return (
-                    <Fragment>
-                        <BlurScreen title="PRESETS" color="#8282826b" show={false} close={context.showHideProfileScreen} content={<Presets server={context.state.OBSServer} context={context} show={context.state.profileScreen}/>}/>
-
-                        
-                    <div className="stream-panel panel-container" >
-        <div className={this.state.startClass}>
-            <div className="start-banner">STREAM PANEL</div>
-            <div className="progress">
-                <div className="indeterminate green"></div>
-            </div>
-        </div>
-
-        
-            <MainSection chanBadges={this.state.badges} context={context} server={context.state.OBSServer}/>
-        </div>
-                    </Fragment>
-        )
-            }
-            
-                
-            }
             
             
-    }
-      </MyContext.Consumer>
+            
+            
+    
+        }</MyContext.Consumer>
       
     );
   }
