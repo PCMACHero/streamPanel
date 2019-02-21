@@ -43,7 +43,7 @@ module.exports = {
         } else if (!req.body.ip) {
             res.json({ message: 'Error', err: 'No local IP address given' });
         } else {
-            let user = await UserManager.findUserByID(req.sessions.userId);
+            let user = await UserManager.findUserByID(req.session.userId);
             if (user.message === "Success") {
                 if (!UserManager.ipAddressIsValid(req.body.ip)) {
                     res.json({ message: 'Error', err: 'IP Address given is not a valid IP Address' })
@@ -202,7 +202,7 @@ module.exports = {
         } else if (!req.body.presetName || !req.body.scnCollection || !req.body.game || !req.body.title) {
             res.json({ message: "Error. Must include a preset name, scene collection, game and title." })
         } else {
-            let user = await UserManager.findUserByID(req.sessions.userId);
+            let user = await UserManager.findUserByID(req.session.userId);
             let newPreset = {
                 presetName: req.body.presetName,
                 scnCollection: req.body.scnCollection,
@@ -224,7 +224,7 @@ module.exports = {
         } else if (!req.body.index) {
             res.json({ message: "Error. Must include the index." });
         } else {
-            let user = await UserManager.findUserByID(req.sessions.userId);
+            let user = await UserManager.findUserByID(req.session.userId);
             if (user.message === "Success") {
                 ApiHelper.removeFromArrayAtIndex(user.data.presets, req.body.index);
                 let savedSuccessfully = await UserManager.saveUserWithoutReturn(user.data);
