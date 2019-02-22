@@ -26,6 +26,7 @@ export default class CommandsInput extends Component{
     commandsToShow =[]
     dbCommands = null
     getCommandsFromDB = (id)=>{
+        
         if(!id){
             return
         }else{
@@ -54,6 +55,7 @@ export default class CommandsInput extends Component{
         
 
         axios.delete(`/api/command/`,{data:{index:i}}).then(res=>{
+
             // this.dbCommands= res.data.commands
             console.log("delete ",res)
             // this.setState({
@@ -68,7 +70,7 @@ export default class CommandsInput extends Component{
             
             
         }).catch((error) => {
-            console.warn('Not good man :(');
+            console.log('Not good man :(');
         })
 
         
@@ -128,6 +130,7 @@ export default class CommandsInput extends Component{
                 name:"",
                 reply:""
             })
+            this.showCommands(data.data.data)   
             // this.showCommands(res.data.commands)
 
         })

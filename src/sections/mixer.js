@@ -91,7 +91,7 @@ export default class Mixer extends Component{
             arr.push(
                 <Fragment>
                     <div className="slide-num">{this.state[`slider${i}`]}</div>
-            <input className="slider" type="range" orient="vertical" name={`slider${i}`} min="0.1" max="1" step="0.01" onChange={(e)=>{
+            <input className="slider" type="range" orient="vertical" name={`slider${i}`} min="0.05" max="1" step="0.01" onChange={(e)=>{
                 console.log("eve ",e)
                 this.changeHandler(e)
                 this.setVol(mics[i], i,e.target.value,this.props.server)
