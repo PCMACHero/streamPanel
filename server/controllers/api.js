@@ -226,7 +226,8 @@ module.exports = {
         } else {
             let user = await UserManager.findUserByID(req.session.userId);
             if (user.message === "Success") {
-                ApiHelper.removeFromArrayAtIndex(user.data.presets, req.body.index);
+                let newSetOfPresets = ApiHelper.removeFromArrayAtIndex(user.data.presets, req.body.index);
+                user.data.presets = newSetOfPresets;
                 let savedSuccessfully = await UserManager.saveUserWithoutReturn(user.data);
                 if (savedSuccessfully === true) {
                     res.json({ message: "Successfully removed preset from index " + req.body.index, data: user.data.presets });
@@ -286,7 +287,8 @@ module.exports = {
         } else {
             let user = await UserManager.findUserByID(req.session.userId);
             if (user.message === "Success") {
-                ApiHelper.removeFromArrayAtIndex(user.data.settings, req.body.index);
+                let newSettings = ApiHelper.removeFromArrayAtIndex(user.data.settings, req.body.index);
+                user.data.settings = newSettings;
                 let savedSuccessfully = await UserManager.saveUserWithoutReturn(user.data);
                 if (savedSuccessfully === true) {
                     res.json({ message: "Successfully deleted setting from index " + req.body.index });
