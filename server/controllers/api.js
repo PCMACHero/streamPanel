@@ -115,6 +115,7 @@ module.exports = {
             let user = await UserManager.findUserByID(req.session.userId);
             if (user.message === "Success") {
                 let newArrayOfCommands = ApiHelper.removeFromArrayAtIndex(user.data.custom, req.body.index);
+                console.log('new set of commands ', newArrayOfCommands);
                 user.data.custom = newArrayOfCommands;
                 let savedSuccessfully = await UserManager.saveUserWithoutReturn(user.data);
                 if (savedSuccessfully === "Success") {

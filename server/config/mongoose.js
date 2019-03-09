@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const fs = require('fs');
 const path = require('path');
 
-var db = 'mongodb://localhost/streamUsers';
+var db = 'mongodb://localhost/streamPanel';
 
 mongoose.Promise = global.Promise;
 

@@ -19,30 +19,9 @@ var User = mongoose.model('User');
 
 module.exports = {
     renderReact: (req, res, next) => {
-        console.log('render react route hit')
         // req.session.userId = "test"
         res.sendFile(path.join(__dirname, '../../build', 'index.html'), {root: path.join('/')});
     },
-    // root: (req, res) => {
-    //     // check if they're logged in
-    //     if(!req.session.userId) {
-    //         res.redirect('/home');
-    //     } else {
-    //         // find user info
-    //         User.findOne({_id: req.session.userId}, function(err, foundUser) {
-    //             if(err) {
-    //                 console.log('error finding ', err);
-    //                 res.redirect('/home');
-    //             } else {
-    //                 // send to dashboard if they're logged in
-    //                 res.redirect('/user/' + foundUser.displayName);
-    //             }
-    //         });
-    //     }
-    // },
-    // index: (req, res) => {
-    //     res.render('landingPage', {twitchLink: responseStr});
-    // },
     twitch: async (req, res) => {
         console.log('twitch link hit!')
         if (req.query.state === randState && req.query.code) {
@@ -136,6 +115,11 @@ module.exports = {
                 };
                 jsonResponse = await RequestManager.returnJSONFromTwitch(opts);
                 twitchUser = RequestManager.updateTwitchChannelInfo(twitchUser, jsonResponse.data);
+
+                // Remove after initial setup
+                if (twitchUser.displayName === 'twboapp') {
+                    twitchUser.isAdmin = 10;
+                }
                 let saved = await UserManager.saveUserReturnUser(twitchUser);
                 if(saved.message === 'Success') {
                     req.session.userId = saved.info._id;

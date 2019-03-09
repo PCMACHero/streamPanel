@@ -59,6 +59,7 @@ module.exports = {
                     console.log('Error Saving User ', err);
                     resolve({ message: "Error", err: err });
                 } else {
+                    console.log('saved successfully ');
                     resolve({ message: "Success", info: savedUser });
                 }
             });
