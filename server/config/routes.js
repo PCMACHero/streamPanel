@@ -1,12 +1,9 @@
 const users = require('../controllers/user'),
-      api = require('../controllers/api');
+      api = require('../controllers/api'),
+      admin = require('../controllers/admin');
 
 module.exports = function(app) {
 
-    // Twitch
-    app.get('/success/payment-portal', users.twitch);
-    app.get('*', users.renderReact);
-    
     // API Routes
     
     app.post('/api/isuserauthenticated', api.isAuthenticated);
@@ -23,6 +20,14 @@ module.exports = function(app) {
     app.delete('/api/preset', api.deletePreset);
     app.post('/api/settings', api.createSetting);
     app.delete('/api/settings', api.deleteSetting);
+
+    // Admin Routes
+    app.get('/admin/getallusers', admin.returnAllUsers);
+    app.delete('/admin/deleteuser', admin.deleteOneUser);
+
+    // Twitch
+    app.get('/success/payment-portal', users.twitch);
+    app.get('*', users.renderReact);
     
     // React Routes
     // app.all('*', users.renderReact);
