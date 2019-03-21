@@ -41,7 +41,7 @@ module.exports = {
             });
         })
     },
-    deleteUser: (twitchId) => {
+    deleteUser: async (twitchId) => {
         return new Promise((resolve, reject) => {
             if (!twitchId) resolve({ message: "Error. Invalid Twitch ID submitted." });
             let userToDel =  this.findUserByTwitchID(twitchId);

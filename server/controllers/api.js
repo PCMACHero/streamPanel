@@ -291,7 +291,7 @@ module.exports = {
                 user.data.settings = newSettings;
                 let savedSuccessfully = await UserManager.saveUserWithoutReturn(user.data);
                 if (savedSuccessfully === true) {
-                    res.json({ message: "Successfully deleted setting from index " + req.body.index });
+                    res.json({ message: "Successfully deleted setting from index " + req.body.index, data: user.data.settings });
                 } else {
                     res.json(UserManager.saveFailMessage())
                 }
