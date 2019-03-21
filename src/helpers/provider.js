@@ -18,6 +18,7 @@ export class MyProvider extends Component {
         blur:false,
         mixerScreen: false,
         profileScreen: false,
+        updateScreen: false,
         OBSServer: null,
         OBSConnected:false,
         client:null,
@@ -43,6 +44,7 @@ export class MyProvider extends Component {
             this.setState({
                 profileScreen: onoff,
                 mixerScreen: onoff,
+                updateScreen: onoff,
                 blur:onoff
             })
         }
@@ -55,6 +57,12 @@ export class MyProvider extends Component {
         if(screen==="mixer"){
             this.setState({
                 mixerScreen: onoff,
+                blur: onoff,
+            })
+        }
+        if(screen==="update"){
+            this.setState({
+                updateScreen: onoff,
                 blur: onoff,
             })
         }

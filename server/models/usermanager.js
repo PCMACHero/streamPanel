@@ -44,7 +44,7 @@ module.exports = {
     deleteUser: (twitchId) => {
         return new Promise((resolve, reject) => {
             if (!twitchId) resolve({ message: "Error. Invalid Twitch ID submitted." });
-            let userToDel = await this.findUserByTwitchID(twitchId);
+            let userToDel =  this.findUserByTwitchID(twitchId);
             if (userToDel.message === "Success") {
                 userToDel.data.remove(err => {
                     if (err) {

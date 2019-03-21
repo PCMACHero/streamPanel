@@ -63,10 +63,11 @@ export default class CommandsInput extends Component{
             //     reply:""
             // })
             // this.showCommands(res.data.commands)
-            // this.setState({
-            //     name:"",
-            //     reply:""
-            // })
+            this.getCommandsFromDB(this.id) 
+            this.setState({
+                name:"",
+                reply:""
+            })
             
             
         }).catch((error) => {
