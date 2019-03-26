@@ -7,6 +7,7 @@ import './twitchlogin.css';
 import SVGLogo from '../sections/svg';
 import InfoPane from '../sections/infoPane';
 import Features from '../sections/features'
+import GetIP from '../helpers/getIP';
 
 
 
@@ -119,7 +120,7 @@ render(){
               
               </div>
               <div className="center">
-              <a className="twitch-btn-login" href= {this.state.twitchURL}><div className="login">Login</div></a>
+              <a className="twitch-btn-login" href= {this.state.twitchURL} style={{height:"100%"}}><div className="login">Login</div></a>
               </div>
           </div>
           
@@ -138,6 +139,7 @@ render(){
       </div>
 
       <div className="page-space">
+      {/* <GetIP/> */}
         <div className="page-section">
         <InfoPane title="OBS CONTROL" body={this.info.b1} icon={<i class="material-icons">
 mic

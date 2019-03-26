@@ -1,17 +1,22 @@
 import React from 'react'
 import {clientID} from '../../common/common'
 import {Row, Autocomplete} from 'react-materialize'
-import bigGameList from '../../helpers/gamelist'
+import "./updatemodal.css"
+
 import axios from 'axios'
 
 export default class Update extends React.Component{
-    gamesList={}
+    
     state={
-        currentGame: "",
+        currentGame: this.props.context.state.game,
         newGame:"",
-        currentTitle:"",
+        newGameAC: "",
+        currentTitle:this.props.context.state.title,
         newTitle:"",
         gameCover:"",
+        gameToSend:null,
+        getText:null,
+        // gamesList:
         
     }
     getGameCover=(game)=>{
@@ -40,42 +45,84 @@ export default class Update extends React.Component{
         }
         
     }
-    getGamesList=()=>{
-        for(let i=0; i<bigGameList.length; i++){
-               let boxURL = bigGameList[i].box_art_url.split("")
-               boxURL.splice(boxURL.length-20)
-               let boxURL2 = boxURL.join("")+"150x200.jpg"
+    // getGamesList=()=>{
+    //     let tempList={}
+    //     for(let i=0; i<bigGameList.length; i++){
+            
+    //            let boxURL = bigGameList[i].box_art_url.split("")
+    //            boxURL.splice(boxURL.length-20)
+    //            let boxURL2 = boxURL.join("")+"150x200.jpg"
                
-               this.gamesList[bigGameList[i].name]=boxURL2
-               //add to DB
-        }
+    //            tempList[bigGameList[i].name]=boxURL2
+               
+    //     }
 
+    //        this.setState({
+    //            gamesList:tempList
+    //        })
+    //        console.log("MY 100 GAMES DATA:", (bigGameList))
            
-           console.log("MY 100 GAMES DATA:", (bigGameList))
-           //static game list until build list to mongo
-           // axios({
-           
-           //     url: '/twitchgames',
-           //     method: 'post',
-           //     "headers": {
-           //         "Content-Type": "application/json",
-                   
-           //                 },
-           //     "data": {
-           //         "list": bigGameList
-           //             }
-           //   })
-           
-           }
+    //        }
+    getGameToSend=()=>{
+        if(this.state.newGameAC){
+            return this.state.newGameAC
+        }else if (this.state.newGame){
+            return this.state.newGame
+        } else {
+            return this.state.currentGame
+        }
+    }
     changeHandler = (event)=>{
-        console.log(event.target.value)
+        
         this.setState({
-            [event.target.name]: event.target.value
+            newTitle: event.target.value
         })
         
     }
+    changeGameHandler = (event)=>{
+        
+        
+        this.setState({
+            newGame: event.target.value
+        })
+        
+    }
+
+
+    changeGameHandlerAC = (val)=>{
+        
+        this.setState({
+            newGameAC: val
+        })
+        
+    }
+
+    getText=()=>{
+        this.props.context.state.OBSServer.send({
+            "request-type": "GetTextFreetype2Properties",
+            "source": "counterSP"
+        }).then(data=>{
+            console.log("MY TEXT DATA", data)
+        })
+    }
+
+    setText=(num)=>{
+        
+        this.props.context.state.OBSServer.send({
+            "request-type": "SetTextFreetype2Properties",
+            "source": "counterSP",
+            "text":num
+        })
+    }
+
+    componentDidUpdate(prev){
+        console.log("did update update prev", prev)
+        console.log("did update update props", this.props)
+    }
+
     componentDidMount(){
-        this.getGamesList()
+        document.getElementById("newGame").setAttribute("autocomplete", "off");
+        // this.getGamesList()
     }
     render(){
         return (
@@ -83,25 +130,25 @@ export default class Update extends React.Component{
 
             
             <form className="commands-input">
+            
                         <Row>
                             <Autocomplete
-                                limit={10}
-                                minLength={2}
-                                m={12}
-                                onChange={(e)=>this.changeHandler(e)}
-                                onAutocomplete={(e)=>{
-                                    console.log("console log e",e)
-                                    this.setState({
-                                    
-                                    newGame:e
-                                })}}
-                                // autocomplete="off"
+                                
+                                limit={4}
+                                minLength={3}
+                                // m={12}
+                                onChange={(e)=>this.changeGameHandler(e)}
+                                onAutocomplete={(val)=>{
+                                    this.changeGameHandlerAC(val)
+                                   }}
+                                value={this.state.newGameAC? this.state.newGameAC : this.state.newGame}
+                                
                                 // title='Update Game/Category'
                                 className="input-name"
-                                data={this.gamesList}
+                                data={this.props.context.state.gamesList}
                                 name="newGame"
                                 id="newGame"
-                                placeholder="Enter Game/Category"
+                                placeholder={`Enter Game/Category: ${this.props.context.state.game}`}
                                 
                                 
                                 
@@ -111,13 +158,11 @@ export default class Update extends React.Component{
                             />
                             
                         </Row>
-                        {/* <div className="input-field">
-                            <input className="input-name" name="newGame" autoComplete="off" data={this.gamesList} id="new-game"placeholder={`Current: ${this.props.channelOBJ.game}`} type="text" onChange={this.changeHandler} value={this.state.newGamePlaying}/>
-                            <label for="new-name">Update Game</label>
-                        </div> */}
+                        
                         <div className="input-field command-input-text">
-                            <input className="input-name" name="newTitle" autoComplete="off" id="new-title"placeholder={`Enter Title ex: ${this.state.currentTitle}`} type="text" onChange={(e)=>this.changeHandler(e)} value={this.state.newTitle}/>
-                            {/* <label for="new-title">Update Title</label> */}
+                            <input className="input-name" name="newTitle" autoComplete="off" id="new-title"placeholder={`Enter Title ex: ${this.props.context.state.title}`} 
+                            type="text" onChange={(e)=>this.changeHandler(e)} value={this.state.newTitle}/>
+                            
                         </div>
                         
 
@@ -143,10 +188,11 @@ export default class Update extends React.Component{
                     //     title = this.state.newGame
                     // }
                             console.log("MY OAUTH IN PUT", this.props.context.state.myOauth)
+                            console.log("MY NEWGAME", this.state.newGameAC? this.state.newGameAC: this.state.newGame)
                     axios({
                         method: 'put', //you can set what request you want to be
                         url: 'https://api.twitch.tv/kraken/channels/'+this.props.context.state.myId,
-                        data: {"channel": {"status": "test", "game": this.state.newGame}},
+                        data: {"channel": {"status": this.state.newTitle? this.state.newTitle: this.state.currentTitle, "game": this.getGameToSend()}},
                         headers: {
                             "Accept": "application/vnd.twitchtv.v5+json",
                             "Client-ID": clientID,
@@ -156,8 +202,9 @@ export default class Update extends React.Component{
                             'Content-Type': 'application/json'
                         }
                       }).then(data=>{
+                          this.props.context.updateStatus(data.data.game,data.data.status)
                         this.setState({
-                            newGame:"",
+                            newGame:"2",
                             newTitle:"",
                             currentGame:data.data.game,
                             currentTitle:data.data.status
@@ -170,6 +217,9 @@ export default class Update extends React.Component{
                       
                       
                 }} className="s1 btn right-align #4a148c purple darken-4" waves='light'>Update</div>
+
+                <div className="btn" onClick={()=>{this.getText()}}>GETTEXT</div>
+                <div className="btn" onClick={()=>{this.setText(`${this.props.context.state.OBSCounter}`)}}>SETTEXT</div>
                 </React.Fragment>
         )
     }

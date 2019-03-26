@@ -35,14 +35,16 @@ showMyModal=()=>{
             console.log(this.state.myModal)
             this.setState({
             myModal: null
-        })}}></div><MyModal title="CHAT-MODE" btn1="FOLLOW-ONLY" client={this.props.client} modes={this.state} function1={this.toggleFMode}/></Fragment>
+        })}}></div><MyModal title="CHAT-MODE" btn1="FOLLOW-ONLY" client={this.props.client} context={this.props.context} modes={this.state} fol={this.props.context.state.chatMode["followers-only"]} function1={()=>{this.toggleFMode()}}/></Fragment>
     })
 }
 getChatMode=(client)=>{
     
     client.on("roomstate", (channel, state)=> {
+        
         let activeText = ""
         if(state["followers-only"]>0){
+            
             activeText+="F/"
         }
         if(state["subs-only"]){
@@ -61,7 +63,7 @@ getChatMode=(client)=>{
         
         console.log("CHAT MODE",state)
 
-        
+            this.props.context.updateState("chatMode", state)
             this.setState({
                 active: activeText,
                 "followers-only": state["followers-only"],
@@ -76,7 +78,7 @@ getChatMode=(client)=>{
 }
 
 toggleFMode=(client)=>{
-    client.followersonly(streamer, 30)
+    client.followersonly(streamer, "30")
 .then((data) => {
     console.log(data)
     this.props.newMessage(data)
@@ -119,15 +121,7 @@ toggleFMode=(client)=>{
 
         render(){
 
-            let modal= null
-            if(this.state.showModal){
-                modal = 
-                <Fragment><div className="modal-back" onClick={()=>{
-                    
-                    this.setState({
-                    showModal: !this.state.showModal
-                })}}></div><CommandsModal/></Fragment>
-            }
+            
 
 
 
@@ -135,10 +129,10 @@ toggleFMode=(client)=>{
             
             return (
                 <Fragment>
-                    {this.state.myModal}
+                    
                 
                 <div className='source-panel'>
-                {modal}
+                
                 <div className="twitch-btn"  onClick={()=>{this.runAd() }}>
                     <i className="material-icons">
                     monetization_on
@@ -160,10 +154,10 @@ toggleFMode=(client)=>{
                 </div>
                     
                     
-                
+                {/* <MyModal key={this.props.context.state.chatMode["followers-only"]} title="CHAT-MODE" btn1="FOLLOW-ONLY" client={this.props.client} context={this.props.context} modes={this.state} fol={this.props.context.state.chatMode["followers-only"]} function1={()=>{this.toggleFMode()}}/> */}
                 <div className="twitch-btn" onClick={(e)=>{
     
-                    this.showMyModal()
+                    this.props.context.showHideScreen("chatMode", "on")
                     console.log("clicked")
                     }}>
                     <i className="material-icons">

@@ -23,7 +23,7 @@ export default class BlurScreen extends Component{
                     <div className="blur-box" onClick={(e)=>{
                         e.stopPropagation();
                     }}style={{height:"70%",width:"70%",display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column", backgroundColor:this.props.color}}>
-                        <div className="blur-title" style={{fontSize:"2em"}}>{this.props.title}</div>
+                        <div className="blur-title" style={{fontSize:"2.5em", color:"white"}}>{this.props.title}</div>
                         <div className="blur-content">{this.props.content}</div>
                     </div>
                 </div>

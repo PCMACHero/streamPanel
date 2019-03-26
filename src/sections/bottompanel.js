@@ -46,6 +46,23 @@ class BottomPanel extends Component{
         })
     
     }
+
+    increaseOBSCounter=()=>{
+        
+        
+           let newNum = this.props.context.state.OBSCounter+1
+        
+        
+        this.props.context.updateState("OBSCounter", newNum)
+        this.props.context.state.OBSServer.send({
+            "request-type": "SetTextFreetype2Properties",
+            "source": "counterSP",
+            "text":newNum.toString()
+        })
+    }
+
+    
+
     componentDidUpdate(prev){
         if(this.props.server !== prev.server)
         this.getOBSStreamStatus() 
@@ -142,14 +159,22 @@ if(this.props.event && this.props.event["update-type"]==="StreamStatus"){
                 </div>
                 
                 <div className="profiles-btn">
-                <Numbers channelOBJ={this.props.channelOBJ} />
-                <div className="label2">CPU: {this.cpuUsage}</div>
+                <div className="profiles-btn" style={{display:"flex", flexDirection:"row"}}>
+            <div className="profiles-btn" style={{width:"50%"}}>yes</div>
+            <div className="profiles-btn" style={{width:"50%"}} onClick={()=>{this.increaseOBSCounter()}}>+</div>
+        </div>
+                {/* <Numbers channelOBJ={this.props.channelOBJ} /> */}
+                {/* <div className="label2">CPU: {this.cpuUsage}</div>
                 <div className="label2">Bit-rate: {this.bitRate}</div>
                 <div className="label2">Dropped: {this.droppedFrames}</div>
-                <div className="label2">Uptime: {this.streamTime}</div>
+                <div className="label2">Uptime: {this.streamTime}</div> */}
                 
                 </div>
-                <div className="profiles-btn" style={{width:"50%"}} onClick={(e)=>{console.log(e.type)
+
+
+
+                <div className="profiles-btn" style={{display:"flex", flexDirection:"row"}}>
+                <div className="profiles-btn" style={{width:"50%", height:"100%"}} onClick={(e)=>{console.log(e.type)
                 context.showHideScreen("profile", true)}}>
                 
                 <div className="label">PRESETS</div>
@@ -157,11 +182,13 @@ if(this.props.event && this.props.event["update-type"]==="StreamStatus"){
                 
                 
                 </div>
-                <div className="profiles-btn" style={{width:"50%"}} onClick={(e)=>{console.log(e.type)
+                <div className="profiles-btn" style={{width:"50%", height:"100%"}} onClick={(e)=>{console.log(e.type)
                 context.showHideScreen("update", true)}}>
                 
                 <div className="label">UPDATE</div>
-                <div className="label2">Bit-rate: {this.bitRate}</div>
+                
+                </div>
+                
                 
                 
                 </div>

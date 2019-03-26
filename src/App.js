@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import 'materialize-css/dist/css/materialize.min.css'
+// import 'materialize-css/dist/css/materialize.min.css'
 import StreamPanel from './views/streampanel'
 import {MyProvider, MyContext} from './helpers/provider'
 import TwitchLogin from './views/twitchlogin'

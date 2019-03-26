@@ -128,7 +128,7 @@ class MainSection extends Component{
         
         console.log("EVENT FIRED 9", newEventData);
         
-        
+        this.props.context.updateState("event", newEventData)
         
         this.setState({
             event: newEventData
@@ -190,11 +190,11 @@ class MainSection extends Component{
             <div className="mid-section">
                 <SourcePanel server={context.state.OBSServer}  event={this.state.event} showHide={context.showHideScreen} func={this.toggleSource} srcClass={this.state.srcClass} />
                 <VideoBox channel={streamer}></VideoBox>
-                <TwitchPanel client={context.state.client} oauth={this.props.oauth} newMessage={context.newMessage} runAd={this.runAd}/>
+                <TwitchPanel client={context.state.client} oauth={this.props.oauth} newMessage={context.newMessage} context={context} runAd={this.runAd}/>
                 
             </div>
             
-            <BottomPanel event={this.state.event} server={context.state.OBSServer} channelOBJ={this.state.channel} client={this.client} OBSOBJ={this.state} oauth={this.props.oauth} micSources={this.state.micSources}/>
+            <BottomPanel event={this.state.event} server={context.state.OBSServer} channelOBJ={this.state.channel} client={this.client} OBSOBJ={this.state} oauth={this.props.oauth} micSources={this.state.micSources} context={context}/>
             
         </div> 
             

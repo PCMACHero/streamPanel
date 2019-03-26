@@ -25,7 +25,7 @@ export default class Chat extends Component {
         this.context=this.props.context
         this.id = this.props.id
         this.oauth = null
-        this.commands = []
+        // this.props.context.state.commands = this.props.context.state.commands
         this.modDBObj={}
         this.badgeDivArray=[]
         this.subscriberBadges={}
@@ -74,7 +74,8 @@ export default class Chat extends Component {
             modal: false,
             badges: {},
             post:"",
-            myDivs:[]
+            myDivs:[],
+            commands: this.props.context.state.commands
             
             
             }
@@ -223,7 +224,7 @@ export default class Chat extends Component {
         
         axios.get(`/spuser/${this.props.context.state.myId}`).then(data=>{
             console.log("MY DB COMMANDS ree", data, "MY ID", this.props.context.state.myId)
-            this.commands = data.data.commands
+            this.props.context.state.commands = data.data.commands
         })
     }
      
@@ -361,16 +362,7 @@ modDB=(user, status)=>{
 
 }
 chatListner=()=>{
-    // console.log("CHAT CONTEXT LISTENER", this.props.context.state.loadListener)
-        
-           console.log("LISTENER PRE", this.props.client)
-           this.props.client.on("action",  (channel, userstate, message, self)=> {
-            this.makeMessageDivs(channel,"You",message,self)
-            
-        
-            // Do your stuff.
-        });
-        
+    
             this.props.client.on('chat', (channel, user, message, self)=>{
                 
                 // if(user.badges && user.badges.moderator){
@@ -389,11 +381,11 @@ chatListner=()=>{
                 this.makeMessageDivs(channel,user,message,self)
                 
                 // let getLocalStorageCommands= JSON.parse(localStorage.getItem('commands'));
-                if(this.commands){
-                    for(let i = 0; i<this.commands.length; i++){
-                        if(this.commands[i].name===message){
-                            console.log("RESPONSE word ",this.commands[i], i)
-                            this.props.client.action(streamer, `${this.commands[i].response}`).then(function(data) {
+                if(this.props.context.state.commands){
+                    for(let i = 0; i<this.props.context.state.commands.length; i++){
+                        if(this.props.context.state.commands[i].name===message){
+                            console.log("RESPONSE word ",this.props.context.state.commands[i], i)
+                            this.props.client.action(streamer, `${this.props.context.state.commands[i].reply}`).then(function(data) {
                                 // data returns [channel]
                             }).catch(function(err) {
                                 //
@@ -411,13 +403,56 @@ chatListner=()=>{
     
                 
             })
+            this.props.client.on('action', (channel, user, message, self)=>{
+                
+                // if(user.badges && user.badges.moderator){
+                    if(user.mod){
+                    this.modDB(user.username, true)
+                }else {
+                    this.modDB(user.username, false)
+                }
+                
+                this.makeBadgeDivs(user)
+                
+                
+                
+                // this.emoteParser(message,)
+                this.smartEmoteParser(message,user.emotes)
+                this.makeMessageDivs(channel,user,message,self)
+                
+                // let getLocalStorageCommands= JSON.parse(localStorage.getItem('commands'));
+                // if(this.props.context.state.commands){
+                //     for(let i = 0; i<this.props.context.state.commands.length; i++){
+                //         if(this.props.context.state.commands[i].name===message){
+                //             console.log("RESPONSE word ",this.props.context.state.commands[i], i)
+                //             this.props.client.action(streamer, `${this.props.context.state.commands[i].reply}`).then(function(data) {
+                //                 // data returns [channel]
+                //             }).catch(function(err) {
+                //                 //
+                //             });
+                //         }
+                //     }
+                        
+                    
+                // }
+                    
+                    
+                
+                
+            
+    
+                
+            })
         
 }   
 
 componentDidUpdate(prevProps){
+    if(prevProps.context.state.commands !== this.props.context.state.commands){
+        this.setState({commands:this.props.context.state.commands})
+    }
     
     if(prevProps.client === null && this.props.client){
-        this.getCommands()
+        // this.getCommands()
         this.getGlobalBadges()
 this.getChannelBadges()
 this.getSubscriberBadges()

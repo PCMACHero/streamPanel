@@ -8,6 +8,7 @@ import BlurScreen from '../sections/blurscreen';
 import Presets from '../sections/presets';
 import Mixer from '../sections/mixer';
 import Update from '../sections/updatemodal/update';
+import MyModal from '../sections/mymodal';
 
 
 
@@ -120,6 +121,7 @@ class StreamPanel extends Component {
                 
                     
                         <Fragment>
+                            <BlurScreen title="CHATMODE" color="rgba(0,0,0, 0.4)" show={context.state.chatModeScreen} close={context.showHideScreen} content={<MyModal context={context} title={"CHAT MODE"}/>}/>
                             <BlurScreen title="UPDATE" color="rgba(0,0,0, 0.4)" show={context.state.updateScreen} close={context.showHideScreen} content={<Update context={context}/>}/>
                             <BlurScreen title="MIXER" color="rgba(0,0,0, 0.4)" show={context.state.mixerScreen} close={context.showHideScreen} content={<Mixer server={context.state.OBSServer}/>}/>
                             <BlurScreen title="PRESETS" color="rgba(0,0,0, 0.4)" show={context.state.profileScreen} close={context.showHideScreen} content={<Presets server={context.state.OBSServer} context={context} show={context.state.profileScreen}/>}/>

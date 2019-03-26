@@ -103,7 +103,9 @@ export default class CommandsInput extends Component{
                 </div>
 
             )
-        } this.setState({
+        } 
+        this.props.context.updateState("commands", commands)
+        this.setState({
             commands:commands
         })
     }

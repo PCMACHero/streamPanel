@@ -2,6 +2,7 @@ import React,{Component} from 'react';
 import axios from 'axios';
 import tmi from 'tmi.js'
 import {streamer, dumbData} from './dummydata'
+import bigGameList from './gamelist'
 import Obs from './obs-server'
 
 export const MyContext = React.createContext();
@@ -13,14 +14,18 @@ export class MyProvider extends Component {
     // begin= window.location.href.indexOf("=")
     // token = window.location.href.slice(this.begin+1,this.begin+31)
     state={
+        event:null,
         game:null,
         title:null,
+        gameCover:null,
         blur:false,
+        chatModeScreen: false,
         mixerScreen: false,
         profileScreen: false,
         updateScreen: false,
         OBSServer: null,
         OBSConnected:false,
+        OBSCounter:1,
         client:null,
         loadListener: false,
         // myId: dumbData.twitchId,
@@ -30,11 +35,19 @@ export class MyProvider extends Component {
         myOauth: null,
         username: null,
         commands: null,
+        presets: null,
         email:null,
         partner: null,
         messageCenter: {
             m:"Status: All well",
             class: ""
+        },
+        gamesList:{},
+        chatMode:{
+            "followers-only":null,
+            swMode:null,
+            sbMode:null,
+            eMode:null,
         }
         
 
@@ -42,6 +55,7 @@ export class MyProvider extends Component {
     showHideScreen=(screen, onoff)=>{
         if(screen==="all"){
             this.setState({
+                chatModeScreen: onoff,
                 profileScreen: onoff,
                 mixerScreen: onoff,
                 updateScreen: onoff,
@@ -66,14 +80,31 @@ export class MyProvider extends Component {
                 blur: onoff,
             })
         }
+        if(screen==="chatMode"){
+            this.setState({
+                chatModeScreen: onoff,
+                blur: onoff,
+            })
+        }
         
         
         
     }
+    updateState=(key, value)=>{
+        this.setState({
+            [key]:value
+        })
+    }
+    updateCover=(cover)=>{
+        this.setState({
+            gameCover:cover
+        })
+    }
     updateStatus=(game,title)=>{
         this.setState({
             game:game,
-            title:title
+            title:title,
+            
         })
     }
     newMessage = (message)=>{
@@ -136,16 +167,12 @@ export class MyProvider extends Component {
         axios.post(`/api/getuserinfo/`).then(res=>{
             console.log("my greek", res)
             let commands = res.data.data.custom
-            if(commands.length===0){
-                axios.post("/api/newcommand",{name:"!test", reply:"Succeeded yey"}).then(data=>{
-                    console.log("loaded new command")
-
-                })
-            }else{
-                this.setState({
-                    commands: commands
-                })
-            }
+            let presets = res.data.data.presets
+            
+            this.setState({
+                commands: commands,
+                presets: presets
+            })
             
         })
     }
@@ -199,16 +226,52 @@ export class MyProvider extends Component {
     }
     makeOBS=()=>{
         let server = new Obs();
-        server.connect()
-        setTimeout(() => {
+        server.connect().then(data=>{
             this.setState({
                 OBSServer:server
             })
-        }, 2000);
+        })
+        
+            
+       
         
     }
+
+    getGamesList=()=>{
+        let tempList={}
+        for(let i=0; i<bigGameList.length; i++){
+            
+               let boxURL = bigGameList[i].box_art_url.split("")
+               boxURL.splice(boxURL.length-20)
+               let boxURL2 = boxURL.join("")+"150x200.jpg"
+               
+               tempList[bigGameList[i].name]=boxURL2
+               //add to DB
+        }
+
+           this.setState({
+               gamesList:tempList
+           })
+           console.log("MY 100 GAMES DATA:", (bigGameList))
+           //static game list until build list to mongo
+           // axios({
+           
+           //     url: '/twitchgames',
+           //     method: 'post',
+           //     "headers": {
+           //         "Content-Type": "application/json",
+                   
+           //                 },
+           //     "data": {
+           //         "list": bigGameList
+           //             }
+           //   })
+           
+           }
+
     componentDidMount(){
         console.log("MY PROVIDER MOUNTED", this.state)
+        this.getGamesList()
         this.makeOBS()
         
         this.getOauth()
@@ -219,10 +282,12 @@ export class MyProvider extends Component {
         return (
             <MyContext.Provider value={{
                 state: this.state,
+                updateState: this.updateState,
                 getOBSServer: this.getOBSServer,
                 getOauth: this.getOauth,
                 newMessage: this.newMessage,
                 updateStatus:this.updateStatus,
+                updateCover: this.updateCover,
                 showHideScreen: this.showHideScreen
             }}>
                 {this.props.children}

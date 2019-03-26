@@ -249,7 +249,7 @@ iframe{
   
   display: flex;
   color:rgb(219, 219, 255);
-  background-color: #000d2467;
+  background-color: #000000;
   animation: fadeIn 1s linear;
   text-align: left;
   flex-direction: column;
