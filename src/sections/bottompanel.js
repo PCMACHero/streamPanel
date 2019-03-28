@@ -195,10 +195,10 @@ if(this.props.event && this.props.event["update-type"]==="StreamStatus"){
                 
             </div>
             <div className="bottom-middle-container">
-                <ChannelStatus channelOBJ={this.props.channelOBJ} context={context}/>
+                <ChannelStatus channelOBJ={this.props.channelOBJ} twitchId={context.state.twitchId} context={context}/>
             </div>
             <div className="bottom-right-container">
-                <Notifications userID={context.state.myId} client={context.state.client}/>
+                <Notifications userID={context.state.twitchId} context={context} client={context.state.client}/>
                 
             </div>
             

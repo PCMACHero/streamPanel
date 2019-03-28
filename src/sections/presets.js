@@ -127,7 +127,7 @@ export default class Presets extends Component{
     changeGameAndTitle=(preset)=>{
         axios({
             method: 'put', //you can set what request you want to be
-            url: 'https://api.twitch.tv/kraken/channels/'+this.props.context.state.myId,
+            url: 'https://api.twitch.tv/kraken/channels/'+this.props.context.state.twitchId,
             data: {"channel": {"status": preset.title, "game": preset.game}},
             headers: {
                 "Accept": "application/vnd.twitchtv.v5+json",

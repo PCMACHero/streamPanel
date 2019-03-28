@@ -29,15 +29,24 @@ this.getAuth()
       
       <BrowserRouter>
       <MyProvider>
-      <div>
+      
+        <MyContext.Consumer>{
+          context=>
+          <div>
           <Route path="/success" component={Success} exact/>
           <Route path="/" exact component={TwitchLogin}/>
-          <Route path="/panel" exact component={StreamPanel}/>
+          <Route path="/panel" exact render={() => <StreamPanel context={context}/>}/>
 
           
           <Route path="/about" component={about}/>
           <Route path="/setup" component={setup}/>
-        </div>
+          </div>
+        }
+
+
+        </MyContext.Consumer>
+          
+        
         </MyProvider>
         
           

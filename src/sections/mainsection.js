@@ -22,6 +22,7 @@ class MainSection extends Component{
     ad = false;
     
     state = {
+        displayName: this.props.context.state.displayName,
         client:null,
         // sceneComp:null,
         channel:{
@@ -147,6 +148,9 @@ class MainSection extends Component{
                 
             }
             
+
+            
+
             if(this.props.server && pp.server===null){
                 
                 this.props.server.addMessageListener(this.handleServerEvent)
@@ -155,20 +159,6 @@ class MainSection extends Component{
            componentDidMount(){
                console.log("MAIN HAS MOUNTED", this.props.context)
            
-            
-            if(this.props.context.state.client){
-                // this.client.connect();
-            }
-                
-            
-            
-            
-                
-            
-            
-            
-
-            
             };
 
             
@@ -189,7 +179,7 @@ class MainSection extends Component{
             <ScenePanel server={context.state.OBSServer}  event={this.state.event} scenes={this.state.scenes} func={this.setSceneAndSourcesOnClick} currentScene={this.state.currentScene}/>
             <div className="mid-section">
                 <SourcePanel server={context.state.OBSServer}  event={this.state.event} showHide={context.showHideScreen} func={this.toggleSource} srcClass={this.state.srcClass} />
-                <VideoBox channel={streamer}></VideoBox>
+                <VideoBox channel={this.props.context.state.displayName}></VideoBox>
                 <TwitchPanel client={context.state.client} oauth={this.props.oauth} newMessage={context.newMessage} context={context} runAd={this.runAd}/>
                 
             </div>

@@ -90,10 +90,10 @@ render(){
 </nav> */}
 <div className="navbar-fixed">
 <nav>
-    <div class="nav-wrapper">
+    <div className="nav-wrapper">
     
-      <a href="#" class="brand-logo right"><div className="sp">StreamPanel</div><div className="brand-img"></div></a>
-      <ul id="nav-mobile" class="left hide-on-med-and-down">
+      <a href="#" className="brand-logo right"><div className="sp">StreamPanel</div><div className="brand-img"></div></a>
+      <ul id="nav-mobile" className="left hide-on-med-and-down">
       <li><Link to="/">HOME</Link></li>
       <li><Link to="/setup">SETUP</Link></li>
       <li><Link to="/about">ABOUT</Link></li>
@@ -141,9 +141,9 @@ render(){
       <div className="page-space">
       {/* <GetIP/> */}
         <div className="page-section">
-        <InfoPane title="OBS CONTROL" body={this.info.b1} icon={<i class="material-icons">
+        <InfoPane title="OBS CONTROL" body={this.info.b1} icon={<i className="material-icons">
 mic
-</i>} icon2= {<i class="material-icons">
+</i>} icon2= {<i className="material-icons">
 videocam
 </i>}/>
         <div className="fp-img-box"><div className="fp-img" style={{backgroundImage:`url(../images/fp-1.jpg)`}}></div></div>
@@ -155,9 +155,9 @@ videocam
       <div className="page-space">
       <div className="page-section">
         
-        <InfoPane title="TWITCH CONTROL" body={this.info.b2} icon={<i class="material-icons">
+        <InfoPane title="TWITCH CONTROL" body={this.info.b2} icon={<i className="material-icons">
 mic
-</i>} icon2= {<i class="material-icons">
+</i>} icon2= {<i className="material-icons">
 videocam
 </i>}/>
 <div className="fp-img-box"><div className="fp-img" style={{backgroundImage:`url(../images/twitch.png)`}}></div></div>
@@ -165,16 +165,16 @@ videocam
         </div>
       </div>
       <div className="page-space">
-       <InfoPane title="BOT COMMANDS" body={this.info.b3} icon={<i class="material-icons">
+       <InfoPane title="BOT COMMANDS" body={this.info.b3} icon={<i className="material-icons">
 adb
 </i>}/>
        <div className="fp-img-box"><div className="fp-img" style={{backgroundImage:`url(../images/commands.png)`}}></div></div>
 
       </div>
       <div className="page-space" style={{backgroundImage:`url(../images/spbg2.jpg)`, backgroundSize:"cover",backgroundColor:"rgba(69, 0, 130, 0.8)", backgroundPosition: "center", backgroundBlendMode: "screen", color:"black"}}>
-       <InfoPane color="#131215de" title="CONTROL WIRELESSLY" body={this.info.b4} icon={<i class="material-icons">
+       <InfoPane color="#131215de" title="CONTROL WIRELESSLY" body={this.info.b4} icon={<i className="material-icons">
 tablet_mac
-</i>} icon2={<i class="material-icons">
+</i>} icon2={<i className="material-icons">
 wifi
 </i>}/>
       </div>
@@ -184,28 +184,28 @@ wifi
           <source src="/videos/spmov.mov" type="video/mp4"/>
         </video>
       </div>
-      <footer class="page-footer teal darken-4">
-          <div class="container ">
-            <div class="row">
-              <div class="col l6 s12">
-                <h5 class="white-text">Follow Us On Twitter</h5>
-                <p class="grey-text text-lighten-4">Keep up with new updates, and announcements. We are always looking at feedback as well.</p>
+      <footer className="page-footer teal darken-4">
+          <div className="container ">
+            <div className="row">
+              <div className="col l6 s12">
+                <h5 className="white-text">Follow Us On Twitter</h5>
+                <p className="grey-text text-lighten-4">Keep up with new updates, and announcements. We are always looking at feedback as well.</p>
               </div>
-              <div class="col l4 offset-l2 s12">
-                <h5 class="white-text">Links</h5>
+              <div className="col l4 offset-l2 s12">
+                <h5 className="white-text">Links</h5>
                 <ul>
-                  <li><a class="grey-text text-lighten-3" href="https://twitter.com/stream_panel" target="_blank">Twitter</a></li>
-                  <li><a class="grey-text text-lighten-3" href="mailto:streampanelapp@gmail.com" target="_blank">Contact</a></li>
-                  <li><a class="grey-text text-lighten-3" href="https://youtube.com" target="_blank">Youtube</a></li>
+                  <li><a className="grey-text text-lighten-3" href="https://twitter.com/stream_panel" target="_blank">Twitter</a></li>
+                  <li><a className="grey-text text-lighten-3" href="mailto:streampanelapp@gmail.com" target="_blank">Contact</a></li>
+                  <li><a className="grey-text text-lighten-3" href="https://youtube.com" target="_blank">Youtube</a></li>
                   
                 </ul>
               </div>
             </div>
           </div>
-          <div class="footer-copyright">
-            <div class="container">
+          <div className="footer-copyright">
+            <div className="container">
             © 2019, StreamPanel
-            {/* <a class="grey-text text-lighten-4 right" href="#!">More Links</a> */}
+            {/* <a className="grey-text text-lighten-4 right" href="#!">More Links</a> */}
             </div>
           </div>
         </footer>

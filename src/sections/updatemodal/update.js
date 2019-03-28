@@ -191,7 +191,7 @@ export default class Update extends React.Component{
                             console.log("MY NEWGAME", this.state.newGameAC? this.state.newGameAC: this.state.newGame)
                     axios({
                         method: 'put', //you can set what request you want to be
-                        url: 'https://api.twitch.tv/kraken/channels/'+this.props.context.state.myId,
+                        url: 'https://api.twitch.tv/kraken/channels/'+this.props.context.state.twitchId,
                         data: {"channel": {"status": this.state.newTitle? this.state.newTitle: this.state.currentTitle, "game": this.getGameToSend()}},
                         headers: {
                             "Accept": "application/vnd.twitchtv.v5+json",

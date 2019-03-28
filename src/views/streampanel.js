@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import MainSection from '../sections/mainsection'
-import {streamer} from "../helpers/dummydata"
+
 import {clientID} from "../common/common"
 import axios from "axios"
 import { MyContext } from '../helpers/provider';
@@ -8,7 +8,9 @@ import BlurScreen from '../sections/blurscreen';
 import Presets from '../sections/presets';
 import Mixer from '../sections/mixer';
 import Update from '../sections/updatemodal/update';
-import MyModal from '../sections/mymodal';
+import MyModal from '../sections/chatmode';
+import CommandsInput from '../sections/commandsinput';
+import ChatModal from '../sections/chatmode';
 
 
 
@@ -27,7 +29,7 @@ class StreamPanel extends Component {
             }
 
 
-    token = this.props.location.hash.slice(14,44);
+    
     // token = "rql8ru6ow4i3agf3i1xc0j8zzgpt39"
     getUser(){
         axios.get("https://api.twitch.tv/kraken/channel", {headers: {
@@ -69,7 +71,7 @@ class StreamPanel extends Component {
         })
     }
 
-    getUserID(){
+    getUserID(streamer){
         const URL = "https://api.twitch.tv/kraken/users?login="+streamer
         
         axios.get(URL, this.headers).then(response => {
@@ -105,7 +107,7 @@ class StreamPanel extends Component {
                 startClass:"start-fade"
             })
         }, 2000);
-        this.getUserID()
+        this.getUserID(this.props.context.state.twitchId)
         
         
         
@@ -121,7 +123,8 @@ class StreamPanel extends Component {
                 
                     
                         <Fragment>
-                            <BlurScreen title="CHATMODE" color="rgba(0,0,0, 0.4)" show={context.state.chatModeScreen} close={context.showHideScreen} content={<MyModal context={context} title={"CHAT MODE"}/>}/>
+                            <BlurScreen title="BOT COMMANDS" color="rgba(0,0,0, 0.4)" show={context.state.commandsScreen} close={context.showHideScreen} content={<CommandsInput context={context}/>}/>
+                            <BlurScreen title="CHATMODE" color="rgba(0,0,0, 0.4)" show={context.state.chatModeScreen} close={context.showHideScreen} content={<ChatModal context={context}/>}/>
                             <BlurScreen title="UPDATE" color="rgba(0,0,0, 0.4)" show={context.state.updateScreen} close={context.showHideScreen} content={<Update context={context}/>}/>
                             <BlurScreen title="MIXER" color="rgba(0,0,0, 0.4)" show={context.state.mixerScreen} close={context.showHideScreen} content={<Mixer server={context.state.OBSServer}/>}/>
                             <BlurScreen title="PRESETS" color="rgba(0,0,0, 0.4)" show={context.state.profileScreen} close={context.showHideScreen} content={<Presets server={context.state.OBSServer} context={context} show={context.state.profileScreen}/>}/>
@@ -130,12 +133,12 @@ class StreamPanel extends Component {
                         <div className="stream-panel panel-container" style={context.state.blur ? {filter:"blur(5px"}: null}
                         // style={{animation:"blurIn 2s forwards"}}
                         >
-            <div className={this.state.startClass}>
+            {/* <div className={this.state.startClass}>
                 <div className="start-banner">STREAM PANEL</div>
                 <div className="progress">
                     <div className="indeterminate green"></div>
                 </div>
-            </div>
+            </div> */}
     
             
                 <MainSection chanBadges={this.state.badges} context={context} server={context.state.OBSServer}/>

@@ -26,8 +26,8 @@ class ChannelStatus extends Component{
         }
     }
     ChannelData = this.props.channelOBJ
-    getStreamData = ()=>{
-        axios.get(`https://api.twitch.tv/kraken/streams/${streamerID}`, {
+    getStreamData = (id)=>{
+        axios.get(`https://api.twitch.tv/kraken/streams/${id}`, {
             headers: {
                 Accept:"application/vnd.twitchtv.v5+json",
                 "Client-ID": clientID
@@ -148,18 +148,23 @@ class ChannelStatus extends Component{
             this.getTitleAndGame()
             console.log("bloop", prev.context.state.game, this.props.context.state.game)
         }
+
+        if(this.props.twitchId && this.props.twitchId !== prev.twitchId){
+            console.log("got id")
+            setInterval(() => {
+            
+                this.getStreamData(this.props.twitchId)
+            }, 15000);
+            setTimeout(() => {
+                this.getStreamData(this.props.twitchId)
+                this.getTitleAndGame()
+            }, 2000);
+        }
     }
 
     componentDidMount(){
         
-        setInterval(() => {
-            
-            this.getStreamData()
-        }, 15000);
-        setTimeout(() => {
-            this.getStreamData()
-            this.getTitleAndGame()
-        }, 2000);
+        
         
         
         

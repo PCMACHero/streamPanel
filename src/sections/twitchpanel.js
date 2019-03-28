@@ -5,95 +5,107 @@ import CommandsModal from './commandsModal'
 import {Modal} from 'react-materialize'
 import Commands from './commands'
 import {MyContext} from '../helpers/provider'
-import MyModal from './mymodal';
+import MyModal from './chatmode';
 // import SceneBtn from './scenebtn'
 // import {twitchBtns} from '../helpers/dummydata'
 
 class TwitchPanel extends Component{
     state={
-        "followers-only": null,
-        "subs-only": null,
-        slow: null,
-        "emote-only": null,
+        
         active:null,
         showModal: false,
         myModal: null,
     }
+    counter=0
     client = this.props.client
     
-hideMyModal=()=>{
-    console.log("tried to hide modal")
-    this.setState({
-        myModal:null
-    })
-}
-showMyModal=()=>{
-    this.setState({
-        myModal: <Fragment>
-            
-            <div className="modal-back" onClick={()=>{
-            console.log(this.state.myModal)
-            this.setState({
-            myModal: null
-        })}}></div><MyModal title="CHAT-MODE" btn1="FOLLOW-ONLY" client={this.props.client} context={this.props.context} modes={this.state} fol={this.props.context.state.chatMode["followers-only"]} function1={()=>{this.toggleFMode()}}/></Fragment>
-    })
-}
-getChatMode=(client)=>{
+
+
+
+getChatModeBetter=(client)=>{
+
     
-    client.on("roomstate", (channel, state)=> {
-        
-        let activeText = ""
-        if(state["followers-only"]>0){
-            
-            activeText+="F/"
-        }
-        if(state["subs-only"]){
-            activeText+="SB/"
-        }
-        if(state.slow){
-            activeText+="SL/"
-        }
-        if(state["emote-only"]){
-            activeText+="E/"
-        }
-        
-        if(activeText.length==0){
-            activeText = "NORMAL"
-        }
-        
-        console.log("CHAT MODE",state)
 
-            this.props.context.updateState("chatMode", state)
-            this.setState({
-                active: activeText,
-                "followers-only": state["followers-only"],
-                "subs-only": state["subs-only"],
-                slow: state.slow,
-                "emote-only": state["emote-only"],
+    client.on("followersonly", (channel, enabled, length) => {
+        console.log("yay it ran", enabled)
+        
+        this.props.context.updateState({"followers-only": enabled})
+    });
 
-            })
-        
-        
+    client.on("subscribers", (channel, enabled) => {
+        this.props.context.updateState({"subs-only": enabled})
+    });
+
+
+    client.on("slowmode", (channel, enabled, length) => {
+        this.props.context.updateState({"slow": enabled})
+    });
+
+    client.on("emoteonly", (channel, enabled) => {
+        this.props.context.updateState({"emote-only": enabled})
     });
 }
 
-toggleFMode=(client)=>{
-    client.followersonly(streamer, "30")
-.then((data) => {
-    console.log(data)
-    this.props.newMessage(data)
-    // data returns [channel, minutes]
-}).catch((err) => {
-    this.props.newMessage(err)
-    console.log(err)
-});
-
+getFirstChatMode=(client)=>{
+    
+        client.on("roomstate", (channel, state)=> {
+            
+                console.log("ROOMSTATE now", state)
+            
+            let activeText = ""
+            if(state["followers-only"] !== undefined){
+                
+                let fol = false
+                if(state["followers-only"]>0){
+                    fol = true
+                }
+                console.log("follows only is", fol)
+                this.props.context.updateState("followers-only", fol)
+                
+                activeText+="F/"
+            }
+            if(state["subs-only"] !== undefined){
+                this.props.context.updateState("subs-only", state["subs-only"])
+                activeText+="SB/"
+            }
+            if(state.slow !== undefined){
+                let sl = false
+                if(state["slow"]>0){
+                    sl = true
+                }
+                this.props.context.updateState("slow", sl)
+                activeText+="SL/"
+            }
+            if(state["emote-only"] !== undefined){
+                this.props.context.updateState("emote-only", state["emote-only"])
+                activeText+="E/"
+            }
+            
+            if(activeText.length==0){
+                activeText = "NORMAL"
+            }
+            
+            console.log("CHAT MODE",state)
+            
+            
+                
+                
+            
+            
+                
+            
+            
+        });
+    
+    
 }
+
+
        runAd=()=>{
             
             
             
-            this.props.client.commercial(streamer, 30).then(data=> {
+            this.props.client.commercial(chan, 30).then(data=> {
                 // data returns [channel, seconds]
                 this.props.newMessage(data)
 
@@ -111,7 +123,8 @@ toggleFMode=(client)=>{
         }
         componentDidUpdate(prev){
             if(prev.client===null && this.props.client){
-                this.getChatMode(this.props.client)
+                this.getFirstChatMode(this.props.client)
+                // this.getChatModeBetter(this.props.client)
             }
         }
         componentDidMount(){
@@ -140,10 +153,8 @@ toggleFMode=(client)=>{
                     <div className='label'>RUN AD</div>
                 </div>
                 <div className="twitch-btn" onClick={()=>{
-                        console.log(this.state.showModal)
-                        this.setState({
-                        showModal: !this.state.showModal
-                    })}}>
+                        this.props.context.showHideScreen("commands", "on")
+                        }}>
     
                     <i className="material-icons">
                     adb
@@ -154,7 +165,6 @@ toggleFMode=(client)=>{
                 </div>
                     
                     
-                {/* <MyModal key={this.props.context.state.chatMode["followers-only"]} title="CHAT-MODE" btn1="FOLLOW-ONLY" client={this.props.client} context={this.props.context} modes={this.state} fol={this.props.context.state.chatMode["followers-only"]} function1={()=>{this.toggleFMode()}}/> */}
                 <div className="twitch-btn" onClick={(e)=>{
     
                     this.props.context.showHideScreen("chatMode", "on")

@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {MyContext, MyProvider} from '../views/streampanel'
 import axios from 'axios'
 import './twitchpanel.css'
-import { streamerID } from '../helpers/dummydata';
+
 
 export default class CommandsInput extends Component{
 
@@ -18,19 +18,15 @@ export default class CommandsInput extends Component{
 
     counter=1
     oauth = this.props.context.state.myOauth
-    id = this.props.context.state.myId
+    id = this.props.context.state.twitchId
     // counter2=70000
     objForLS = {}
     getLocalStorageCommands = {}
     // commandsTurnedToArray= []
     commandsToShow =[]
     dbCommands = null
-    getCommandsFromDB = (id)=>{
+    getCommandsFromDB = ()=>{
         
-        if(!id){
-            return
-        }else{
-
 
 
             axios.post(`/api/getuserinfo/`).then(res=>{
@@ -45,7 +41,7 @@ export default class CommandsInput extends Component{
 
 
 
-        }
+        
         
     }
     
@@ -63,7 +59,7 @@ export default class CommandsInput extends Component{
             //     reply:""
             // })
             // this.showCommands(res.data.commands)
-            this.getCommandsFromDB(this.id) 
+            this.getCommandsFromDB() 
             this.setState({
                 name:"",
                 reply:""
@@ -153,7 +149,7 @@ export default class CommandsInput extends Component{
         console.log("commands context", this.props.context)
         
             
-            this.getCommandsFromDB(this.id)   
+            this.getCommandsFromDB()   
         
         
 
@@ -188,4 +184,3 @@ export default class CommandsInput extends Component{
     }
 }
 
-// CommandsInput.contextType = MyContext;

@@ -55,9 +55,9 @@ getSubs=()=>{
      
 
 
-getRecentFollows=()=>{
+getRecentFollows=(id)=>{
     // let URL = "https://api.twitch.tv/helix/users/follows?first=20&to_id="+this.props.userID
-    let URL = "https://api.twitch.tv/helix/users/follows?first=20&to_id="+streamerID
+    let URL = "https://api.twitch.tv/helix/users/follows?first=20&to_id="+id
     let headers = {
         headers: {
             "Client-ID": clientID,
@@ -95,7 +95,7 @@ getRecentFollows=()=>{
 componentDidUpdate(pre){
     if(this.props.client && pre.client !== this.props.client){
         this.getSubs()
-        this.getRecentFollows()
+        this.getRecentFollows(this.props.context.state.twitchId)
     }
     
 }
@@ -111,8 +111,8 @@ componentDidMount(){
 
 
     setInterval(() => {
-        
-        this.getRecentFollows()
+        console.log(this.props.context.state.twitchId)
+        this.getRecentFollows(this.props.context.state.twitchId)
     }, 10000);
 }
 

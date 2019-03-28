@@ -19,6 +19,7 @@ export class MyProvider extends Component {
         title:null,
         gameCover:null,
         blur:false,
+        commandsScreen: false,
         chatModeScreen: false,
         mixerScreen: false,
         profileScreen: false,
@@ -34,6 +35,7 @@ export class MyProvider extends Component {
         myId: null,
         myOauth: null,
         username: null,
+        displayName: null,
         commands: null,
         presets: null,
         email:null,
@@ -43,18 +45,17 @@ export class MyProvider extends Component {
             class: ""
         },
         gamesList:{},
-        chatMode:{
-            "followers-only":null,
-            swMode:null,
-            sbMode:null,
-            eMode:null,
-        }
+        "followers-only": null,
+        "subs-only": null,
+        slow: null,
+        "emote-only": null,
         
 
     }
     showHideScreen=(screen, onoff)=>{
         if(screen==="all"){
             this.setState({
+                commandsScreen: onoff,
                 chatModeScreen: onoff,
                 profileScreen: onoff,
                 mixerScreen: onoff,
@@ -83,6 +84,12 @@ export class MyProvider extends Component {
         if(screen==="chatMode"){
             this.setState({
                 chatModeScreen: onoff,
+                blur: onoff,
+            })
+        }
+        if(screen==="commands"){
+            this.setState({
+                commandsScreen: onoff,
                 blur: onoff,
             })
         }
@@ -163,67 +170,54 @@ export class MyProvider extends Component {
             
         })
     }
-    getBizUser(){
-        axios.post(`/api/getuserinfo/`).then(res=>{
-            console.log("my greek", res)
-            let commands = res.data.data.custom
-            let presets = res.data.data.presets
-            
-            this.setState({
-                commands: commands,
-                presets: presets
-            })
-            
-        })
-    }
-    getUser(){
-        axios.get("https://api.twitch.tv/kraken/channel", {headers: {
-            Authorization: `OAuth ${this.token}`
-        }}).then(data =>{
-            let id= data.data._id
-            
-            let begginingCommand = {"!uptime": "1 day"}
-                    let email = data.data.email
-                    let commands = data.data.commands
-                    let username = data.data.display_name
-                    let partner = data.data.partner
-            axios.post(`/api/getuserinfo/`).then(res=>{
-                console.log("my greek", res)
-                    
-                if(res.data===null){
-                    console.log("MY GREEK DATA WAS NULL")
-                    commands = [{name: "!You are", response: "New"}]
-                    axios.post(`/newspuser/`,{
-                        _id: id,
-                        username: username,
-                        commands: commands,
-                        email: email,
-                        partner: partner,
-                    })
-                } else {
-                    axios.put(`/spuser/${id}`,{
-                        _id: id,
-                        username: username,
-                        commands: commands,
-                        email: email,
-                        partner: partner,
-                    })
-                }
-                
-                console.log("MY GREEK ", data)
-            })
-            console.log("MY SWEET USER DATA",data.data)
-            this.setState({
-                loadListener: true,
-                myId: data.data._id,
-                username: username,
-                commands: commands,
-                email:email,
-                partner: partner,
 
-            })
+    makeTwitchClient=(oauth, channel, res)=>{
+        console.log("res is", res)
+        let options = {
+            options: {
+                debug: true
+            },
+            connection: {
+                reconnect: true
+            },
+            identity: {
+                username: channel,
+                password: "oauth:"+oauth
+                
+            },
+            channels: [channel]
+        };
+   let client = new tmi.client(options);
+   client.connect().then(data=>{
+    this.setState({
+        commands: res.data.data.custom,
+        presets: res.data.data.presets,
+        custom: res.data.data.custom,
+        twitchId: res.data.data.twitchId,
+        myOauth: res.data.data.accessToken,
+        displayName: res.data.data.displayName,
+        isPartner: res.data.data.isPartner,
+        email: res.data.data.email,
+        client: client,
+        loadListener: true
+
+
+    })
+   })
+        
+        
+    }
+
+    getBizUser=()=>{
+        axios.post(`/api/getuserinfo/`).then(res=>{
+            console.log("my greek 2", res.data.data)
+            
+            this.makeTwitchClient(res.data.data.accessToken, res.data.data.displayName, res)
+            
+            
         })
     }
+    
     makeOBS=()=>{
         let server = new Obs();
         server.connect().then(data=>{
@@ -274,9 +268,9 @@ export class MyProvider extends Component {
         this.getGamesList()
         this.makeOBS()
         
-        this.getOauth()
+        // this.getOauth()
         this.getBizUser()
-        // this.getUser()
+        
     }
     render(){
         return (
