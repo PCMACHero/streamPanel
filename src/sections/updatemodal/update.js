@@ -16,6 +16,9 @@ export default class Update extends React.Component{
         gameCover:"",
         gameToSend:null,
         getText:null,
+        line1:"",
+        line2:"",
+        counterNum:"",
         // gamesList:
         
     }
@@ -87,7 +90,11 @@ export default class Update extends React.Component{
         })
         
     }
-
+    changeLines=(e)=>{
+        this.setState({
+            [e.target.name]:e.target.value
+        })
+    }
 
     changeGameHandlerAC = (val)=>{
         
@@ -106,12 +113,19 @@ export default class Update extends React.Component{
         })
     }
 
-    setText=(num)=>{
+    setText=()=>{
+        console.log("here here")
+        this.props.context.updateState("OBSCounterLine1",this.state.line1) 
+        this.props.context.updateState("OBSCounter",Number(this.state.counterNum)) 
+        this.props.context.updateState("OBSCounterLine2",this.state.line2) 
         
+        
+        
+        let string = `${this.state.line1===""?"":this.state.line1 + " "} ${this.state.counterNum} ${this.state.line2===""?"": " " + this.state.line2}`
         this.props.context.state.OBSServer.send({
             "request-type": "SetTextFreetype2Properties",
             "source": "counterSP",
-            "text":num
+            "text":string
         })
     }
 
@@ -219,7 +233,17 @@ export default class Update extends React.Component{
                 }} className="s1 btn right-align #4a148c purple darken-4" waves='light'>Update</div>
 
                 <div className="btn" onClick={()=>{this.getText()}}>GETTEXT</div>
-                <div className="btn" onClick={()=>{this.setText(`${this.props.context.state.OBSCounter}`)}}>SETTEXT</div>
+                
+                    <form action="" style={{display:"flex", justifyContent:"space-evenly", width:"700px"}}>
+                        <input type="text" style={{width:"150px"}} name="line1" id="line1" value={this.state.line1} autoComplete="off" onChange={(e)=>{this.changeLines(e)}}/>
+                        <input type="text" style={{width:"30px"}} name="counterNum" id="counterNum" value={this.state.counterNum} autoComplete="off" onChange={(e)=>{this.changeLines(e)}}/>
+                        <input type="text" style={{width:"150px"}} name="line2" id="line2" value={this.state.line2} autoComplete="off" onChange={(e)=>{this.changeLines(e)}}/>
+                        
+                        <div className="btn" onClick={()=>{this.setText()}}>SEND</div>
+                    </form>
+                
+                
+                
                 </React.Fragment>
         )
     }

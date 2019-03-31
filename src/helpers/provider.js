@@ -26,7 +26,9 @@ export class MyProvider extends Component {
         updateScreen: false,
         OBSServer: null,
         OBSConnected:false,
-        OBSCounter:1,
+        OBSCounter:null,
+        OBSCounterLine1: "",
+        OBSCounterLine2: "",
         client:null,
         loadListener: false,
         // myId: dumbData.twitchId,
@@ -98,8 +100,12 @@ export class MyProvider extends Component {
         
     }
     updateState=(key, value)=>{
+        console.log("updated provider state key", key)
+        console.log("updated provider state value",value)
         this.setState({
             [key]:value
+        
+
         })
     }
     updateCover=(cover)=>{

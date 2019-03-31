@@ -47,17 +47,18 @@ class BottomPanel extends Component{
     
     }
 
-    increaseOBSCounter=()=>{
+    increaseOBSCounter=(line1,num, line2)=>{
+        console.log("increased", this.props.context.state)
         
-        
-           let newNum = this.props.context.state.OBSCounter+1
+           let newNum = num+1
+           let string = `${line1===""?"":line1+" "}${newNum}${line2===""?"":" "+line2}`
         
         
         this.props.context.updateState("OBSCounter", newNum)
         this.props.context.state.OBSServer.send({
             "request-type": "SetTextFreetype2Properties",
             "source": "counterSP",
-            "text":newNum.toString()
+            "text":string
         })
     }
 
@@ -83,7 +84,7 @@ class BottomPanel extends Component{
     
     
 render(){
-    // console.log("my chan obj", this.props.channelOBJ)
+    console.log("bottom panel rendered")
     if(this.state.streaming){
         this.stream = "STOP STREAM"
         this.status ="You are streaming"
@@ -159,9 +160,18 @@ if(this.props.event && this.props.event["update-type"]==="StreamStatus"){
                 </div>
                 
                 <div className="profiles-btn">
-                <div className="profiles-btn" style={{display:"flex", flexDirection:"row"}}>
-            <div className="profiles-btn" style={{width:"50%"}}>yes</div>
-            <div className="profiles-btn" style={{width:"50%"}} onClick={()=>{this.increaseOBSCounter()}}>+</div>
+                <div className="profiles-btn" style={{display:"flex", flexDirection:"column", height:"100%"}}>
+                <div style={{height:"50%", width:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>
+                    <div className="chicken-counter" style={{width:"50%",height:"100%"}}>yes</div>
+                    <div className="chicken-counter" style={{width:"50%",height:"100%"}} onClick={()=>{this.increaseOBSCounter(this.props.context.state.OBSCounterLine1, -1, this.props.context.state.OBSCounterLine2)}}>RESET</div>
+                </div>
+                <div  style={{height:"50%", width:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>
+                    
+                    <div className="chicken-counter2" style={{width:"50%",height:"100%"}} onClick={()=>{this.increaseOBSCounter(this.props.context.state.OBSCounterLine1, this.props.context.state.OBSCounter-2, this.props.context.state.OBSCounterLine2)}}>-</div>
+                    <div className="chicken-counter2" style={{width:"50%",height:"100%"}} onClick={()=>{this.increaseOBSCounter(this.props.context.state.OBSCounterLine1, this.props.context.state.OBSCounter, this.props.context.state.OBSCounterLine2)}}>+</div>
+                </div>
+            
+            
         </div>
                 {/* <Numbers channelOBJ={this.props.channelOBJ} /> */}
                 {/* <div className="label2">CPU: {this.cpuUsage}</div>
@@ -174,20 +184,26 @@ if(this.props.event && this.props.event["update-type"]==="StreamStatus"){
 
 
                 <div className="profiles-btn" style={{display:"flex", flexDirection:"row"}}>
-                <div className="profiles-btn" style={{width:"50%", height:"100%"}} onClick={(e)=>{console.log(e.type)
-                context.showHideScreen("profile", true)}}>
+                    <div style={{width:"50%", height:"100%"}}>
+                        <div className="profiles-btn" style={{width:"100%", height:"50%"}} onClick={(e)=>{console.log(e.type)
+                            context.showHideScreen("profile", true)}}>
+                            <div className="label">PRESETS</div>
+                            {/* <div className="label2">Bit-rate: {this.bitRate}</div> */}
+                        </div>
+                        <div className="profiles-btn" style={{width:"100%", height:"50%"}} onClick={(e)=>{console.log(e.type)
+                            context.showHideScreen("update", true)}}>
+                            
+                            <div className="label">UPDATE</div>
+                    
+                        </div>
+
+
+                    </div>
+                    <div style={{width:"50%", height:"100%"}}>
+                        hello
+                    </div>
                 
-                <div className="label">PRESETS</div>
-                <div className="label2">Bit-rate: {this.bitRate}</div>
                 
-                
-                </div>
-                <div className="profiles-btn" style={{width:"50%", height:"100%"}} onClick={(e)=>{console.log(e.type)
-                context.showHideScreen("update", true)}}>
-                
-                <div className="label">UPDATE</div>
-                
-                </div>
                 
                 
                 
