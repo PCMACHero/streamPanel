@@ -42,9 +42,14 @@ componentDidMount(){
 }
 render(){
     return (
-        <div className="numbers-box">
-            <div className="number-item">{this.state.time.toString()}</div>
-            <div className="number-item">{this.state.channelOBJ.views}</div>
+        // <div className="numbers-box">
+        //     <div className="number-item">{this.state.time.toString()}</div>
+        //     <div className="number-item">{this.state.channelOBJ.views}</div>
+        // </div>
+
+        <div className="profiles-btn" style={{display:"flex", flexDirection:"row"}}>
+            <div className="profiles-btn" style={{width:"50%"}}>yes</div>
+            <div className="profiles-btn" style={{width:"50%"}}>+</div>
         </div>
     )
 }

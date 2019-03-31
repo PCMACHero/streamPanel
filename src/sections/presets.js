@@ -7,6 +7,7 @@ export default class Presets extends Component{
         divs:[],
         btnClicked:null,
         currentCollection:null,
+        presetName: ""
     }
     color=[
         "linear-gradient(rgb(255, 165, 0),rgb(255, 0, 0))",
@@ -50,7 +51,7 @@ export default class Presets extends Component{
             
         //     btnClicked:btn
         // })
-        this.makeDivs(this.presetArray,true)
+        this.makeDivs(this.props.context.state.presets,true)
     }
 
     // getIPs(callback){
@@ -126,7 +127,7 @@ export default class Presets extends Component{
     changeGameAndTitle=(preset)=>{
         axios({
             method: 'put', //you can set what request you want to be
-            url: 'https://api.twitch.tv/kraken/channels/'+this.props.context.state.myId,
+            url: 'https://api.twitch.tv/kraken/channels/'+this.props.context.state.twitchId,
             data: {"channel": {"status": preset.title, "game": preset.game}},
             headers: {
                 "Accept": "application/vnd.twitchtv.v5+json",
@@ -146,7 +147,7 @@ export default class Presets extends Component{
             console.log("collection", data["sc-name"])
             this.setState({
                 currentCollection:data["sc-name"]
-            })
+            }, ()=>{console.log("coll changed to", this.state.currentCollection)})
         })
     }
     loadPreset=(preset)=>{
@@ -191,24 +192,24 @@ export default class Presets extends Component{
                 myClass= "preset-btn-current"
             }
             
-            let string = presetArray[i].preset
-            divArray.push(<div key={i} className={myClass} style={clickOff}
+            let string = presetArray[i].presetName
+            divArray.push(
+            <div className="preset-item" key={i}>
+                <div  className={myClass} style={clickOff}
                 // style={{backgroundImage:this.color[i]}} 
                 onClick={()=>{
                 console.log(i)
                 // this.changeClass(true)
-                this.makeDivs(this.presetArray,true)
+                this.makeDivs(this.props.context.state.presets,true)
                 this.loadPreset(presetArray[i])
                 this.props.context.showHideScreen("profile")
                 
-                // setTimeout(() => {
-                    
-                //     // this.changeGameAndTitle(presetArray[i])
-                    
-                //     this.props.context.showHideProfileScreen()
-                // }, 5000);
+               
                 
-            }}>{string.toUpperCase()}</div>)
+            }}>{string.toUpperCase()}</div><div className="btn del" onClick={()=>{this.delPreset(i)}}>DEL</div>
+
+            </div>
+            )
         }
         this.setState({
             divs:divArray
@@ -222,23 +223,61 @@ export default class Presets extends Component{
 
         
     }
+
+    addPreset=()=>{
+        axios.post("/api/preset",{presetName:this.state.presetName,scnCollection:this.state.currentCollection, game:this.props.context.state.game, title: this.props.context.state.title}).then(data=>{
+            this.props.context.updateState("presets", data.data.data)
+            console.log(data.data.data)
+        })
+    }
+    delPreset(i){
+        
+        axios.delete(`/api/preset/`,{"data":{index:i}}).then(res=>{
+            this.props.context.updateState("presets", res.data.data)
+            console.log("deleted ",res)
+            
+        }).catch((error) => {
+            console.log('Not good man :(', error);
+        })
+
+        
+    }
+
+    handleChange=(e)=>{
+        this.setState({
+            presetName: e.target.value
+        })
+    }
     componentDidUpdate(prev){
-        console.log("did update", prev.show)
-        console.log("did update", this.props.show)
+        console.log("did update presets prev", prev)
+        console.log("did update presets props",this.props)
+        if(this.props.context.state.event["update-type"]==="SceneCollectionChanged"){
+            this.getCollection()
+            
+            this.makeDivs(this.props.context.state.presets)
+        }
+        
         if(this.props.server && prev.server===null){
-            this.makeDivs(this.presetArray)
-            // this.getCollection()
+            this.makeDivs(this.props.context.state.presets)
+            
             console.log("rendered presets")
         }
         if(prev.show !== this.props.show){
-            this.makeDivs(this.presetArray)
+            this.makeDivs(this.props.context.state.presets)
             console.log("rendered presets 2")
+        }
+        if(prev.context.state.presets !== this.props.context.state.presets){
+            console.log("TRIED TO LOAD PRESETS", this.props.context.state.presets)
+            this.makeDivs(this.props.context.state.presets)
         }
         
     }
     componentDidMount(){
         // this.getIPs()
-        this.makeDivs(this.presetArray)
+        this.getCollection()
+        this.makeDivs(this.props.context.state.presets)
+        document.getElementById("preset-name").setAttribute("autocomplete", "off")
+        
     }
   
 
@@ -246,7 +285,17 @@ export default class Presets extends Component{
         console.log("re rendered")
         return (
             <Fragment>
+                <div className="preset-item">
+                    <input type="text" style={{color:"white"}}name="preset-name" id="preset-name" value={this.state.presetName} onChange={(e)=>{this.handleChange(e)}}/>
+                    <div className="btn" 
+                    // style={{width:"300px", backgroundColor:"purple"}} 
+                    onClick={()=>{this.addPreset()}}>SAVE</div>
+                </div>
+                
+                <div className="presets-box">
                 {this.state.divs}
+                </div>
+                
             </Fragment>
                 
             

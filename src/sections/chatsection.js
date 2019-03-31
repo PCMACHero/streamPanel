@@ -1,11 +1,11 @@
 import React, {Component, Fragment} from 'react';
-// import Chat from './chat'
-import tmi from "tmi.js";
+
+
 import {streamer, streamerID} from "../helpers/dummydata"
-import {Modal} from "react-materialize"
+
 import axios from "axios";
 import {clientID} from "../common/common"
-import { isIPv4 } from 'net';
+
 import './chat.css'
 import ChatModal from './chatmodal'
 import { MyContext } from '../helpers/provider';
@@ -25,7 +25,7 @@ export default class Chat extends Component {
         this.context=this.props.context
         this.id = this.props.id
         this.oauth = null
-        this.commands = []
+        // this.props.context.state.commands = this.props.context.state.commands
         this.modDBObj={}
         this.badgeDivArray=[]
         this.subscriberBadges={}
@@ -44,25 +44,7 @@ export default class Chat extends Component {
         this.badgeClass = "is-mod"
         this.modUnmod = null;
 
-        // this.options = {
-        //     options: {
-        //         debug: true
-        //     },
-        //     connection: {
-        //         reconnect: true
-        //     },
-        //     identity: {
-        //         username: "streampanelapp",
-        //         password: "oauth:"+this.props.oauth
-        //     },
-        //     channels: [streamer]
-        // };
-        
-        // this.props.client = new tmi.client(this.options);
-        
-      
-            
-        // this.props.client.connect();
+
         this.state = {
             clickedUser: null,
             showModal: false,
@@ -74,7 +56,8 @@ export default class Chat extends Component {
             modal: false,
             badges: {},
             post:"",
-            myDivs:[]
+            myDivs:[],
+            commands: this.props.context.state.commands
             
             
             }
@@ -84,12 +67,12 @@ export default class Chat extends Component {
     
     
     
-    fetchEmotes(){
+    fetchEmotes(chan){
         let emoteSetString=""
         
         // if(this.props.partner){
             if(true){
-            axios.get(`https://api.twitch.tv/api/channels/${streamer}/product`,this.headers).then(data=>{
+            axios.get(`https://api.twitch.tv/api/channels/${chan}/product`,this.headers).then(data=>{
                 // console.log("MY EMOTE SETS", data.data.plans[data.data.plans.length-1].emoticon_set_ids)
                 // console.log("MY EMOTE SETS", data.data.plans)
                 //ie 1332,44224,54443
@@ -165,70 +148,7 @@ export default class Chat extends Component {
         })
     }
 
-    // emoteParserSmart(message,user){
-    //     let newEmoteOBJ={}
-    //     let emoteObj = user.emotes
-    //     let arrayOfWords = message.split(" ")
-    //     let emoteID=null
-    //     let arrayOfEmoteKeys = Object.keys(emoteObj)
 
-    //     //make new emote object with [0-8]:90 format
-    //     for (let i=0;i<arrayOfEmoteKeys.length;i++){
-    //         for(let i=0;i<emoteObj[arrayOfEmoteKeys[i]].length;i++){
-    //             newEmoteOBJ[emoteObj[arrayOfEmoteKeys[i][0]]]=arrayOfEmoteKeys[i]
-    //         }
-    //     }
-
-
-    //     let JSXelem= <img className="emote animated pulse infinite" 
-    //     src={`https://static-cdn.jtvnw.net/emoticons/v1/${emoteID}/2.0`}/>
-
-
-
-    // }
-
-    // emoteParser(message){
-        
-    //     this.setState({
-    //         post: message
-    //     })
-    //     console.log("MY AXIOS EMOTES ", this.emotes)
-    //     let arrayOfWords = message.split(" ")
-    //     for(let i=0;i<arrayOfWords.length;i++){
-    //         for(let k=0; k<this.emotes.length; k++){
-    //             // console.log(this.emotes[k])
-    //             if(arrayOfWords[i]===this.emotes[k].code){
-    //                 let JSXelem= <img className="emote animated pulse infinite" src={`https://static-cdn.jtvnw.net/emoticons/v1/${this.emotes[k].id}/2.0`}/>
-                    
-    //                 arrayOfWords.splice(i,1,JSXelem)
-    //                 let parsedMessage = <div>{arrayOfWords}</div>
-    //                 this.setState({
-    //                     post : parsedMessage
-    //                 })
-    //                 console.log("Found EMOTE match: ",this.emotes[k].code, this.state.post)
-                    
-    //             }
-                
-    //         }
-    //     } 
-    
-    // }
-        
-        
-            
-            
-            
-         
-    getCommands=()=>{
-        
-        axios.get(`/spuser/${this.props.context.state.myId}`).then(data=>{
-            console.log("MY DB COMMANDS ree", data, "MY ID", this.props.context.state.myId)
-            this.commands = data.data.commands
-        })
-    }
-     
-        
-        
     getModStatus = (user)=>{
         this.props.client.mods("streampanelapp").then(data =>{
             if(data.includes(user.username)){
@@ -292,10 +212,10 @@ getGlobalBadges=()=>{
             })
 
 }
-getSubscriberBadges=()=>{
-    console.log("BADGE ERROR 0", streamerID)
+getSubscriberBadges=(id)=>{
+    console.log("BADGE ERROR 0", id)
     
-    axios.get("https://badges.twitch.tv/v1/badges/channels/"+streamerID+"/display?language=en")
+    axios.get("https://badges.twitch.tv/v1/badges/channels/"+id+"/display?language=en")
     .then(data=>{
         let myOBJ = data
         console.log("BADGE ERROR 1", data)
@@ -305,9 +225,9 @@ getSubscriberBadges=()=>{
         
     })
 }
-getChannelBadges=()=>{
+getChannelBadges=(id)=>{
     console.log("cbcb")
-    axios.get(`https://api.twitch.tv/kraken/chat/${streamerID}/badges`,this.headers)
+    axios.get(`https://api.twitch.tv/kraken/chat/${id}/badges`,this.headers)
     .then(data=>{
                 let myOBJ=data
                 this.channelBadges=myOBJ.data
@@ -360,17 +280,8 @@ modDB=(user, status)=>{
     
 
 }
-chatListner=()=>{
-    // console.log("CHAT CONTEXT LISTENER", this.props.context.state.loadListener)
-        
-           console.log("LISTENER PRE", this.props.client)
-           this.props.client.on("action",  (channel, userstate, message, self)=> {
-            this.makeMessageDivs(channel,"You",message,self)
-            
-        
-            // Do your stuff.
-        });
-        
+chatListner=(chan, commands)=>{
+    
             this.props.client.on('chat', (channel, user, message, self)=>{
                 
                 // if(user.badges && user.badges.moderator){
@@ -389,11 +300,11 @@ chatListner=()=>{
                 this.makeMessageDivs(channel,user,message,self)
                 
                 // let getLocalStorageCommands= JSON.parse(localStorage.getItem('commands'));
-                if(this.commands){
-                    for(let i = 0; i<this.commands.length; i++){
-                        if(this.commands[i].name===message){
-                            console.log("RESPONSE word ",this.commands[i], i)
-                            this.props.client.action(streamer, `${this.commands[i].response}`).then(function(data) {
+                if(commands){
+                    for(let i = 0; i<commands.length; i++){
+                        if(commands[i].name===message){
+                            console.log("RESPONSE word ",commands[i], i)
+                            this.props.client.action(chan, `${commands[i].reply}`).then(function(data) {
                                 // data returns [channel]
                             }).catch(function(err) {
                                 //
@@ -411,17 +322,60 @@ chatListner=()=>{
     
                 
             })
+            this.props.client.on('action', (channel, user, message, self)=>{
+                
+                // if(user.badges && user.badges.moderator){
+                    if(user.mod){
+                    this.modDB(user.username, true)
+                }else {
+                    this.modDB(user.username, false)
+                }
+                
+                this.makeBadgeDivs(user)
+                
+                
+                
+                // this.emoteParser(message,)
+                this.smartEmoteParser(message,user.emotes)
+                this.makeMessageDivs(channel,user,message,self)
+                
+                // let getLocalStorageCommands= JSON.parse(localStorage.getItem('commands'));
+                // if(this.props.context.state.commands){
+                //     for(let i = 0; i<this.props.context.state.commands.length; i++){
+                //         if(this.props.context.state.commands[i].name===message){
+                //             console.log("RESPONSE word ",this.props.context.state.commands[i], i)
+                //             this.props.client.action(streamer, `${this.props.context.state.commands[i].reply}`).then(function(data) {
+                //                 // data returns [channel]
+                //             }).catch(function(err) {
+                //                 //
+                //             });
+                //         }
+                //     }
+                        
+                    
+                // }
+                    
+                    
+                
+                
+            
+    
+                
+            })
         
 }   
 
 componentDidUpdate(prevProps){
+    if(prevProps.context.state.commands !== this.props.context.state.commands){
+        this.setState({commands:this.props.context.state.commands})
+    }
     
     if(prevProps.client === null && this.props.client){
-        this.getCommands()
+        // this.getCommands()
         this.getGlobalBadges()
-this.getChannelBadges()
-this.getSubscriberBadges()
-    this.chatListner()
+this.getChannelBadges(this.props.context.state.twitchId)
+this.getSubscriberBadges(this.props.context.state.twitchId)
+    this.chatListner(this.props.context.state.displayName, this.props.context.state.commands)
 
     }
 }

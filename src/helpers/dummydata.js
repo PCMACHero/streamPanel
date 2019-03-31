@@ -44,12 +44,13 @@ const idOBJ={
   sandyravage: "8957332",
   summit1g: "26490481",
   courageJD:"106125347",
-  callofduty: "501281"
+  callofduty: "501281",
+  mrsnewbhero: "74527399"
 
 }
 
 
-export const streamer = "callofduty"
+export const streamer = ""
 export const streamerID= idOBJ[streamer]
 export const OBSSceneObj = 
 { 'current-scene': 'In-Game',

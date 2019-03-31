@@ -1,15 +1,15 @@
 import React from 'react';
 
 class VideoBox extends React.Component{
-    constructor(props){
+    
         
-        super(props);
-        this.link = `https://player.twitch.tv/?channel=${props.channel}&muted=true`
-        this.state = {
+       
+        
+    state = {
             condition: true
             }
             
-    }
+    
     handleClick = () => {
         console.log('this is:', this);
         this.setState({
@@ -25,7 +25,7 @@ class VideoBox extends React.Component{
             
                 <iframe 
                     title="video"
-                    src={this.link}
+                    src={`https://player.twitch.tv/?channel=${this.props.channel}&muted=true`}
                     height="720"
                     width="1280"
                     frameBorder="0"
