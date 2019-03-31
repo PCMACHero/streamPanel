@@ -172,7 +172,25 @@ if(this.props.event && this.props.event["update-type"]==="StreamStatus"){
                 </div>
             
             
+        </div>  
+                
+        <div className="profiles-btn" style={{display:"flex", flexDirection:"column", height:"100%"}}>
+                <div style={{height:"50%", width:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>
+                    <div className="chicken-counter" style={{width:"50%",height:"100%"}} onClick={(e)=>{console.log(e.type)
+                            context.showHideScreen("profile", true)}}>PRESETS</div>
+                    <div className="chicken-counter" style={{width:"50%",height:"100%"}} onClick={(e)=>{console.log(e.type)
+                            context.showHideScreen("update", true)}}>UPDATE</div>
+                </div>
+                <div  style={{height:"50%", width:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>
+                    
+                    <div className="chicken-counter2" style={{width:"50%",height:"100%"}} onClick={()=>{this.increaseOBSCounter(this.props.context.state.OBSCounterLine1, this.props.context.state.OBSCounter-2, this.props.context.state.OBSCounterLine2)}}>SETTINGS</div>
+                    <div className="chicken-counter2" style={{width:"50%",height:"100%"}} onClick={()=>{this.increaseOBSCounter(this.props.context.state.OBSCounterLine1, this.props.context.state.OBSCounter, this.props.context.state.OBSCounterLine2)}}>YES</div>
+                </div>
+            
+            
         </div>
+
+
                 {/* <Numbers channelOBJ={this.props.channelOBJ} /> */}
                 {/* <div className="label2">CPU: {this.cpuUsage}</div>
                 <div className="label2">Bit-rate: {this.bitRate}</div>
@@ -183,31 +201,7 @@ if(this.props.event && this.props.event["update-type"]==="StreamStatus"){
 
 
 
-                <div className="profiles-btn" style={{display:"flex", flexDirection:"row"}}>
-                    <div style={{width:"50%", height:"100%"}}>
-                        <div className="profiles-btn" style={{width:"100%", height:"50%"}} onClick={(e)=>{console.log(e.type)
-                            context.showHideScreen("profile", true)}}>
-                            <div className="label">PRESETS</div>
-                            {/* <div className="label2">Bit-rate: {this.bitRate}</div> */}
-                        </div>
-                        <div className="profiles-btn" style={{width:"100%", height:"50%"}} onClick={(e)=>{console.log(e.type)
-                            context.showHideScreen("update", true)}}>
-                            
-                            <div className="label">UPDATE</div>
-                    
-                        </div>
-
-
-                    </div>
-                    <div style={{width:"50%", height:"100%"}}>
-                        hello
-                    </div>
                 
-                
-                
-                
-                
-                </div>
                 
             </div>
             <div className="bottom-middle-container">

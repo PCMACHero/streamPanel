@@ -21,7 +21,8 @@ var UserSchema = new mongoose.Schema({
     isPartner: {type: Boolean, required: false},
     language: {type: String, required: false},
     settings: {type: Array, default: []},
-    presets: [{presetName: String, scnCollection: String, game: String, title: String}]
+    presets: [{presetName: String, scnCollection: String, game: String, title: String}],
+    streamKey: {type: String, required: false}
 }, {timestamps: true});
 
 mongoose.model('User', UserSchema);
