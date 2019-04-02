@@ -16,7 +16,7 @@ font-family: 'Rubik Mono One', sans-serif; */
 .bottom-right-container{
     box-sizing: content-box;
     display: flex;
-    width: 40%;
+    width: 30%;
     height: 100%;
     flex-shrink: 0;
     
