@@ -1,7 +1,7 @@
 
 const find = require('local-devices');
 const isPortReachable = require('is-port-reachable'),
-    xmlRequest = require('./requestHelper').xmlRequest;
+    requestHelper = require('./requestHelper');
 
 const funcGetIP=()=>{
     // Find all local network devices.
@@ -10,7 +10,7 @@ const funcGetIP=()=>{
             isPortReachable(4444, {host: i.ip}).then(reachable => {
                 if(reachable){
                     console.log("This is the IP", i.ip);
-                    xmlRequest({method: "POST", url: "/api/updatelocalip", body: 'ip='.concat(i.ip)}).then(resFromDB => {
+                    requestHelper.xmlRequest({method: "POST", url: "/api/updatelocalip", body: 'ip='.concat(i.ip)}).then(resFromDB => {
                         let parsedResponse = JSON.parse(resFromDB);
                         if (parsedResponse.message === 'Success') {
                             // let the user know?

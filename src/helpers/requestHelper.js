@@ -24,4 +24,6 @@ const xmlRequest = obj => {
     }));
 };
 
-module.exports = xmlRequest;
+module.exports = {
+    xmlRequest,
+};
