@@ -101,20 +101,20 @@ getFirstChatMode=(client)=>{
 }
 
 
-       runAd=()=>{
+    //    runAd=()=>{
             
             
             
-            this.props.client.commercial(chan, 30).then(data=> {
-                // data returns [channel, seconds]
-                this.props.newMessage(data)
+    //         this.props.client.commercial(chan, 30).then(data=> {
+    //             // data returns [channel, seconds]
+    //             this.props.newMessage(data)
 
-            }).catch(err=> {
-                //
-                this.props.newMessage(`Cannot run ad: "${err}"`)
-            });
+    //         }).catch(err=> {
+    //             //
+    //             this.props.newMessage(`Cannot run ad: "${err}"`)
+    //         });
             
-        }
+    //     }
         
         unrunAd=()=>{
             console.log("clicked unrun ad part 1")
