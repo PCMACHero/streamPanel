@@ -109,15 +109,13 @@ module.exports = {
         // will take in index and delete from array
         if (UserManager.userNotInSession(req.session)) {
             res.json(UserManager.notLoggedInMessage());
-        } else if (!req.body.index) {
-            res.json({ message: "Error", err: "Must provide an index." })
         } else {
             let user = await UserManager.findUserByID(req.session.userId);
             if (user.message === "Success") {
                 let newArrayOfCommands = ApiHelper.removeFromArrayAtIndex(user.data.custom, req.body.index);
                 user.data.custom = newArrayOfCommands;
                 let savedSuccessfully = await UserManager.saveUserWithoutReturn(user.data);
-                if (savedSuccessfully === "Success") {
+                if (savedSuccessfully) {
                     res.json({ message: `Successfully removed command from index ${req.body.index}`, data: user.data.custom });
                 } else {
                     res.json(UserManager.saveFailMessage());

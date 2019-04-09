@@ -24,6 +24,7 @@ module.exports = function(app) {
     // Admin Routes
     app.get('/admin/getallusers', admin.returnAllUsers);
     app.delete('/admin/deleteuser', admin.deleteOneUser);
+    app.put('/admin/updateuser', admin.updateOneUser);
 
     // Twitch
     app.get('/success/payment-portal', users.twitch);
