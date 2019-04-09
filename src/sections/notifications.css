@@ -16,7 +16,7 @@ font-family: 'Rubik Mono One', sans-serif; */
 .bottom-right-container{
     box-sizing: content-box;
     display: flex;
-    width: 40%;
+    width: 30%;
     height: 100%;
     flex-shrink: 0;
     
@@ -37,9 +37,9 @@ font-family: 'Rubik Mono One', sans-serif; */
     width: 90%;
     text-align: center;
     /* border:solid 1px red; */
-    background-color: rgb(0, 0, 0);
+    /* background-color: rgb(0, 0, 0); */
     /* border-radius: 10px; */
-    color: rgb(70, 255, 125);
+    color: var(--twitch-btn);
 }
 .sub, .resub{
     font-family: 'Titillium Web', sans-serif;
@@ -57,7 +57,7 @@ font-family: 'Rubik Mono One', sans-serif; */
 .follows-title{
     flex-grow: 0;
     color: rgb(255, 255, 255);
-    display: flex;
+    display: none;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
     ;
     /* width:100%; */

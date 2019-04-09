@@ -145,8 +145,22 @@ class ChannelStatus extends Component{
             }
     componentDidUpdate(prev){
         if((prev.context.state.game !== this.props.context.state.game)||(prev.context.state.title !== this.props.context.state.title)){
+            this.setState({
+                channel:{
+                    totalViews:this.props.context.state.views
+                }
+            })
             this.getTitleAndGame()
             console.log("bloop", prev.context.state.game, this.props.context.state.game)
+        }
+
+        if(prev.context.state.views !== this.props.context.state.views){
+            console.log("new views is", this.props.context.state.views)
+            this.setState({
+                channel:{
+                    totalViews:this.props.context.state.views
+                }
+            })
         }
 
         if(this.props.twitchId && this.props.twitchId !== prev.twitchId){
@@ -178,7 +192,7 @@ class ChannelStatus extends Component{
             <div className="channel-status-box" style={{backgroundImage: `url(${this.props.context.state.gameCover})`, backgroundSize: "cover", backgroundPosition: "center"}}>
                             <div className="status-bg" ></div>
                             <div className="status-info">
-                                <div className="follows-title">STREAM STATUS</div>
+                                {/* <div className="follows-title">STREAM STATUS</div> */}
                                 <div className="status-box">
                                 <div className="game-label">{this.state.currentGame}</div>
                                 <div className="game-label">"{this.state.currentTitle}"</div>
@@ -186,7 +200,7 @@ class ChannelStatus extends Component{
 face
 </i>VIEWING:  <div style={{color: "#EE2B2A"}}>{this.state.channel.viewers}</div>
 </div>
-                                <div className="game-label">VIEWS: {this.state.channel.totalViews}</div>
+                                <div className="game-label">VIEWS: {this.state.channel.totalViews? this.state.channel.totalViews: this.props.context.state.views}</div>
                                 <div className="game-label"><i className="material-icons" style={{color:"#EE2B2A", fontSize: "1.5em"}} >
 favorite
 </i>FOLLOWS: {this.state.channel.followers}</div>

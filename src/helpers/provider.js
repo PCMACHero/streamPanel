@@ -18,6 +18,8 @@ export class MyProvider extends Component {
         game:null,
         title:null,
         gameCover:null,
+        views: null,
+        followers: null,
         blur:false,
         commandsScreen: false,
         chatModeScreen: false,
@@ -42,6 +44,8 @@ export class MyProvider extends Component {
         presets: null,
         email:null,
         partner: null,
+        mature: null,
+        streamKey: null,
         messageCenter: {
             m:"Status: All well",
             class: ""
@@ -51,9 +55,61 @@ export class MyProvider extends Component {
         "subs-only": null,
         slow: null,
         "emote-only": null,
+        // channel: {
+        //     game: null,
+        //     title: null,
+        //     userID: null,
+        //     partner:null,
+        //     name: null,
+        //     email: null,
+        //     mature: data.data.mature,
+        //     views: data.data.views,
+        //     followers: data.data.followers,
+        //     streamKey: data.data.stream_key,
+        //     mature:data.data.mature
+
+        // }
         
 
     }
+
+    getUserID=(id, oauth)=>{
+        const headers = {"headers":{
+            "Client-ID": id,
+            "Authorization": 'OAuth '+oauth
+        }}
+         axios.get("https://api.twitch.tv/kraken/channel",headers).then(data=>{
+            console.log("THIS IS MY USERID AXIOS DATA: ",data.data)
+            
+            this.setStreamKey(this.state.OBSServer, data.data.stream_key)
+            
+            this.setState({
+                
+                    game: data.data.game,
+                    title: data.data.status,
+                    userID: data.data["_id"],
+                    partner:data.data.partner,
+                    name: data.data.name,
+                    email: data.data.email,
+                    mature: data.data.mature,
+                    views: data.data.views,
+                    followers: data.data.followers,
+                    streamKey: data.data.stream_key,
+                    mature:data.data.mature
+
+                
+                
+                
+                
+            })
+            
+            
+        })
+    }
+
+
+
+
     showHideScreen=(screen, onoff)=>{
         if(screen==="all"){
             this.setState({
@@ -144,7 +200,7 @@ export class MyProvider extends Component {
     getOauth=()=>{
         axios.post("/api/getuserinfo").then(data=>{
             let obj = data.data.data
-            // console.log("MY CONTEXT OAUTH", data)
+            console.log("MY USER DATA", data)
            let options = {
                 options: {
                     debug: true
@@ -202,7 +258,7 @@ export class MyProvider extends Component {
         twitchId: res.data.data.twitchId,
         myOauth: res.data.data.accessToken,
         displayName: res.data.data.displayName,
-        isPartner: res.data.data.isPartner,
+        
         email: res.data.data.email,
         client: client,
         loadListener: true
@@ -219,14 +275,29 @@ export class MyProvider extends Component {
             console.log("my greek 2", res.data.data)
             
             this.makeTwitchClient(res.data.data.accessToken, res.data.data.displayName, res)
+            this.getUserID(res.data.data.twithId, res.data.data.accessToken )
             
             
         })
     }
     
+
+    setStreamKey=(server,key,type)=>{
+        server.send({'request-type': 'SetStreamSettings',
+        settings: {
+            key:key
+        },
+        save:true
+    }).then(data=>{
+        console.log("stream settings", data)
+        
+    })
+}
+
     makeOBS=()=>{
         let server = new Obs();
         server.connect().then(data=>{
+            
             this.setState({
                 OBSServer:server
             })
