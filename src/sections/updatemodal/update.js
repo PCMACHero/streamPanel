@@ -232,7 +232,7 @@ export default class Update extends React.Component{
                       
                 }} className="s1 btn right-align #4a148c purple darken-4" waves='light'>Update</div>
 
-                <div className="btn" onClick={()=>{this.getText()}}>GETTEXT</div>
+                
                 
                     <form action="" style={{display:"flex", justifyContent:"space-evenly", width:"700px"}}>
                         <input type="text" style={{width:"150px"}} name="line1" id="line1" value={this.state.line1} autoComplete="off" onChange={(e)=>{this.changeLines(e)}}/>

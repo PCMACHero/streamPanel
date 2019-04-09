@@ -10,6 +10,7 @@ module.exports = {
                     resolve({ message: 'Error', err: error });
                 } else {
                     let responseFormatted = JSON.parse(body);
+                    console.log("MY BACKEND JSON", responseFormatted)
                     resolve({ message: 'Success', data: responseFormatted });
                 }
             });

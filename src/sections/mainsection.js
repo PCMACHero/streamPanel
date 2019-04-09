@@ -78,13 +78,13 @@ class MainSection extends Component{
     //     })
     // }
 // need username, userID, game, status, live status, viewers, followers,
-    getUserID=()=>{
+    getUserID=(id, oauth)=>{
         const headers = {"headers":{
-            "Client-ID": clientID,
-            "Authorization": 'OAuth '+this.props.context.state.myOauth
+            "Client-ID": id,
+            "Authorization": 'OAuth '+oauth
         }}
          axios.get("https://api.twitch.tv/kraken/channel",headers).then(data=>{
-            console.log("THIS IS MY USERID AXIOS DATA: ",data.data._id)
+            console.log("THIS IS MY USERID AXIOS DATA: ",data.data)
             
             
             this.setState({

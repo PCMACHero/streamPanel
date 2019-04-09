@@ -42,7 +42,7 @@ module.exports = {
                 console.log('Error getting info from Twitch ' + jsonResponse.err);
                 res.json(RequestManager.twitchFailMessage());
             }
-
+            console.log("TWITCH DATA 1", jsonResponse.data)
             twitchUser.accessToken = jsonResponse.data["access_token"];
             twitchUser.refreshToken = jsonResponse.data["refresh_token"];
             const expires_in = jsonResponse.data["expires_in"];

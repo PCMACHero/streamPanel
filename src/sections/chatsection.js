@@ -280,17 +280,14 @@ modDB=(user, status)=>{
     
 
 }
-chatListner=(chan, commands)=>{
+chatListner=(chan)=>{
     
             this.props.client.on('chat', (channel, user, message, self)=>{
                 
-                // if(user.badges && user.badges.moderator){
-                    if(user.mod){
-                    this.modDB(user.username, true)
-                }else {
-                    this.modDB(user.username, false)
-                }
                 
+                // if(user.badges && user.badges.moderator){
+                this.modDBObj[user.username] = user.mod
+                console.log("chat listner is mod", this.modDBObj)
                 this.makeBadgeDivs(user)
                 
                 
@@ -300,11 +297,11 @@ chatListner=(chan, commands)=>{
                 this.makeMessageDivs(channel,user,message,self)
                 
                 // let getLocalStorageCommands= JSON.parse(localStorage.getItem('commands'));
-                if(commands){
-                    for(let i = 0; i<commands.length; i++){
-                        if(commands[i].name===message){
-                            console.log("RESPONSE word ",commands[i], i)
-                            this.props.client.action(chan, `${commands[i].reply}`).then(function(data) {
+                if(this.props.context.state.commands){
+                    for(let i = 0; i<this.props.context.state.commands.length; i++){
+                        if(this.props.context.state.commands[i].name===message){
+                            console.log("RESPONSE word ",this.props.context.state.commands[i], i)
+                            this.props.client.action(chan, `${this.props.context.state.commands[i].reply}`).then(function(data) {
                                 // data returns [channel]
                             }).catch(function(err) {
                                 //
@@ -339,21 +336,7 @@ chatListner=(chan, commands)=>{
                 this.smartEmoteParser(message,user.emotes)
                 this.makeMessageDivs(channel,user,message,self)
                 
-                // let getLocalStorageCommands= JSON.parse(localStorage.getItem('commands'));
-                // if(this.props.context.state.commands){
-                //     for(let i = 0; i<this.props.context.state.commands.length; i++){
-                //         if(this.props.context.state.commands[i].name===message){
-                //             console.log("RESPONSE word ",this.props.context.state.commands[i], i)
-                //             this.props.client.action(streamer, `${this.props.context.state.commands[i].reply}`).then(function(data) {
-                //                 // data returns [channel]
-                //             }).catch(function(err) {
-                //                 //
-                //             });
-                //         }
-                //     }
-                        
-                    
-                // }
+                
                     
                     
                 
@@ -375,7 +358,8 @@ componentDidUpdate(prevProps){
         this.getGlobalBadges()
 this.getChannelBadges(this.props.context.state.twitchId)
 this.getSubscriberBadges(this.props.context.state.twitchId)
-    this.chatListner(this.props.context.state.displayName, this.props.context.state.commands)
+
+    this.chatListner(this.props.context.state.displayName)
 
     }
 }

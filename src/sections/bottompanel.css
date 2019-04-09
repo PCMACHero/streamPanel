@@ -15,7 +15,7 @@ font-family: 'Homenaje', sans-serif;
 font-family: 'Rubik Mono One', sans-serif; */
 .bottom-panel >* {
 box-sizing: border-box;
-border:0.5px solid white;
+
 }
 .chicken-counter, .chicken-counter2{
     display: flex;
@@ -28,19 +28,19 @@ border:0.5px solid white;
 }
 
 .chicken-counter{
-    background-color: #3A393A;
+    background-color: var(--source-btn);
 }
 .chicken-counter:hover{
     background-color: rgb(107, 107, 107);
 }
 
 .chicken-counter2{
-    background-color: #1F1E1F;
-    font-size: 2rem;
+    background-color: var(--col1);
+    font-size: 1rem;
 }
 .chicken-counter2:hover{
     background-color: rgb(53, 53, 53);
-    font-size: 2rem;
+    
 }
 
 .bottom-panel{
@@ -130,14 +130,14 @@ border:0.5px solid white;
 .bottom-left-container{
         /* margin: 0px 2px; */
         display: flex;
-        flex-shrink: 0;
+        
         height: 100%;
         width: 20%;
         /* flex-basis: 20%; */
         overflow-x: hidden;
         overflow-y: hidden;
         flex-direction: column;
-        justify-content: flex-start;
+        justify-content: center;
         align-items: center;
     
 }
@@ -221,11 +221,10 @@ border:0.5px solid white;
     justify-content: center;
     align-items: center;
     text-align: center;
-    /* border-radius: 2px; */
-    background-color: #0A55BD;
+    
     
     display: flex;
-    margin: .5px;
+    
     
 }
 
@@ -264,7 +263,7 @@ border:0.5px solid white;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    color:#3DEC61;
+    color:var(--twitch-btn);
     width: 100%;
     
     
@@ -417,6 +416,29 @@ padding-top: 5px;
     /* background-image: linear-gradient(rgb(0, 60, 255),rgb(58, 225, 255)); */
     
     
+}
+
+.tiny-btns{
+    display: flex;
+    flex-direction: column;
+    width: 10%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.tiny-btn{
+    width: 100%;
+    height: 25%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--source-btn);
+    border-bottom: 1px solid rgb(63, 63, 63);
+}
+.tiny-btn:hover{
+    background-color: rgb(19, 19, 19);
 }
 
 @keyframes choose {
