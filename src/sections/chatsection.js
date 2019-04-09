@@ -283,15 +283,11 @@ modDB=(user, status)=>{
 chatListner=(chan)=>{
     
             this.props.client.on('chat', (channel, user, message, self)=>{
-                console.log("chat listner chan", chan)
+                
                 
                 // if(user.badges && user.badges.moderator){
-                    if(user.mod){
-                    this.modDB(user.username, true)
-                }else {
-                    this.modDB(user.username, false)
-                }
-                
+                this.modDBObj[user.username] = user.mod
+                console.log("chat listner is mod", this.modDBObj)
                 this.makeBadgeDivs(user)
                 
                 

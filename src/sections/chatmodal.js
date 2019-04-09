@@ -25,9 +25,12 @@ class ChatModal extends Component{
     // }
 
     userMod=(client,user,status, newMessage)=>{
-        
+        console.log("this is x client", client)
+        console.log("this is x user", user)
+        console.log("this is x status", status)
+        console.log("this is x newmessage", newMessage)
         if(status){
-            client.unmod("streampanelapp", this.props.username).then((data)=>{
+            client.unmod(client.globaluserstate["display-name"], this.props.username).then((data)=>{
                 console.log("DID unmod?", data)
                 newMessage(data)
             }).catch(function(err) {
@@ -35,7 +38,7 @@ class ChatModal extends Component{
                 newMessage(`Cannot unmod: "${err}"`)
             });
         } else {
-            client.mod("streampanelapp", this.props.username).then((data)=> {
+            client.mod(client.globaluserstate["display-name"], this.props.username).then((data)=> {
                 console.log("DID mod?", data)
                 newMessage(data)
             }).catch(function(err) {
@@ -46,7 +49,7 @@ class ChatModal extends Component{
     }
     userBan=(client,user,newMessage)=>{
         
-            client.ban("streampanelapp", user, "You are rude").then(function(data) {
+            client.ban(client.globaluserstate["display-name"], user, "You are rude").then(function(data) {
                 console.log(user+" has been banished")
                 newMessage(`"${user}" has been banished to the netherrealm.`)
             }).catch(function(err) {
@@ -55,7 +58,7 @@ class ChatModal extends Component{
     }
     userTime=(client,user, num, newMessage)=>{
        
-            client.timeout("streampanelapp", user, num).then(function(data) {
+            client.timeout(client.globaluserstate["display-name"], user, num).then(function(data) {
                 console.log(data)
                 console.log(user+" has been put on time-out for "+data[2]/60+ " minutes")
                 newMessage(user+" has been put on time-out for "+data[2]/60+ " minutes")
@@ -96,7 +99,7 @@ class ChatModal extends Component{
                 <div className="modal-title">{this.props.username}</div>
                 <div className="modal-content">
                     <div className="m-c-side">
-                        <div className="btn c-m-btn" onClick={()=>{this.userMod(this.props.client,this.props.username, status, this.props.newMessage)}}>{mod}</div>
+                        <div className="btn c-m-btn" onClick={()=>{this.userMod(this.props.client,this.props.username, db[this.props.username], this.props.newMessage)}}>{mod}</div>
                         <div className="btn c-m-btn">WHISPER</div>
                     </div>
                     <div className="m-c-side">
