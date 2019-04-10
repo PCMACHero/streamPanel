@@ -296,12 +296,18 @@ export class MyProvider extends Component {
 
     makeOBS=()=>{
         let server = new Obs();
-        server.connect().then(data=>{
+        axios.post("/api/getlocalip").then(ip=>{
+            console.log(ip.data)
+            server.connect(ip.data).then(data=>{
             
-            this.setState({
-                OBSServer:server
+                this.setState({
+                    OBSServer:server
+                },()=>{
+                    this.getBizUser()
+                })
             })
         })
+        
         
             
        
@@ -341,12 +347,16 @@ export class MyProvider extends Component {
            }
 
     componentDidMount(){
+
+
+        
+
         console.log("MY PROVIDER MOUNTED", this.state)
         this.getGamesList()
         this.makeOBS()
         
         // this.getOauth()
-        this.getBizUser()
+        // this.getBizUser()
         
     }
     render(){

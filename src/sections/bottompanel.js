@@ -128,7 +128,7 @@ getStreamKey=(server)=>{
             console.log("we ran")
             this.setState({
                 streamKey: this.props.context.state.streamKey,
-                testDiv: <div className="chicken-counter2" style={{width:"50%",height:"100%"}} onClick={()=>{this.toggleTestStream(this.props.context.state.streamKey)}}>Test</div>
+                testDiv: null
             })
             }
     }
@@ -251,7 +251,7 @@ render(){
                 <div  style={{height:"50%", width:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>
                     
                     <div className="chicken-counter2" style={{width:"50%",height:"100%"}} onClick={()=>{this.getStreamKey(this.props.server)}}>GET</div>
-                    {this.state.testDiv}
+                    <div className="chicken-counter2" style={{width:"50%",height:"100%"}} >N/A</div>
                 </div>
             
             

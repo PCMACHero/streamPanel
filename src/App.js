@@ -6,16 +6,28 @@ import TwitchLogin from './views/twitchlogin'
 import Success from './views/success'
 import about from './views/about'
 import setup from './views/setup'
-import {BrowserRouter, Route} from 'react-router-dom'
+import {BrowserRouter, Route, Redirect} from 'react-router-dom'
 import './App.css';
 import Axios from 'axios';
 
 
 class App extends Component {
+  state={
+    auth:null
+  }
 
 getAuth=()=>{
   Axios.post("/api/isuserauthenticated").then(data=>{
-    console.log("AUTH DATA", data)
+    console.log("AUTH DATA", data.data.message)
+    if(data.data.message==="Success: User is Authenticated"){
+      this.setState({
+        auth:true
+      })
+    }else{
+      this.setState({
+        auth:false
+      })
+    }
     
 
   })
@@ -25,6 +37,7 @@ this.getAuth()
 }
 
   render() {
+    
     return (
       
       <BrowserRouter>
@@ -33,8 +46,10 @@ this.getAuth()
         <MyContext.Consumer>{
           context=>
           <div>
+          
           <Route path="/success" component={Success} exact/>
-          <Route path="/" exact component={TwitchLogin}/>
+          {/* <Route path="/" exact component={TwitchLogin}/> */}
+          <Route path="/" exact render={() => this.state.auth?<Redirect to="/panel"></Redirect>:<TwitchLogin context={context}/>}/>
           <Route path="/panel" exact render={() => <StreamPanel context={context}/>}/>
 
           

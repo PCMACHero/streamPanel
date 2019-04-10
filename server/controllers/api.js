@@ -3,6 +3,8 @@ const session = require('express-session'),
       ApiHelper = require('../helpers/api_helpers'),
       UserManager = require('../models/usermanager'),
       RequestManager = require('../controllers/requests');
+const find = require('local-devices');
+const isPortReachable = require('is-port-reachable');
 const twitchCltId = config.TwitchCredentials.twitchCltId,
       twitchSecret = config.TwitchCredentials.twitchSecret,
       randState = config.TwitchCredentials.randState,
@@ -10,6 +12,31 @@ const twitchCltId = config.TwitchCredentials.twitchCltId,
       responseStr = "https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=" + twitchCltId + "&redirect_uri=" + redirectUri + "&scope=channel_editor+channel_read+chat:read+chat:edit+channel:moderate+viewing_activity_read+user:read:email+bits:read+clips:edit&state=" + randState;
 
 module.exports = {
+    getLocalIP:  (req, res, next) => {
+        let twitchId = req.body.twitchId;
+        // let userInfo = await UserManager.findUserByTwitchID(twitchId);
+        let ip = null
+        let myIP =  find().then(devices => {
+            
+            devices.forEach(i=>{
+                isPortReachable(4444, {host: i.ip}).then(reachable => {
+                    if(reachable){
+                        res.json(i.ip);
+                        
+                        console.log("This is the IP", i.ip)
+                    }
+                    console.log(reachable);
+                    
+                });
+            })
+            // res.json(ip);
+          })
+        // if (userInfo.message === "Success") {
+        //     res.json(userInfo);
+        // } else {
+        //     res.json(UserManager.saveFailMessage);
+        // }
+    },
     testRoute: async (req, res, next) => {
         let twitchId = req.body.twitchId;
         let userInfo = await UserManager.findUserByTwitchID(twitchId);
