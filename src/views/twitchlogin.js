@@ -7,7 +7,7 @@ import './twitchlogin.css';
 import SVGLogo from '../sections/svg';
 import InfoPane from '../sections/infoPane';
 import Features from '../sections/features'
-import GetIP from '../helpers/getIP';
+
 
 
 
@@ -139,7 +139,7 @@ render(){
       </div>
 
       <div className="page-space">
-      {/* <GetIP/> */}
+      
         <div className="page-section">
         <InfoPane title="OBS CONTROL" body={this.info.b1} icon={<i className="material-icons">
 mic
