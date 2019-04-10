@@ -1,4 +1,3 @@
-// import React from 'react';
 const mongoose = require('mongoose');
 const request = require('request');
 const RequestManager = require('./requests');
@@ -8,7 +7,6 @@ const session = require('express-session');
 const config = require('../../common_config/config')
 const permittedUsers = config.PermittedUsers;
 const ReactDOM = require('react-dom');
-    //   App = require('../../src/App');
 const twitchCltId = config.TwitchCredentials.twitchCltId,
       twitchSecret = config.TwitchCredentials.twitchSecret,
       randState = config.TwitchCredentials.randState,
