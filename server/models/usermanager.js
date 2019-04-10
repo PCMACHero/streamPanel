@@ -18,6 +18,7 @@ module.exports = {
         });
     },
     findUserByID: (userId) => {
+        console.log('usermanager finduserbyid ', userId);
         return new Promise((resolve, reject) => {
             User.findOne({_id: userId}, (err, foundUser) => {
                 if (err) {
@@ -44,17 +45,21 @@ module.exports = {
     deleteUser: async (twitchId) => {
         return new Promise((resolve, reject) => {
             if (!twitchId) resolve({ message: "Error. Invalid Twitch ID submitted." });
-            let userToDel =  this.findUserByTwitchID(twitchId);
-            if (userToDel.message === "Success") {
-                userToDel.data.remove(err => {
-                    if (err) {
-                        console.log("Error trying to delete user ", err);
-                        resolve({ message: "Error", err: err });
-                    } else {
-                        resolve({ message: "Successfully removed user with " + twitchId + " from the database" });
-                    }
-                });
-            }
+            User.findOne({twitchId: twitchId}, (err, foundUser) => {
+                if (err) {
+                    console.log('Error finding User ', err);
+                    resolve({ message: "Error", err: err });
+                } else {
+                    foundUser.data.remove(err => {
+                        if (err) {
+                            console.log("Error trying to delete user ", err);
+                            resolve({ message: "Error", err: err });
+                        } else {
+                            resolve({ message: "Successfully removed user with " + twitchId + " from the database" });
+                        }
+                    });
+                }
+            });
         })
     },
     updateUser: (twitchId, updatedUser) => {
@@ -87,6 +92,7 @@ module.exports = {
                     console.log('Error Saving User ', err);
                     resolve(false);
                 } else {
+                    console.log('saved successfully');
                     resolve(true);
                 }
             });
