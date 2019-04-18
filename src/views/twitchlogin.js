@@ -94,9 +94,9 @@ render(){
     
       <a href="#" className="brand-logo right"><div className="sp">StreamPanel</div><div className="brand-img"></div></a>
       <ul id="nav-mobile" className="left hide-on-med-and-down">
-      <li><Link to="/">HOME</Link></li>
+      {/* <li><Link to="/">HOME</Link></li>
       <li><Link to="/setup">SETUP</Link></li>
-      <li><Link to="/about">ABOUT</Link></li>
+      <li><Link to="/about">ABOUT</Link></li> */}
       </ul>
     </div>
   </nav>
@@ -120,14 +120,14 @@ render(){
               
               </div>
               <div className="center">
-              <a className="twitch-btn-login" href= {this.state.twitchURL} style={{height:"100%"}}><div className="login">Login</div></a>
+              <a className="twitch-btn-login" href= {this.state.twitchURL} style={{height:"100%"}}><div className="login">{this.props.auth? `Welcome, ${this.props.context.state.displayName}`: "Login"}</div></a>
               </div>
           </div>
           
 
           </div>
           {/* <div className="vid-container"> */}
-            <video autoPlay muted loop id="my-video"  height="100%">
+            <video autoPlay muted loop id="my-video"  width="100%">
             <source src="/videos/spmov.mov" type="video/mp4"/>
         </video>
           {/* </div> */}

@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router-dom'
 import './bottompanel.css';
 import ChannelStatus from './channelstatus'
 import Notifications from './notifications'
@@ -250,8 +251,8 @@ render(){
                 </div>
                 <div  style={{height:"50%", width:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>
                     
-                    <div className="chicken-counter2" style={{width:"50%",height:"100%"}} onClick={()=>{this.getStreamKey(this.props.server)}}>GET</div>
-                    <div className="chicken-counter2" style={{width:"50%",height:"100%"}} >N/A</div>
+                    <div className="chicken-counter2" style={{width:"50%",height:"100%"}} ><Link to="/">Home</Link></div>
+                    <div className="chicken-counter2" style={{width:"50%",height:"100%"}} ></div>
                 </div>
             
             

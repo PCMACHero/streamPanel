@@ -273,7 +273,7 @@ export class MyProvider extends Component {
     getBizUser=()=>{
         axios.post(`/api/getuserinfo/`).then(res=>{
             console.log("my greek 2", res.data.data)
-            
+            this.makeOBS(res.data.data.localIp)
             this.makeTwitchClient(res.data.data.accessToken, res.data.data.displayName, res)
             this.getUserID(res.data.data.twithId, res.data.data.accessToken )
             
@@ -294,17 +294,13 @@ export class MyProvider extends Component {
     })
 }
 
-    makeOBS=()=>{
+    makeOBS=(ip)=>{
         let server = new Obs();
-        axios.post("/api/getlocalip").then(ip=>{
-            console.log(ip.data)
-            server.connect(ip.data).then(data=>{
+        server.connect(ip).then(data=>{
             
                 this.setState({
                     OBSServer:server
-                },()=>{
-                    this.getBizUser()
-                })
+                
             })
         })
         
@@ -353,7 +349,7 @@ export class MyProvider extends Component {
 
         console.log("MY PROVIDER MOUNTED", this.state)
         this.getGamesList()
-        this.makeOBS()
+        this.getBizUser()
         
         // this.getOauth()
         // this.getBizUser()

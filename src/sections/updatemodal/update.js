@@ -19,8 +19,33 @@ export default class Update extends React.Component{
         line1:"",
         line2:"",
         counterNum:"",
+        localIP: null,
+        ipBtn: <div className="btn">FETCHING IP</div>
         // gamesList:
         
+    }
+     getUserIP=()=> {
+        window.RTCPeerConnection = window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection;   //compatibility for firefox and chrome
+        var pc = new RTCPeerConnection({iceServers:[]}), noop = function(){};      
+        pc.createDataChannel("");    //create a bogus data channel
+        pc.createOffer(pc.setLocalDescription.bind(pc), noop);    // create offer and set local description
+        pc.onicecandidate = (ice)=>{  //listen for candidate events
+            if(!ice || !ice.candidate || !ice.candidate.candidate)  return;
+            var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
+            this.setState({
+                localIP: myIP,
+                ipBtn: <div className="btn" onClick={()=>{this.saveLocalIP(this.state.localIP)}}>This Machine Has OBS</div>
+            })
+            console.log('my IP: ', myIP);   
+            pc.onicecandidate = noop;
+        };
+    }
+    saveLocalIP=(ip)=>{
+        console.log('save ip 1', ip)
+        axios.post('/api/updatelocalip',{ip: ip}).then(data=>{
+            console.log('save ip 2')
+            console.log(data)
+        })
     }
     getGameCover=(game)=>{
         if(game){
@@ -136,6 +161,7 @@ export default class Update extends React.Component{
 
     componentDidMount(){
         document.getElementById("newGame").setAttribute("autocomplete", "off");
+        this.getUserIP()
         // this.getGamesList()
     }
     render(){
@@ -240,8 +266,9 @@ export default class Update extends React.Component{
                         <input type="text" style={{width:"150px"}} name="line2" id="line2" value={this.state.line2} autoComplete="off" onChange={(e)=>{this.changeLines(e)}}/>
                         
                         <div className="btn" onClick={()=>{this.setText()}}>SEND</div>
+                        
                     </form>
-                
+                    {this.state.ipBtn}
                 
                 
                 </React.Fragment>
