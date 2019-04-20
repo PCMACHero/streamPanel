@@ -3,7 +3,7 @@ const TwitchCredentials = {
     twitchSecret : "kbindvae0yd2g2c6lbsfq83f86rezr",
     randState : "77bfce89f4169e4e4e79d45af98d0c04",
     // redirectUri : "http://localhost:8000/success/payment-portal",
-    redirectUri : "http://192.168.2.7:8000/success/payment-portal",
+    redirectUri : "http://3.14.73.117/success/payment-portal",
 }
 
 const PermittedUsers = {
