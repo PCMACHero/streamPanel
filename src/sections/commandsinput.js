@@ -2,95 +2,92 @@ import React, {Component} from 'react';
 
 import {MyContext, MyProvider} from '../views/streampanel'
 import axios from 'axios'
+import './twitchpanel.css'
+
 
 export default class CommandsInput extends Component{
+
+    state={
+        name:"",
+        reply: "",
+        commands: null,
+        id:null
+    }
+
+
+
     counter=1
+    oauth = this.props.context.state.myOauth
+    id = this.props.context.state.twitchId
     // counter2=70000
     objForLS = {}
     getLocalStorageCommands = {}
     // commandsTurnedToArray= []
     commandsToShow =[]
     dbCommands = null
-    getCommandsFromDB = (id)=>{
-        if(!id){
-            return
-        }else{
-            axios.get(`/spuser/${id}`).then(res=>{
-                this.dbCommands = res.data.commands
-                console.log("MY DB COMMANDS", this.dbCommands)
-                // this.getLSObjAndArray()
-                // this.commandsTurnedToArray = this.dbCommands
-                this.showCommands()
+    getCommandsFromDB = ()=>{
+        
+
+
+            axios.post(`/api/getuserinfo/`).then(res=>{
+                console.log("my greek", res)
+                let commands = res.data.data.custom
+                // this.setState({
+                //     commands:commands
+                // })
+                this.showCommands(commands)
             })
-        }
+
+
+
+
+        
         
     }
     
-    state={
-        name:"",
-        response: "",
-        commands: this.commandsToShow,
-        id:null
-    }
-    deleteCommand(item){
-        this.dbCommands.splice(item,1);
+    
+    deleteCommand(i){
+        // this.dbCommands.splice(index,1);
         
 
-        axios.put(`/spuser/${this.props.context.state.myId}`,{
-            _id: this.props.context.state.myId,
-            username: this.props.context.state.username,
-            commands: this.dbCommands,
-            email: this.props.context.state.email,
-            partner: this.props.context.state.partner,
-        }).then(res=>{
-            this.dbCommands= res.data.commands
+        axios.delete(`/api/command/`,{data:{index:i}}).then(res=>{
+
+            // this.dbCommands= res.data.commands
+            console.log("delete ",res)
             // this.setState({
             //     name:"",
-            //     response:""
+            //     reply:""
             // })
-            this.showCommands()
+            // this.showCommands(res.data.commands)
+            this.getCommandsFromDB() 
             this.setState({
                 name:"",
-                response:""
+                reply:""
             })
             
             
+        }).catch((error) => {
+            console.log('Not good man :(');
         })
 
         
     }
-    // LSArrayToOBj = ()=>{
-    //     this.objForLS = {}
-    //         console.log("before",this.objForLS)
-    //         for (let i=0; i<this.commandsTurnedToArray.length;i++){
-    //             this.objForLS[this.commandsTurnedToArray[i][0]] = this.commandsTurnedToArray[i][1];
-    //             console.log("this.commandsTurnedToArray", this.commandsTurnedToArray)
-    //             console.log("this.getlocalstoarage: ",this.getLocalStorageCommands )
-    //         } 
-    //         console.log("after",this.objForLS)
-    //         localStorage.setItem('commands', JSON.stringify(this.objForLS));
 
-    // }
-    // getLSObjAndArray = ()=>{
-    //     this.getLocalStorageCommands= JSON.parse(localStorage.getItem('commands'));
-    //     //  this.commandsTurnedToArray= Object.entries(JSON.parse(localStorage.getItem('commands')))
-    //     // this.commandsTurnedToArray= Object.entries(JSON.parse(this.dbCommands))
-    // }
-
-    showCommands = ()=>{
+    showCommands = (commands)=>{
         
         this.commandsToShow = []
-        for(let i=0; i<this.dbCommands.length;i++){
+        console.log("commands in show", commands)
+        for(let i=0; i<commands.length;i++){
             // let index = 1000000
-            let makeObj = this.dbCommands[i]
+            let makeObj = commands[i]
             this.commandsToShow.push(
                 
                 <div className="command-item" key={i}>
                     <div className="command-name">
                         <div>{makeObj.name}</div>
                     </div>
-                    <div className="command-text">"{makeObj.response}"</div>
-                    <div className="s1 btn right-align red" onClick={()=>{
+                    <div className="command-text">"{makeObj.reply}"</div>
+                    <div className="btn del " onClick={()=>{
                         console.log("clicked to delete: ",makeObj)
                         this.deleteCommand(i)
                         
@@ -103,6 +100,10 @@ export default class CommandsInput extends Component{
 
             )
         } 
+        this.props.context.updateState("commands", commands)
+        this.setState({
+            commands:commands
+        })
     }
     // checkIfLSEmpty = ()=>{
     //     if(JSON.parse(localStorage.getItem('commands'))){
@@ -116,31 +117,26 @@ export default class CommandsInput extends Component{
     // }
    
     addCommand = ()=>{
-        let commandToAdd = {name:this.state.name, response: this.state.response}
+        // let commandToAdd = {name:this.state.name, reply: this.state.reply}
         // this.commandsTurnedToArray.push(this.dbCommands)
-        this.dbCommands.push(commandToAdd)
+        // this.dbCommands.push(commandToAdd)
 
+        console.log("loaded new command 1")
+        axios.post("/api/newcommand",{name:this.state.name, reply:this.state.reply}).then(data=>{
+            console.log("loaded new command2")
+            console.log("loaded new command3", data)
+            this.setState({
+                name:"",
+                reply:""
+            })
+            this.showCommands(data.data.data)   
+            // this.showCommands(res.data.commands)
 
-        axios.put(`/spuser/${this.props.context.state.myId}`,{
-            _id: this.props.context.state.myId,
-            username: this.props.context.state.username,
-            commands: this.dbCommands,
-            email: this.props.context.state.email,
-            partner: this.props.context.state.partner,
         })
-
-        console.log("ADD CLICK", this.dbCommands)
-        
-        this.setState({
-            name:"",
-            response:""
-        })
-        console.log("THIS IS GETLOCALSTORAGECOMMANDS: ", this.getLocalStorageCommands)
-        console.log("THIS IS COMMANDTURNEDTOARRAY: ", this.commandsTurnedToArray)
-        console.log("THIS IS COMMANDSTOSHOW:", this.commandsToShow)
-        this.showCommands()
-        
+    
     }
+
+
     changeHandler = (event)=>{
         console.log(event.target.value)
         
@@ -150,31 +146,34 @@ export default class CommandsInput extends Component{
         
     }
     componentDidMount(){
+        console.log("commands context", this.props.context)
         
-        setTimeout(() => {
-            console.log("MY CONTEXT",this.props.context)
-            this.getCommandsFromDB(this.props.context.state.myId)   
-        }, 500);
+            
+            this.getCommandsFromDB()   
+        
         
 
     }
     render(){
        
         return (
-            <div  className="commands-box" 
-            // key={this.counter+=5}
-            >
-            
+            <div  className="commands-box">
+                <div className="modal-title">COMMAND MAKER</div>
                 <form className="commands-input">
-                    <div className="input-field">
-                        <input className="input-name" name="name" autoComplete="off" id="name"placeholder="" type="text" onChange={this.changeHandler} value={this.state.name}/>
-                        {/* <label for="name">Command Name</label> */}
-                    </div>
-                    <div className="input-field command-input-text">
-                        <input className="input-name" name="response" autoComplete="off" id="response" placeholder={``} type="text" onChange={this.changeHandler} value={this.state.response}/>
-                        {/* <label for="response">Command Response</label> */}
-                    </div>
-                    <div onClick={this.addCommand} className="s1 btn right-align purple" waves='light'>ADD</div>
+                <div className="input-pair">
+                <div className="input-field">
+                    
+                    <input className="input-name" name="name" autoComplete="off" id="name"placeholder="" type="text" onChange={this.changeHandler} value={this.state.name}/>
+                    {/* <label for="name">Command Name</label> */}
+                </div>
+                <div className="input-field command-input-text">
+                    <input className="input-name" name="reply" autoComplete="off" id="reply" placeholder={``} type="text" onChange={this.changeHandler} value={this.state.reply}/>
+                    {/* <label for="reply">Command reply</label> */}
+                </div>
+                </div>
+                    
+                    <div className="btn-box"><div onClick={this.addCommand} className="btn" waves='light'>ADD</div></div>
+                    
                 </form>
                 <div className="commands" >
                     {this.commandsToShow}
@@ -185,4 +184,3 @@ export default class CommandsInput extends Component{
     }
 }
 
-CommandsInput.contextType = MyContext;

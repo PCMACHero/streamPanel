@@ -13,23 +13,25 @@ const headers= {"headers": {
 // })
 // return "parasite"
 // }
+export const dumbData = {
+       
+  accessToken: "bwivcc7mjes0btlvhkmsuxv8acdjdo",
+  
+  displayName: "streampanelapp",
+  
+  twitchId: "277053577",
+  
+      
+}
+
 const idOBJ={
-  imaqtpie: "24991333",
-  hutch: "8815236",
-  drdisrespect: "17337557",
-  teepee: "23844396",
-  goldglove: "1518077",
-  karma:"10406",
-  scump: "13240194",
-  nameless: "10328157",
-  shroud: "37402112",
-  destiny: "18074328",
-  streampanelapp: "277053577",
-  katgunn: "23822990",
-  callofduty: "501281"
+  chocotaco:"69906737",
+  
 
 }
-export const streamer = "scump"
+
+
+export const streamer = ""
 export const streamerID= idOBJ[streamer]
 export const OBSSceneObj = 
 { 'current-scene': 'In-Game',
@@ -61,3 +63,23 @@ export const OBSSceneObj =
                 typeId: 'coreaudio_input_capture' } ],
   status: 'ok',
   messageId: '2' }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -5,6 +5,7 @@ import {streamer, streamerID} from '../helpers/dummydata'
 import {Modal, Row, Autocomplete} from 'react-materialize'
 import { setInterval, setTimeout } from 'timers';
 import bigGameList from '../helpers/gamelist'
+import { MyContext } from '../helpers/provider';
 
 class ChannelStatus extends Component{
     gamesList={}
@@ -13,13 +14,40 @@ class ChannelStatus extends Component{
     }}
     state={
         currentGame: "",
-        newGame:"",
+        newGame:null,
         currentTitle:"",
-        newTitle:"",
-        gameCover:""
+        newTitle:null,
+        gameCover:"",
+        viewers: "",
+        followers: "",
+        channel: {
+            views: "",
+
+        }
     }
     ChannelData = this.props.channelOBJ
-    
+    getStreamData = (id)=>{
+        axios.get(`https://api.twitch.tv/kraken/streams/${id}`, {
+            headers: {
+                Accept:"application/vnd.twitchtv.v5+json",
+                "Client-ID": clientID
+            }
+        }).then(data=>{
+            if(data.data.stream){
+                // this.getGameCover(data.data.stream.game)
+                console.log("$$$", data.data.stream)
+            this.setState({
+                channel: {
+                    _id: data.data.stream._id,
+                    viewers: data.data.stream.viewers,
+                    totalViews: data.data.stream.channel.views,
+                    followers: data.data.stream.channel.followers
+                }
+            })
+            }
+            
+        })
+    }
     changeHandler = (event)=>{
         
         this.setState({
@@ -28,48 +56,61 @@ class ChannelStatus extends Component{
         
     }
     getGameCover=(game)=>{
-        axios.get("https://api.twitch.tv/helix/games?name="+game,this.headers).then(data=>{
-        console.log("game cover---->", data)  
+        if(game){
+            axios.get("https://api.twitch.tv/helix/games?name="+game,this.headers).then(data=>{
+        console.log("game cover game---->", game)  
+        console.log("game cover data---->", data.data.data)  
         
-        let boxURL = data.data.data[0].box_art_url.split("")
+            let boxURL = data.data.data[0].box_art_url.split("")
                 boxURL.splice(boxURL.length-20)
-                let boxURL2 = boxURL.join("")+"150x200.jpg"
+                let boxURL2 = boxURL.join("")+"450x600.jpg"
 
-                
+               this.props.context.updateCover(boxURL2) 
         
         this.setState({
                 gameCover:boxURL2
             })
+        
+        
         })
+        } else {
+            let noGame = "https://static-cdn.jtvnw.net/ttv-boxart/Apex%20Legends-285x380.jpg"
+            this.setState({
+                gameCover:noGame
+            })
+        }
+        
     }
 
-    getChannelStatus=()=>{
-        const oauth = this.props.oauth
+    getTitleAndGame=()=>{
+        //Get Title, and game
+        console.log("CONTEXT IN STATUS", this.props.context)
+        const oauth = this.props.context.state.myOauth
         // const oauth = "xp5b0vv17q14ue9l0zw9x8hpreznkn"
         const headers = {"headers":{
             "Client-ID": clientID,
             "Authorization": 'OAuth '+oauth
         }}
          axios.get("https://api.twitch.tv/kraken/channel",headers).then(data=>{
-            console.log("GET CHAN STATUS!!!!: ",data.data)
+            console.log("GET CHAN STATUS!!!!: ",data.data.game)
             this.getGameCover(data.data.game)
-            
+            this.props.context.updateStatus(data.data.game,data.data.status)
             this.setState({
                 currentGame: data.data.game,
                 currentTitle: data.data.status,
-                channel: {
+                // channel: {
                     
                     
                     
-                    userID: data.data["_id"],
-                    // partner:data.data.partner,
-                    // name: data.data.name,
-                    // email: data.data.email,
-                    // mature: data.data.mature,
-                    // views: data.data.views,
-                    // streamKey: data.data.stream_key
+                //     userID: data.data["_id"],
+                //     partner:data.data.partner,
+                //     name: data.data.name,
+                //     email: data.data.email,
+                //     mature: data.data.mature,
+                //     views: data.data.views,
+                //     streamKey: data.data.stream_key
 
-                }
+                // }
                 
             })
         })
@@ -102,10 +143,43 @@ class ChannelStatus extends Component{
             //   })
             
             }
+    componentDidUpdate(prev){
+        if((prev.context.state.game !== this.props.context.state.game)||(prev.context.state.title !== this.props.context.state.title)){
+            this.setState({
+                channel:{
+                    totalViews:this.props.context.state.views
+                }
+            })
+            this.getTitleAndGame()
+            console.log("bloop", prev.context.state.game, this.props.context.state.game)
+        }
 
+        if(prev.context.state.views !== this.props.context.state.views){
+            console.log("new views is", this.props.context.state.views)
+            this.setState({
+                channel:{
+                    totalViews:this.props.context.state.views
+                }
+            })
+        }
+
+        if(this.props.twitchId && this.props.twitchId !== prev.twitchId){
+            console.log("got id")
+            setInterval(() => {
+            
+                this.getStreamData(this.props.twitchId)
+            }, 15000);
+            setTimeout(() => {
+                this.getStreamData(this.props.twitchId)
+                this.getTitleAndGame()
+            }, 2000);
+        }
+    }
 
     componentDidMount(){
-        this.getChannelStatus()
+        
+        
+        
         
         
         this.getGamesList()
@@ -115,98 +189,47 @@ class ChannelStatus extends Component{
     }
     render(){
         return(
-            <Modal className="commands-modal"
-                header='UPDATE CHANNEL'
-                trigger={<div className="channel-status-box">
-                            <div className="follows-title">CATEGORY/GAME</div>
-                            <div className="game-playing"><img className="game-cover" src={this.state.gameCover}/><div className="game-label">{this.state.currentGame}</div></div>
-                            <div className="follows-title">STREAM TITLE</div>
-                            <div className="channel-title">
+            <div className="channel-status-box" style={{backgroundImage: `url(${this.props.context.state.gameCover})`, backgroundSize: "cover", backgroundPosition: "center"}}>
+                            <div className="status-bg" ></div>
+                            <div className="status-info">
+                                {/* <div className="follows-title">STREAM STATUS</div> */}
+                                <div className="status-box">
+                                <div className="game-label">{this.state.currentGame}</div>
+                                <div className="game-label">"{this.state.currentTitle}"</div>
+                                <div className="game-label"><i className="material-icons" style={{color:"black", fontSize: "1.5em"}}>
+face
+</i>VIEWING:  <div style={{color: "#EE2B2A"}}>{this.state.channel.viewers}</div>
+</div>
+                                <div className="game-label">VIEWS: {this.state.channel.totalViews? this.state.channel.totalViews: this.props.context.state.views}</div>
+                                <div className="game-label"><i className="material-icons" style={{color:"#EE2B2A", fontSize: "1.5em"}} >
+favorite
+</i>FOLLOWS: {this.state.channel.followers}</div>
                             
-                                <div className="text-div">"{this.state.currentTitle}"</div>
+                            
+                            </div>
                             </div>
                             
-                            <div className="update-card">
-                                UPDATE CHANNEL
-                                <i className="material-icons">
-                                    update
-                                    </i>
+                            
+                            
+                            
+                                <MyContext.Consumer>
+                                    {context=>
+                                    <div className="message-center" onClick={(e)=>{
+                                        e.stopPropagation();
+                                        context.newMessage("Batman")
+                                        console.log(context.state.messageCenter)
+                                    }}>
+                                        <div className={context.state.messageCenter.class} >{context.state.messageCenter.m}</div>
+                                        
                             </div>
-                            
-                        </div>}>
+                                        
+                                    }
+                                </MyContext.Consumer>
+                                
+                            </div>
                         
-                    <form className="commands-input">
-                        <Row>
-                            <Autocomplete
-                                limit={10}
-                                minLength={2}
-                                m={12}
-                                onChange={this.changeHandler}
-                                onAutocomplete={(e)=>{this.setState({
-                                    newGame:e
-                                })}}
-                                // autocomplete="off"
-                                // title='Update Game/Category'
-                                className="input-name"
-                                data={this.gamesList}
-                                name="newGame"
-                                id="newGame"
-                                placeholder="Enter Game/Category"
-                                
-                                
-                                
-                                
-                                
-                            />
-                            
-                        </Row>
-                        {/* <div className="input-field">
-                            <input className="input-name" name="newGame" autoComplete="off" data={this.gamesList} id="new-game"placeholder={`Current: ${this.props.channelOBJ.game}`} type="text" onChange={this.changeHandler} value={this.state.newGamePlaying}/>
-                            <label for="new-name">Update Game</label>
-                        </div> */}
-                        <div className="input-field command-input-text">
-                            <input className="input-name" name="newTitle" autoComplete="off" id="new-title"placeholder={`Enter Title ex: ${this.props.channelOBJ.status}`} type="text" onChange={this.changeHandler} value={this.state.newTitle}/>
-                            {/* <label for="new-title">Update Title</label> */}
-                        </div>
                         
-
-                    </form>
-
                     
-
-
-
-                
-                <div onClick={()=>{
-                            console.log(this.state.newGame)
-                    axios({
-                        method: 'put', //you can set what request you want to be
-                        url: 'https://api.twitch.tv/kraken/channels/'+this.state.channel.userID,
-                        data: {"channel": {"status": this.state.newTitle, "game": this.state.newGame}},
-                        headers: {
-                            "Accept": "application/vnd.twitchtv.v5+json",
-                            "Client-ID": clientID,
-                            // "Authorization": 'OAuth ' + "xp5b0vv17q14ue9l0zw9x8hpreznkn",
-                            "Authorization": 'OAuth ' + this.props.oauth,
-                            // this.props.channelOBJ.oauth,
-                            'Content-Type': 'application/json'
-                        }
-                      }).then(data=>{
-                        this.setState({
-                            newGame:"",
-                            newTitle:"",
-                            currentGame:data.data.game,
-                            currentTitle:data.data.status
-                        })
-                        console.log("MY CURRENT GAME:", this.state.currentGame)
-                        this.getGameCover(this.state.currentGame)
-                      })
-                      
-                      
-                      
-                      
-                }} className="s1 btn right-align #4a148c purple darken-4" waves='light'>Update</div>
-            </Modal>
             
         )
     }

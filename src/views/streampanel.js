@@ -1,85 +1,18 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import MainSection from '../sections/mainsection'
-import {streamer} from "../helpers/dummydata"
+
 import {clientID} from "../common/common"
 import axios from "axios"
+import { MyContext } from '../helpers/provider';
+import BlurScreen from '../sections/blurscreen';
+import Presets from '../sections/presets';
+import Mixer from '../sections/mixer';
+import Update from '../sections/updatemodal/update';
+import MyModal from '../sections/chatmode';
+import CommandsInput from '../sections/commandsinput';
+import ChatModal from '../sections/chatmode';
 
-export const MyContext = React.createContext()
 
-export class MyProvider extends Component {
-    token = "mzilallgzh02pwqsyxhdm734kux3mk"
-    state={
-        myId: null,
-        myOauth: this.token,
-        
-
-    }
-    getOauth=(oauth)=>{
-        this.setState({
-            myOauth: oauth
-        })
-    }
-    getUser(){
-        axios.get("https://api.twitch.tv/kraken/channel", {headers: {
-            Authorization: `OAuth ${this.token}`
-        }}).then(data =>{
-            let id= data.data._id
-            let begginingCommand = {"!uptime": "1 day"}
-                    let email = data.data.email
-                    let commands = data.data.commands
-                    let username = data.data.display_name
-                    let partner = data.data.partner
-            axios.get(`/spuser/${id}`).then(res=>{
-                console.log("my greek", res)
-                    
-                if(res.data===null){
-                    console.log("MY GREEK DATA WAS NULL")
-                    commands = [{name: "!You are", response: "New"}]
-                    axios.post(`/newspuser/`,{
-                        _id: id,
-                        username: username,
-                        commands: commands,
-                        email: email,
-                        partner: partner,
-                    })
-                } else {
-                    axios.put(`/spuser/${id}`,{
-                        _id: id,
-                        username: username,
-                        commands: commands,
-                        email: email,
-                        partner: partner,
-                    })
-                }
-                
-                console.log("MY GREEK ", data)
-            })
-            console.log("MY SWEET USER DATA",data.data)
-            this.setState({
-                myId: id,
-                username: username,
-                commands: commands,
-                email:email,
-                partner: partner,
-
-            })
-        })
-    }
-
-    componentDidMount(){
-        this.getUser()
-    }
-    render(){
-        return (
-            <MyContext.Provider value={{
-                state: this.state,
-                getOauth: this.getOauth
-            }}>
-                {this.props.children}
-            </MyContext.Provider>
-        )
-    }
-}
 
 class StreamPanel extends Component {
     
@@ -96,7 +29,7 @@ class StreamPanel extends Component {
             }
 
 
-    token = this.props.location.hash.slice(14,44);
+    
     // token = "rql8ru6ow4i3agf3i1xc0j8zzgpt39"
     getUser(){
         axios.get("https://api.twitch.tv/kraken/channel", {headers: {
@@ -138,7 +71,7 @@ class StreamPanel extends Component {
         })
     }
 
-    getUserID(){
+    getUserID(streamer){
         const URL = "https://api.twitch.tv/kraken/users?login="+streamer
         
         axios.get(URL, this.headers).then(response => {
@@ -166,6 +99,7 @@ class StreamPanel extends Component {
     
 
     componentDidMount(){
+        console.log("STREAMPANEL Mounted")
         
         // this.getUser()
         setTimeout(() => {
@@ -173,7 +107,7 @@ class StreamPanel extends Component {
                 startClass:"start-fade"
             })
         }, 2000);
-        this.getUserID()
+        this.getUserID(this.props.context.state.twitchId)
         
         
         
@@ -182,22 +116,41 @@ class StreamPanel extends Component {
     }
     
   render() {
+      console.log("STREAMPANEL RENDERED")
     return (
-        <MyProvider>
+        <MyContext.Consumer>{
+            context=> 
+                
+                    
+                        <Fragment>
+                            <BlurScreen title="BOT COMMANDS" color="rgba(0,0,0, 0.4)" show={context.state.commandsScreen} close={context.showHideScreen} content={<CommandsInput context={context}/>}/>
+                            <BlurScreen title="CHATMODE" color="rgba(0,0,0, 0.4)" show={context.state.chatModeScreen} close={context.showHideScreen} content={<ChatModal context={context}/>}/>
+                            <BlurScreen title="UPDATE" color="rgba(0,0,0, 0.4)" show={context.state.updateScreen} close={context.showHideScreen} content={<Update context={context}/>}/>
+                            <BlurScreen title="MIXER" color="rgba(0,0,0, 0.4)" show={context.state.mixerScreen} close={context.showHideScreen} content={<Mixer server={context.state.OBSServer}/>}/>
+                            <BlurScreen title="PRESETS" color="rgba(0,0,0, 0.4)" show={context.state.profileScreen} close={context.showHideScreen} content={<Presets server={context.state.OBSServer} context={context} show={context.state.profileScreen}/>}/>
+
+                            
+                        <div className="stream-panel panel-container" style={context.state.blur ? {filter:"blur(5px"}: null}
+                        // style={{animation:"blurIn 2s forwards"}}
+                        >
+            {/* <div className={this.state.startClass}>
+                <div className="start-banner">STREAM PANEL</div>
+                <div className="progress">
+                    <div className="indeterminate green"></div>
+                </div>
+            </div> */}
+    
             
-            <div className="stream-panel App">
-        <div className={this.state.startClass}>
-            <div className="start-banner">STREAM PANEL</div>
-            <div className="progress">
-                <div className="indeterminate green"></div>
+                <MainSection chanBadges={this.state.badges} context={context} server={context.state.OBSServer}/>
             </div>
-        </div>
-
-
-        <MainSection chanBadges={this.state.badges} oauth={this.token}/>
-      </div>
-
-        </MyProvider>
+                        </Fragment>
+                        
+            
+            
+            
+            
+    
+        }</MyContext.Consumer>
       
     );
   }

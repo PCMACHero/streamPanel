@@ -1,12 +1,14 @@
-import React, {Component} from 'react';
-// import Chat from './chat'
-import tmi from "tmi.js";
+import React, {Component, Fragment} from 'react';
+
+
 import {streamer, streamerID} from "../helpers/dummydata"
-import {Modal} from "react-materialize"
+
 import axios from "axios";
 import {clientID} from "../common/common"
-import { isIPv4 } from 'net';
+
 import './chat.css'
+import ChatModal from './chatmodal'
+import { MyContext } from '../helpers/provider';
 // import $ from 'jquery'
 
 
@@ -20,6 +22,11 @@ export default class Chat extends Component {
                 "Client-ID": clientID
             }
         }
+        this.context=this.props.context
+        this.id = this.props.id
+        this.oauth = null
+        // this.props.context.state.commands = this.props.context.state.commands
+        this.modDBObj={}
         this.badgeDivArray=[]
         this.subscriberBadges={}
         this.globalBadges={}
@@ -37,26 +44,10 @@ export default class Chat extends Component {
         this.badgeClass = "is-mod"
         this.modUnmod = null;
 
-        // this.options = {
-        //     options: {
-        //         debug: true
-        //     },
-        //     connection: {
-        //         reconnect: true
-        //     },
-        //     identity: {
-        //         username: "streampanelapp",
-        //         password: "oauth:"+this.props.oauth
-        //     },
-        //     channels: [streamer]
-        // };
-        
-        // this.props.client = new tmi.client(this.options);
-        
-      
-            
-        // this.props.client.connect();
+
         this.state = {
+            clickedUser: null,
+            showModal: false,
             globalBadges:{},
             modStatus: null,
             message: "",
@@ -65,7 +56,8 @@ export default class Chat extends Component {
             modal: false,
             badges: {},
             post:"",
-            myDivs:[]
+            myDivs:[],
+            commands: this.props.context.state.commands
             
             
             }
@@ -75,12 +67,12 @@ export default class Chat extends Component {
     
     
     
-    fetchEmotes(){
+    fetchEmotes(chan){
         let emoteSetString=""
         
         // if(this.props.partner){
             if(true){
-            axios.get(`https://api.twitch.tv/api/channels/${streamer}/product`,this.headers).then(data=>{
+            axios.get(`https://api.twitch.tv/api/channels/${chan}/product`,this.headers).then(data=>{
                 // console.log("MY EMOTE SETS", data.data.plans[data.data.plans.length-1].emoticon_set_ids)
                 // console.log("MY EMOTE SETS", data.data.plans)
                 //ie 1332,44224,54443
@@ -156,63 +148,7 @@ export default class Chat extends Component {
         })
     }
 
-    // emoteParserSmart(message,user){
-    //     let newEmoteOBJ={}
-    //     let emoteObj = user.emotes
-    //     let arrayOfWords = message.split(" ")
-    //     let emoteID=null
-    //     let arrayOfEmoteKeys = Object.keys(emoteObj)
 
-    //     //make new emote object with [0-8]:90 format
-    //     for (let i=0;i<arrayOfEmoteKeys.length;i++){
-    //         for(let i=0;i<emoteObj[arrayOfEmoteKeys[i]].length;i++){
-    //             newEmoteOBJ[emoteObj[arrayOfEmoteKeys[i][0]]]=arrayOfEmoteKeys[i]
-    //         }
-    //     }
-
-
-    //     let JSXelem= <img className="emote animated pulse infinite" 
-    //     src={`https://static-cdn.jtvnw.net/emoticons/v1/${emoteID}/2.0`}/>
-
-
-
-    // }
-
-    // emoteParser(message){
-        
-    //     this.setState({
-    //         post: message
-    //     })
-    //     console.log("MY AXIOS EMOTES ", this.emotes)
-    //     let arrayOfWords = message.split(" ")
-    //     for(let i=0;i<arrayOfWords.length;i++){
-    //         for(let k=0; k<this.emotes.length; k++){
-    //             // console.log(this.emotes[k])
-    //             if(arrayOfWords[i]===this.emotes[k].code){
-    //                 let JSXelem= <img className="emote animated pulse infinite" src={`https://static-cdn.jtvnw.net/emoticons/v1/${this.emotes[k].id}/2.0`}/>
-                    
-    //                 arrayOfWords.splice(i,1,JSXelem)
-    //                 let parsedMessage = <div>{arrayOfWords}</div>
-    //                 this.setState({
-    //                     post : parsedMessage
-    //                 })
-    //                 console.log("Found EMOTE match: ",this.emotes[k].code, this.state.post)
-                    
-    //             }
-                
-    //         }
-    //     } 
-    
-    // }
-        
-        
-            
-            
-            
-            
-     
-        
-        
     getModStatus = (user)=>{
         this.props.client.mods("streampanelapp").then(data =>{
             if(data.includes(user.username)){
@@ -227,56 +163,34 @@ export default class Chat extends Component {
         
         
         this.myDivs.push(
-        <Modal key={this.counter+=1} className="black"
-            trigger={<div className="chat-card" key={this.counter+=1} onClick={()=>{}}>
+            <div className="chat-card" key={this.counter+=1} onClick={()=>{
+                console.log("clicked")
+                this.setState({
+                    showModal:true,
+                    clickedUser: user.username
+                })
+            }}>
                 <div className="message-intro-box">
                     <div className="message-intro">
-                    <div className="badges">{this.badgeDivArray}</div>
-                    <div className="chat-name" style={{color:user.color}}>{user.username}</div>
+                        <div className="badges">{this.badgeDivArray}</div>
+                        <div className="chat-name" style={{color:user.color}}>{user.username}</div>
                     </div>
+                    
+                    
+                    </div>
+                    <div className="chat-message" key={this.counter+=1}>: {this.state.post}</div>
                     
                 </div>
                 
                 
-                <div className="chat-message" key={this.counter+=1}>: {this.state.post}</div>
-            </div>}>
-                <header>{ (user.username).toUpperCase()}</header>
-                <div className="modal-btn-box">
-                <div className="btn purple" onClick={()=>{
-                        this.props.client.action("streampanelapp", `Hola, ${user.username}`)
-                        .then(function(data) {
-                            
-                            }).catch(function(err) {
-                            
-                                });
-                    }}>Message</div>
                 
-                <div className="btn blue" onClick={()=>{
-                            
-                            this.props.client.unmod("streampanelapp", user.username).then(function(data) {
-                                // data returns [channel, username]
-                                // console.log(data)
-                            }).catch(function(err) {
-                                //
-                                // console.log(err)
-                            });
-                        
-                    }}>{this.state.modStatus}</div>
-                <div className="btn red">Ban</div>
-                <div className="btn red">Timeout</div>
-                <div>{JSON.stringify(user.badges)}</div>
-                <div>{JSON.stringify(channel)}</div>
-                </div>
-                
-                {/* <p>info: { JSON.stringify(user, null, 4)}</p> */}
-                
-              </Modal>
+              
         
         )
         this.setState({
             myDivs: this.myDivs
         })
-        if(this.myDivs.length > 30) {
+        if(this.myDivs.length > 70) {
             this.myDivs.shift()
         }
         
@@ -290,7 +204,7 @@ export default class Chat extends Component {
     
 
 getGlobalBadges=()=>{
-    axios.get("https://badges.twitch.tv/v1/badges/global/display?language=en").then(data=>{
+    axios.get("https://badges.twitch.tv/v1/badges/global/display?language=en", this.headers).then(data=>{
                 let myOBJ = data
                 this.globalBadges=myOBJ.data.badge_sets
                 
@@ -298,19 +212,27 @@ getGlobalBadges=()=>{
             })
 
 }
-getSubscriberBadges=()=>{
-    axios.get("https://badges.twitch.tv/v1/badges/channels/"+streamerID+"/display?language=en").then(data=>{
+getSubscriberBadges=(id)=>{
+    console.log("BADGE ERROR 0", id)
+    
+    axios.get("https://badges.twitch.tv/v1/badges/channels/"+id+"/display?language=en")
+    .then(data=>{
         let myOBJ = data
-        this.subscriberBadges=myOBJ.data.badge_sets
+        console.log("BADGE ERROR 1", data)
+        this.subscriberBadges=myOBJ
+        
+            this.subscriberBadges=myOBJ.data.badge_sets
+        
     })
 }
-getChannelBadges=()=>{
-    axios.get(`https://api.twitch.tv/kraken/chat/${streamerID}/badges`,this.headers)
+getChannelBadges=(id)=>{
+    console.log("cbcb")
+    axios.get(`https://api.twitch.tv/kraken/chat/${id}/badges`,this.headers)
     .then(data=>{
                 let myOBJ=data
                 this.channelBadges=myOBJ.data
                 
-                // console.log("Channel BADGES DATA:",this.channelBadges)
+                console.log("cbcb DATA:",this.channelBadges)
             })
 
 }
@@ -321,6 +243,7 @@ makeBadgeDivs=(user)=>{
     } else {
         
         let arr = Object.keys(user.badges)
+        // console.log("FIX BADGES ,", user.badges, this.subscriberBadges)
         // console.log(arr)
         // console.log(this.globalBadges)
         for(let i=0; i<arr.length;i++){
@@ -329,6 +252,8 @@ makeBadgeDivs=(user)=>{
                 // console.log("my mod object",this.channelBadges.mod.image)
                 this.badgeDivArray.push(<img key={this.counter+=1} className="badge" src={myURL} />)
             }else if(arr[i]==="subscriber"){
+                console.log(`BADGE PIECE 1 ${this.subscriberBadges} Piece 2 ${arr[i]}` )
+
                 let myURL = this.subscriberBadges[arr[i]].versions[user.badges[arr[i]]].image_url_4x
                 // console.log(myURL)
                 this.badgeDivArray.push(<img key={this.counter+=1} className="badge" src={myURL} />)
@@ -337,7 +262,7 @@ makeBadgeDivs=(user)=>{
                 let myURL = this.channelBadges[arr[i]].image
                 this.badgeDivArray.push(<img key={this.counter+=1} className="badge" src={myURL} />)
             }
-            else if(this.globalBadges[arr[i]]){
+            else if(this.globalBadges[arr[i]] && this.globalBadges[arr[i]].versions[user.badges[arr[i]]]){
                 // console.log("THIS IS MY UNDEFINED",this.globalBadges[arr[i]].versions[user.badges[arr[i]]])
                 let myURL = this.globalBadges[arr[i]].versions[user.badges[arr[i]]].image_url_4x
                 // console.log(myURL)
@@ -348,43 +273,147 @@ makeBadgeDivs=(user)=>{
     }
 }
         
-    componentDidMount(){
-        this.getGlobalBadges()
-        this.getChannelBadges()
-        this.getSubscriberBadges()
-        
-        // this.fetchEmotes()
-        
-        this.props.client.on('chat', (channel, user, message, self)=>{
-            // console.log("MY ENTIRE EMOTES OBJ:",user.badges)
-            this.makeBadgeDivs(user)
-            
-            
-            
-            // this.emoteParser(message,)
-            this.smartEmoteParser(message,user.emotes)
-            this.makeMessageDivs(channel,user,message,self)
-            
-            let getLocalStorageCommands= JSON.parse(localStorage.getItem('commands'));
-            if(getLocalStorageCommands != null &&   getLocalStorageCommands.hasOwnProperty(message)){
-                
-                this.props.client.action("streampanelapp", `${getLocalStorageCommands[message]}`).then(function(data) {
-                    // data returns [channel]
-                }).catch(function(err) {
-                    //
-                });
-            }
-            
-        
 
+modDB=(user, status)=>{
+    
+        this.modDBObj[user] = status
+    
+
+}
+chatListner=(chan)=>{
+    
+            this.props.client.on('chat', (channel, user, message, self)=>{
+                
+                
+                // if(user.badges && user.badges.moderator){
+                this.modDBObj[user.username] = user.mod
+                console.log("chat listner is mod", this.modDBObj)
+                this.makeBadgeDivs(user)
+                
+                
+                
+                // this.emoteParser(message,)
+                this.smartEmoteParser(message,user.emotes)
+                this.makeMessageDivs(channel,user,message,self)
+                
+                // let getLocalStorageCommands= JSON.parse(localStorage.getItem('commands'));
+                if(this.props.context.state.commands){
+                    for(let i = 0; i<this.props.context.state.commands.length; i++){
+                        if(this.props.context.state.commands[i].name===message){
+                            console.log("RESPONSE word ",this.props.context.state.commands[i], i)
+                            this.props.client.action(chan, `${this.props.context.state.commands[i].reply}`).then(function(data) {
+                                // data returns [channel]
+                            }).catch(function(err) {
+                                //
+                            });
+                        }
+                    }
+                        
+                    
+                }
+                    
+                    
+                
+                
             
-        })}
+    
+                
+            })
+            this.props.client.on('action', (channel, user, message, self)=>{
+                
+                // if(user.badges && user.badges.moderator){
+                    if(user.mod){
+                    this.modDB(user.username, true)
+                }else {
+                    this.modDB(user.username, false)
+                }
+                
+                this.makeBadgeDivs(user)
+                
+                
+                
+                // this.emoteParser(message,)
+                this.smartEmoteParser(message,user.emotes)
+                this.makeMessageDivs(channel,user,message,self)
+                
+                
+                    
+                    
+                
+                
+            
+    
+                
+            })
+        
+}   
+
+componentDidUpdate(prevProps){
+    if(prevProps.context.state.commands !== this.props.context.state.commands){
+        this.setState({commands:this.props.context.state.commands})
+    }
+    
+    if(prevProps.client === null && this.props.client){
+        // this.getCommands()
+        this.getGlobalBadges()
+this.getChannelBadges(this.props.context.state.twitchId)
+this.getSubscriberBadges(this.props.context.state.twitchId)
+
+    this.chatListner(this.props.context.state.displayName)
+
+    }
+}
+    componentDidMount(){
+        
+            console.log("CHAT CONTEXT", this.props.context)
+            setTimeout(() => {
+                console.log("CHAT CONTEXT waited", this.props.context)
+        //         this.getCommands()
+        //         this.getGlobalBadges()
+        // this.getChannelBadges()
+        // this.getSubscriberBadges()
+        //     this.chatListner()
+            }, 3000);
+            
+       
+            
+        
+        
+        
+        
+        
+        
+        }
 
     render(){
-        
-        
+        let modal = null
+        if(this.state.showModal){
+            
+            modal= 
+            <Fragment>
+                    <div className="modal-back" onClick={()=>{this.setState({showModal:false})}}></div> 
+            <MyContext.Consumer>{
+                context=>
+                <ChatModal username={this.state.clickedUser} client={context.state.client} newMessage={context.newMessage} modDB={this.modDBObj}/>
+            }
+
+
+            </MyContext.Consumer>
+            </Fragment>
+            
+                
+            
+        }
         return (
-            this.state.myDivs
+            <Fragment>
+                <div>{modal}</div>
+            <div>
+                
+    {this.state.myDivs}
+            </div>
+            </Fragment>
+            
+            
             
        )
             

@@ -55,9 +55,9 @@ getSubs=()=>{
      
 
 
-getRecentFollows=()=>{
+getRecentFollows=(id)=>{
     // let URL = "https://api.twitch.tv/helix/users/follows?first=20&to_id="+this.props.userID
-    let URL = "https://api.twitch.tv/helix/users/follows?first=20&to_id="+streamerID
+    let URL = "https://api.twitch.tv/helix/users/follows?first=20&to_id="+id
     let headers = {
         headers: {
             "Client-ID": clientID,
@@ -92,10 +92,17 @@ getRecentFollows=()=>{
     }) 
 
 }
-
+componentDidUpdate(pre){
+    if(this.props.client && pre.client !== this.props.client){
+        this.getSubs()
+        this.getRecentFollows(this.props.context.state.twitchId)
+    }
+    
+}
 componentDidMount(){
+    
 
-    this.getSubs()
+    
     // this.getResubs()
 
     // this.props.client.on("subscription", function (channel, username, method, message, userstate) {
@@ -104,8 +111,8 @@ componentDidMount(){
 
 
     setInterval(() => {
-        
-        this.getRecentFollows()
+        console.log(this.props.context.state.twitchId)
+        this.getRecentFollows(this.props.context.state.twitchId)
     }, 10000);
 }
 
@@ -127,7 +134,7 @@ render(){
                 {/* <div className="follows">{this.state.arrayOfSubs}</div> */}
                 
             </div>
-            <div className="subs-container">
+            {/* <div className="subs-container">
             
                 <div className="tweet-container">
                     <div className="tweet-btn">
@@ -137,7 +144,7 @@ render(){
                     
                 </div>
                 <Link to="/login" className="sp-logo"><div></div></Link>
-            </div>
+            </div> */}
             
             
         </div>

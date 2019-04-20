@@ -42,7 +42,7 @@ export default class OBSRemote extends EventEmitter {
 		})
 	}
     addMessageListener( listener ){
-        // console.log('new listener added: ',listener);
+        console.log('new listener added: ',listener);
         this.messageListener = listener;
     }
 	/**

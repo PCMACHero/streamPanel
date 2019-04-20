@@ -1,0 +1,78 @@
+Chat doesnt render "actions" on app end (but is working and visible to people using normal twitch chat)
+Scenes only scroll on touch drag, not on mouse drag
+
+
+components that need OAUTH: chatsection
+
+components that need ID: chatsection
+
+
+give ID/ouath to via parent :
+import {MyContext, MyProvider} from '../views/streampanel'
+<MyContext.Consumer>
+    {context =>
+      
+      <Chat key={19000} client={this.client} chanBadges={this.props.chanBadges} partner={this.state.channel.partner} 
+                oauth={this.props.oauth}/>
+  </div>
+    }
+  </MyContext.Consumer>
+
+
+REDUX
+
+createStore in index.js and give it a reducer 
+store = createStore(reducer)
+
+import Provider from react-redux and wrap App component
+
+make reducer file and create initial state and reducer. Add action type check
+const initialState = {val:0}
+const reducer = {state = initialState, action}=>{
+  if(action.type==="INCREASE VAL"){
+    return {
+      val: state.val + 1
+    }
+  }
+  return state
+}
+
+make action
+
+
+in a component you want to access redux state, import connect from react-redux, and make mapStateToProps
+const mapStateToProps = state =>{
+  return {
+    myVar : state.val
+  }
+}
+export default connect(mapStateToProps)(Component)
+
+to update redux state form compoenent, make a mapDispatchToProps
+
+const mapDispatchToProps = dispatch => {
+  return {
+    funcNameToUseInComp : ()=> dispatch({type:"INCREASE VAL"})
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(Component)
+
+
+
+
+
+
+
+MyContext boilerplate
+
+<MyContext.Consumer>
+  {context=>
+    <div onClick={(e)=>{
+      e.stopPropagation();
+      context.newMessage("Batman")
+      console.log(context.state.messageCenter)
+      }}>
+    </div>
+              
+  }
+</MyContext.Consumer>

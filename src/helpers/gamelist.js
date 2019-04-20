@@ -3,6 +3,10 @@ const gameList = [{
 			"name": "League of Legends",
 			"box_art_url": "https://static-cdn.jtvnw.net/ttv-boxart/League%20of%20Legends-{width}x{height}.jpg"
 		},
+		{	"id": "511224", 
+			"name": "Apex Legends", 
+			"box_art_url": "https://static-cdn.jtvnw.net/ttv-boxart/Apex%20Legends-{width}x{height}.jpg"
+		},
 		{
 			"id": "33214",
 			"name": "Fortnite",

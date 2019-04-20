@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import CommandInput from './commandsinput'
-import {MyContext, MyProvider} from '../views/streampanel'
+import {MyContext} from '../helpers/provider'
 
 export default class Commands extends Component{
     
@@ -9,7 +9,7 @@ export default class Commands extends Component{
 
     <MyContext.Consumer>
     {context =>
-      <div className="commands-container">
+      <div className="modal-back">
       <CommandInput context={context} />
   </div>
     }
