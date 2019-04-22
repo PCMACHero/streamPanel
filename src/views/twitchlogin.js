@@ -22,6 +22,15 @@ class twitchLogin extends Component{
       body1: ""
     }
   }
+  
+
+  interval = setInterval(() => {
+    this.niceThings()}
+    ,3000
+  )
+
+
+
   info = {
     b1: "Mute your mics, switch scenes, start / stop stream, and much much more, without having to stop the action.",
     b2: "Monitor your chat and stream video, moderate users, update your stream title and category, run ads, view new follows and subs, and much more.",
@@ -31,7 +40,7 @@ class twitchLogin extends Component{
   features = ["Change Scenes", "Mute Mics", "Toggle Sources", "Start/Stop Stream", "Monitor OBS Status", "View Chat", "Ban / Timeout", "Mod Users", "Create Bot Commands", "Run Ads", "Chat-Mode (slow, subs, etc)", "Change Game / Category", "Update Stream Title", "See Recent Foll/Subs", "MUCH MORE to come"]
   counter=0
 lineCounter = 0
-lines=["All-in-one soution for Twitch Streaming", "Control OBS and Twitch from one place", "Feature rich, with more to come", "Works on any device on your network", "Use your tablet, laptop or desktop", "Easy to use, clean, and fast to get started"]
+lines=["All-in-one soution for Twitch Streaming", "Control OBS and Twitch from one place", "Many features already included, and many more planned.", "Works on any device on your network", "Use your tablet, laptop or desktop", "Easy to use, clean, and fast to get started"]
 // URL = `https://id.twitch.tv/oauth2/authorize?client_id=${
 // clientID}&redirect_uri=http://192.168.2.2:3000/panel&response_type=token&scope=channel_editor+channel_read+chat:read+chat:edit+user:edit+communities_moderate+channel:moderate`
 URL = ""
@@ -61,12 +70,15 @@ niceThings=()=>{
   this.lineCounter++
   this.counter++
 }
+
+componentWillUnmount(){
+  clearInterval(this.interval)
+}
+
 componentDidMount(){
   console.log("QQQQ", this.data)
   this.getTwitchLink()
-  setInterval(() => {
-    this.niceThings()
-  }, 4000);
+  this.interval
   
 }
 render(){
@@ -93,10 +105,10 @@ render(){
     <div className="nav-wrapper">
     
       <a href="#" className="brand-logo right"><div className="sp">StreamPanel</div><div className="brand-img"></div></a>
-      <ul id="nav-mobile" className="left hide-on-med-and-down">
-      {/* <li><Link to="/">HOME</Link></li>
+      <ul id="nav-mobile" className="left ">
+      <li><Link to="/">HOME</Link></li>
       <li><Link to="/setup">SETUP</Link></li>
-      <li><Link to="/about">ABOUT</Link></li> */}
+      <li><Link to="/about">ABOUT</Link></li>
       </ul>
     </div>
   </nav>
@@ -127,7 +139,7 @@ render(){
 
           </div>
           {/* <div className="vid-container"> */}
-            <video autoPlay muted loop id="my-video"  width="100%">
+            <video autoPlay muted loop id="my-video"  height="100%" width="100%">
             <source src="/videos/spmov.mov" type="video/mp4"/>
         </video>
           {/* </div> */}
@@ -178,13 +190,13 @@ tablet_mac
 wifi
 </i>}/>
       </div>
-      <div className="page-space-video">
+      <div className="login-container2">
       <Features array={this.features} title="OBS FEATURES"/>
         <video autoPlay muted loop id="my-video" height="100%" >
-          <source src="/videos/spmov.mov" type="video/mp4"/>
+          <source src="/videos/spmov.mp4" type="video/mp4"/>
         </video>
       </div>
-      <footer className="page-footer teal darken-4">
+      <footer className="page-footer purple darken-4">
           <div className="container ">
             <div className="row">
               <div className="col l6 s12">

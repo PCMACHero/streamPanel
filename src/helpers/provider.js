@@ -241,7 +241,8 @@ export class MyProvider extends Component {
                 debug: true
             },
             connection: {
-                reconnect: true
+                reconnect: true,
+                secure: true
             },
             identity: {
                 username: channel,
