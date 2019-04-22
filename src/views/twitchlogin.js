@@ -139,7 +139,7 @@ render(){
           </div>
           {/* <div className="vid-container"> */}
             <video autoPlay muted loop id="my-video"  height="100%" width="100%">
-            <source src="/videos/spmov.mp4" type="video/mp4"/>
+            <source src="/videos/spmov.mov" type="video/mp4"/>
         </video>
           {/* </div> */}
         
@@ -192,7 +192,7 @@ wifi
       <div className="login-container2">
       <Features array={this.features} title="OBS FEATURES"/>
         <video autoPlay muted loop id="my-video" height="100%" >
-          <source src="/videos/spmov.mp4" type="video/mp4"/>
+          <source src="/videos/spmov.mov" type="video/mp4"/>
         </video>
       </div>
       <footer className="page-footer purple darken-4">
