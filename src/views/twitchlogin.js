@@ -139,7 +139,7 @@ render(){
           </div>
           {/* <div className="vid-container"> */}
             <video autoPlay muted loop id="my-video"  height="100%" width="100%">
-            <source src="/videos/spmov.mov" type="video/mp4"/>
+            <source src="/videos/spmov.mp4" type="video/mp4"/>
         </video>
           {/* </div> */}
         
