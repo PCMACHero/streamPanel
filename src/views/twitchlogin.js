@@ -16,6 +16,7 @@ class twitchLogin extends Component{
 
 
   state={
+    interval: null,
     twitchURL:null,
     lineDiv:<div key={this.counter}className="nice-line animated fadeIn">WELCOME TO STREAMPANEL APP</div>,
     info: {
@@ -24,10 +25,7 @@ class twitchLogin extends Component{
   }
   
 
-  interval = setInterval(() => {
-    this.niceThings()}
-    ,3000
-  )
+  
 
 
 
@@ -72,13 +70,14 @@ niceThings=()=>{
 }
 
 componentWillUnmount(){
-  clearInterval(this.interval)
+  clearInterval(this.state.interval)
 }
 
 componentDidMount(){
   console.log("QQQQ", this.data)
   this.getTwitchLink()
-  this.interval
+  let interval = setInterval(this.niceThings, 3000)
+  this.setState({interval:interval})
   
 }
 render(){
