@@ -104,6 +104,8 @@ module.exports = {
                 // Register new user
                 twitchUser.twitchId = jsonResponse.data.data[0]["id"];
                 twitchUser = RequestManager.updateTwitchUserInfo(twitchUser, jsonResponse.data.data[0]);
+                console.log('what is happening here ? - ', twitchUser, jsonResponse.data.data[0]);
+                
                 const thirdTwitchUrl = "https://api.twitch.tv/kraken/channel";
                 opts = {
                     method: 'GET',

@@ -44,6 +44,7 @@ module.exports = {
         return user;
     },
     updateTwitchUserInfo: (user, infoInJSON) => {
+        console.log('update twitch user called ');
         if (user.displayName !== infoInJSON['display_name']) {
             if (infoInJSON['display_name']) {
                 user.displayName = infoInJSON['display_name'];
