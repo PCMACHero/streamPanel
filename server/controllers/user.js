@@ -5,7 +5,7 @@ const UserManager = require('../models/usermanager');
 const path = require('path');
 const session = require('express-session');
 const config = require('../../common_config/config')
-const permittedUsers = config.PermittedUsers;
+// const permittedUsers = config.PermittedUsers;
 const ReactDOM = require('react-dom');
 const twitchCltId = config.TwitchCredentials.twitchCltId,
       twitchSecret = config.TwitchCredentials.twitchSecret,
@@ -96,9 +96,9 @@ module.exports = {
                     res.redirect('/panel');
                 }
             } else if (userIsNew.results === true) {
-                if (!permittedUsers[jsonResponse.data.data[0]["email"]]) {
-                    res.json(RequestManager.twitchFailMessage());
-                }
+                // if (!permittedUsers[jsonResponse.data.data[0]["email"]]) {
+                //     res.json(RequestManager.twitchFailMessage());
+                // }
                 // Register new user
                 twitchUser.twitchId = jsonResponse.data.data[0]["id"];
                 twitchUser = RequestManager.updateTwitchUserInfo(twitchUser, jsonResponse.data.data[0]);
