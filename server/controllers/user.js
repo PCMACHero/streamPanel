@@ -57,7 +57,8 @@ module.exports = {
             };
 
             jsonResponse = await RequestManager.returnJSONFromTwitch(opts);
-            if (!jsonResponse || jsonResponse.message === 'Error') {
+            if (jsonResponse.message === 'Error') {
+                console.log('error on line 61 ', jsonResponse);
                 res.json(RequestManager.twitchFailMessage());
             }
             let userIsNew = await UserManager.isNewUserByTwitchId(jsonResponse.data.data[0]["id"]);
@@ -82,7 +83,8 @@ module.exports = {
                     }
                 };
                 jsonResponse = await RequestManager.returnJSONFromTwitch(opts);
-                if (!jsonResponse || jsonResponse.message === 'Error') {
+                if (jsonResponse.message === 'Error') {
+                    console.log('error on line 87 ', jsonResponse);
                     res.json(RequestManager.twitchFailMessage());
                 }
 
@@ -127,6 +129,7 @@ module.exports = {
                 }
             }
         } else {
+            console.log('improper response detected ');
             res.json(RequestManager.twitchFailMessage())
         }
     },
