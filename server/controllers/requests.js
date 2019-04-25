@@ -10,7 +10,7 @@ module.exports = {
                     resolve({ message: 'Error', err: error });
                 } else {
                     let responseFormatted = JSON.parse(body);
-                    
+
                     resolve({ message: 'Success', data: responseFormatted });
                 }
             });
@@ -77,6 +77,13 @@ module.exports = {
         if (infoInJSON['language']) {
             if (user.language !== infoInJSON['language']) {
                 user.language = infoInJSON['language'];
+            }
+        }
+        if (infoInJSON['email']) {
+            if (user.email !== infoInJSON['email']) {
+                if (infoInJSON['email']) {
+                    user.email = infoInJSON['email'];
+                }
             }
         }
         return user;

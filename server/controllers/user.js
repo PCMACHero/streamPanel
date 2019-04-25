@@ -118,6 +118,8 @@ module.exports = {
                 jsonResponse = await RequestManager.returnJSONFromTwitch(opts);
                 twitchUser = RequestManager.updateTwitchChannelInfo(twitchUser, jsonResponse.data);
 
+                console.log('hola twitch user after third request ', twitchUser, ' and json response: ', jsonResponse.data);
+
                 // Remove after initial setup
                 if (twitchUser.displayName === 'twboapp') {
                     twitchUser.isAdmin = 10;
