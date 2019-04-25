@@ -91,7 +91,7 @@ class ChannelStatus extends Component{
             "Client-ID": clientID,
             "Authorization": 'OAuth '+oauth
         }}
-         axios.get("https://api.twitch.tv/kraken/channel",headers).then(data=>{
+         axios.get("https://api.twitch.tv/kraken/channels/"+this.props.context.state.name,headers).then(data=>{
             console.log("GET CHAN STATUS!!!!: ",data.data.game)
             this.getGameCover(data.data.game)
             this.props.context.updateStatus(data.data.game,data.data.status)

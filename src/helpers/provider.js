@@ -5,6 +5,7 @@ import {streamer, dumbData} from './dummydata'
 import bigGameList from './gamelist'
 import Obs from './obs-server'
 
+ 
 export const MyContext = React.createContext();
 
 export class MyProvider extends Component {
@@ -73,12 +74,12 @@ export class MyProvider extends Component {
 
     }
 
-    getUserID=(id, oauth)=>{
+    getUserID=(chan, oauth)=>{
         const headers = {"headers":{
-            "Client-ID": id,
+            "Client-ID": "4khw278k18bgk0s4bt7nfu4vcs6xvy",
             "Authorization": 'OAuth '+oauth
         }}
-         axios.get("https://api.twitch.tv/kraken/channel",headers).then(data=>{
+         axios.get(`https://api.twitch.tv/kraken/channels/${chan}`,headers).then(data=>{
             console.log("THIS IS MY USERID AXIOS DATA: ",data.data)
             
             // this.setStreamKey(this.state.OBSServer, data.data.stream_key)
@@ -90,12 +91,12 @@ export class MyProvider extends Component {
                     userID: data.data["_id"],
                     partner:data.data.partner,
                     name: data.data.name,
-                    email: data.data.email,
+                    // email: data.data.email,
                     mature: data.data.mature,
                     views: data.data.views,
                     followers: data.data.followers,
                     // streamKey: data.data.stream_key,
-                    mature:data.data.mature
+                    
 
                 
                 
@@ -197,42 +198,42 @@ export class MyProvider extends Component {
     //         OBSServer:server
     //     })
     // }
-    getOauth=()=>{
-        axios.post("/api/getuserinfo").then(data=>{
-            let obj = data.data.data
-            console.log("MY USER DATA", data)
-           let options = {
-                options: {
-                    debug: true
-                },
-                connection: {
-                    reconnect: true,
-                    secure: true
-                },
-                identity: {
-                    username: obj.display_name,
-                    password: "oauth:"+obj.accessToken
-                    // password: "oauth:"+dumbData.accessToken
-                },
-                channels: [streamer]
-            };
-       let client = new tmi.client(options);
-       client.connect()
-            console.log("now what", data)
-            this.setState({
-                client: client,
-                myOauth: obj.accessToken,
-                loadListener: true,
-                myId: obj.twitchId,
-                username: obj.displayName,
-                // commands: commands,
-                // email:obj.email,
-                // partner: obj.isPartner,
+    // getOauth=()=>{
+    //     axios.post("/api/getuserinfo").then(data=>{
+    //         let obj = data.data.data
+    //         console.log("MY USER DATA", data)
+    //        let options = {
+    //             options: {
+    //                 debug: true
+    //             },
+    //             connection: {
+    //                 reconnect: true,
+    //                 secure: true
+    //             },
+    //             identity: {
+    //                 username: obj.display_name,
+    //                 password: "oauth:"+obj.accessToken
+    //                 // password: "oauth:"+dumbData.accessToken
+    //             },
+    //             channels: [streamer]
+    //         };
+    //    let client = new tmi.client(options);
+    //    client.connect()
+    //         console.log("now what", data)
+    //         this.setState({
+    //             client: client,
+    //             myOauth: obj.accessToken,
+    //             loadListener: true,
+    //             myId: obj.twitchId,
+    //             username: obj.displayName,
+    //             // commands: commands,
+    //             // email:obj.email,
+    //             // partner: obj.isPartner,
 
-            })
+    //         })
             
-        })
-    }
+    //     })
+    // }
 
     makeTwitchClient=(oauth, channel, res)=>{
         console.log("res is", res)
@@ -276,8 +277,13 @@ export class MyProvider extends Component {
         axios.post(`/api/getuserinfo/`).then(res=>{
             console.log("my greek 2", res.data.data)
             this.makeOBS(res.data.data.localIp)
-            this.makeTwitchClient(res.data.data.accessToken, res.data.data.displayName, res)
-            this.getUserID(res.data.data.twithId, res.data.data.accessToken )
+            this.makeTwitchClient(res.data.data.accessToken, "courageJD", res)
+            this.getUserID(res.data.data.displayName, res.data.data.accessToken, )
+            this.setState({
+                oauth: res.data.data.accessToken,
+                myId: res.data.data.twitchId,
+                email: res.data.data.email
+            })
             
             
         })
@@ -353,7 +359,7 @@ export class MyProvider extends Component {
         this.getGamesList()
         this.getBizUser()
         
-        // this.getOauth()
+       
         // this.getBizUser()
         
     }
