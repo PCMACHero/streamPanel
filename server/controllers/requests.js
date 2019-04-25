@@ -6,10 +6,11 @@ module.exports = {
         return new Promise((resolve) => {
             request(options, (error, response, body) => {
                 if (error) {
-                    console.log("error in request from Twitch ", error);
+                    console.log("error in request from Twitch. Reload or login again. ", error);
                     resolve({ message: 'Error', err: error });
                 } else {
                     let responseFormatted = JSON.parse(body);
+
                     resolve({ message: 'Success', data: responseFormatted });
                 }
             });

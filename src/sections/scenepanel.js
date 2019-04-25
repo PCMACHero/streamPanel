@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import {Link} from 'react-router-dom'
 // import SceneBtn from './scenebtn'
 // import {OBSSceneObj} from '../helpers/dummydata'
 
@@ -16,7 +17,7 @@ class ScenePanel extends Component{
     OBSSceneObj = this.state.scenes;
     server = this.props.server
     btnClass = null;
-    scenes = [];
+    scenes = [<div key="1" style={{fontSize:"2rem", display:"flex", "justifyContent":"center", "alignItems":"center",height:"20%", backgroundColor:"red", position:"absolute"}}>Cannot Find OBS. Make sure you have installed OBS Websocket (see <Link to="/setup">Setup</Link>), and that OBS is running, then refresh.</div>];
     
     getAndMakeScenesAndSources(server){
         server.send({'request-type': 'GetSceneList'}).then(data=>{

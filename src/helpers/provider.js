@@ -206,10 +206,11 @@ export class MyProvider extends Component {
                     debug: true
                 },
                 connection: {
-                    reconnect: true
+                    reconnect: true,
+                    secure: true
                 },
                 identity: {
-                    username: "streampanelapp",
+                    username: obj.display_name,
                     password: "oauth:"+obj.accessToken
                     // password: "oauth:"+dumbData.accessToken
                 },
@@ -240,7 +241,8 @@ export class MyProvider extends Component {
                 debug: true
             },
             connection: {
-                reconnect: true
+                reconnect: true,
+                secure: true
             },
             identity: {
                 username: channel,

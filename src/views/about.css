@@ -2,5 +2,31 @@
     width: 70%;
     /* height: 80%; */
     color: white;
-    background-color: rgba(0, 0, 0, 0.411);
+    
+    /* background-color: rgba(0, 0, 0, 0.411); */
+}
+
+.collapse{
+    display: flex;
+    font-size: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    
+    border-top: 1px solid white;
+    border-left: 5px solid white;
+    width: 100%;
+    padding: 10px;
+    background-image: linear-gradient(to right,rgb(30, 0, 70),rgb(0, 1, 83));
+}
+
+.collapse-content{
+    display: flex;
+    font-size: 1.5rem;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid white;
+    width: 100%;
+    padding: 20px;
+    background-image: linear-gradient(to right,white, rgb(255, 255, 255));
+    color: blue;
 }
