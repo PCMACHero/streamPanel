@@ -81,7 +81,7 @@ export class MyProvider extends Component {
          axios.get("https://api.twitch.tv/kraken/channel",headers).then(data=>{
             console.log("THIS IS MY USERID AXIOS DATA: ",data.data)
             
-            this.setStreamKey(this.state.OBSServer, data.data.stream_key)
+            // this.setStreamKey(this.state.OBSServer, data.data.stream_key)
             
             this.setState({
                 
@@ -94,7 +94,7 @@ export class MyProvider extends Component {
                     mature: data.data.mature,
                     views: data.data.views,
                     followers: data.data.followers,
-                    streamKey: data.data.stream_key,
+                    // streamKey: data.data.stream_key,
                     mature:data.data.mature
 
                 

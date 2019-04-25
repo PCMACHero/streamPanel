@@ -44,17 +44,17 @@ class BottomPanel extends Component{
             })
         }
 
-        toggleStream = (key)=>{
-            this.props.server.send({'request-type': 'SetStreamSettings',
-            settings: {
-                key:key
-            },
-            save:true
-        }).then(data=>{
+        toggleStream = ()=>{
+        //     this.props.server.send({'request-type': 'SetStreamSettings',
+        //     settings: {
+        //         key:key
+        //     },
+        //     save:true
+        // }).then(data=>{
             this.props.server.send({'request-type': 'StartStopStreaming'}).then(data=>{
                 console.log("start stop:", data)
             })
-        })
+        // })
        
     }
 
@@ -214,7 +214,7 @@ render(){
             <div className="bottom-left-container">
                 <div className="profiles-btn">
                 <div className={this.state.streaming?"streaming": "not-streaming"} style={{"color":this.state.streaming?"green":"white",
-                    fontSize:"1.5rem"}} onClick={()=>{this.toggleStream(this.props.context.state.streamKey)
+                    fontSize:"1.5rem"}} onClick={()=>{this.toggleStream()
                 }}>
                     
                     <div className="label2">{this.state.streaming?"STOP STREAM": "START STREAM"}
@@ -230,7 +230,7 @@ render(){
                 <div className="profiles-btn">
                 <div className="profiles-btn" style={{display:"flex", flexDirection:"column", height:"100%"}}>
                 <div style={{height:"50%", width:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>
-                    <div className="chicken-counter" style={{width:"50%",height:"100%"}} onClick={()=>{this.toggleTestStream(this.props.context.state.streamKey)}}>Test Stream</div>
+                    <div className="chicken-counter" style={{width:"50%",height:"100%"}} ></div>
                     <div className="chicken-counter" style={{width:"50%",height:"100%"}} onClick={()=>{this.increaseOBSCounter(this.props.context.state.OBSCounterLine1, -1, this.props.context.state.OBSCounterLine2)}}>RESET</div>
                 </div>
                 <div  style={{height:"50%", width:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>
