@@ -44,7 +44,7 @@ module.exports = {
         return user;
     },
     updateTwitchUserInfo: (user, infoInJSON) => {
-        console.log('update twitch user called ');
+        console.log('update twitch user called ', infoInJSON);
         if (user.displayName !== infoInJSON['display_name']) {
             if (infoInJSON['display_name']) {
                 user.displayName = infoInJSON['display_name'];
@@ -65,6 +65,7 @@ module.exports = {
                 user.offline_image_url = infoInJSON['offline_image_url'];
             }
         }
+        console.log('hola user after function ', user);
         return user;
     },
     updateTwitchChannelInfo: (user, infoInJSON) => {
