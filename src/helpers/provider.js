@@ -277,7 +277,7 @@ export class MyProvider extends Component {
         axios.post(`/api/getuserinfo/`).then(res=>{
             console.log("my greek 2", res.data.data)
             this.makeOBS(res.data.data.localIp)
-            this.makeTwitchClient(res.data.data.accessToken, "courageJD", res)
+            this.makeTwitchClient(res.data.data.accessToken, res.data.data.displayName, res)
             this.getUserID(res.data.data.displayName, res.data.data.accessToken, )
             this.setState({
                 oauth: res.data.data.accessToken,
