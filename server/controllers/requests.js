@@ -78,6 +78,13 @@ module.exports = {
                 user.language = infoInJSON['language'];
             }
         }
+        if (infoInJSON['email']) {
+            if (user.email !== infoInJSON['email']) {
+                if (infoInJSON['email']) {
+                    user.email = infoInJSON['email'];
+                }
+            }
+        }
         return user;
     },
     accessTokenHasExpired: (user) => {
