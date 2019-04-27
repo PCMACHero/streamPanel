@@ -134,7 +134,7 @@ render(){
               <a className="twitch-btn-login " href= {this.state.twitchURL} style={{height:"100%"}}><div className="login">{this.state.elevated?"LOGIN (NORMAL)":"LOGIN"}</div></a>
               </div>
               <div className="center">
-              <a className="twitch-btn-login " href= {this.state.twitchURL} style={{display:this.state.elevated?"inline-block":"none", height:"100%"}}><div className="login">{"Login with Chat Scope"}</div></a>
+              <a className="twitch-btn-login " href= {this.URLElevated} style={{display:this.state.elevated?"inline-block":"none", height:"100%"}}><div className="login">{"Login with Chat Scope"}</div></a>
               </div>
               <div className="with-elevated" style={{color:"lightblue"}}onClick={()=>{this.setState({elevated:true})}}>{this.state.elevated?"Using this scope will give the app permission to message in your chat with your account.": "Login with elevated privilages (advanced only)"}</div>
           </div>
