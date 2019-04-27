@@ -289,8 +289,9 @@ export class MyProvider extends Component {
             "Authorization": 'OAuth '+oauth
         }}
          axios.get(`https://api.twitch.tv/kraken/`,headers).then(data=>{
-             if(data.token.authorization.scopes.includes("chat:edit"))
-             console.log("scope includes?", data.token.authorization.scopes)
+            console.log("scope includes?", data)
+             if(data.data.token.authorization.scopes.includes("chat:edit"))
+             
              this.setState({
                  scopeToChat: true
              })
