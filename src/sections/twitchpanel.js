@@ -153,13 +153,19 @@ getFirstChatMode=(client)=>{
                     <div className='label'>RUN AD</div>
                 </div>
                 <div className="twitch-btn" onClick={()=>{
-                        this.props.context.showHideScreen("commands", "on")
+
+                        
+                        if(this.props.context.state.scopeToChat){
+                            this.props.context.showHideScreen("commands", "on")
+                        }else{
+                            alert("You need to login without safe mode to use this feature")
+                        }
                         }}>
     
                     <i className="material-icons">
                     adb
                     </i>
-                    <div className='label' >COMMANDS</div>
+                    <div className='label' >{this.props.context.state.scopeToChat?"COMMANDS":"COMMANDS DISABLED"}</div>
                     
                     
                 </div>

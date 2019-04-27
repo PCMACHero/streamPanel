@@ -176,7 +176,7 @@ class MainSection extends Component{
             <Fragment>
             <div className='main-section'>
             <div className="cover"><div className="brand"><div className="brand-user">{context.state.displayName}</div><div className="powered">  powered by  </div><div className="brand-title"> STREAMPANEL APP</div></div></div>
-            <ScenePanel server={context.state.OBSServer}  event={this.state.event} scenes={this.state.scenes} func={this.setSceneAndSourcesOnClick} currentScene={this.state.currentScene}/>
+            <ScenePanel server={context.state.OBSServer}  event={this.state.event} scenes={this.state.scenes} func={this.setSceneAndSourcesOnClick} context={context} currentScene={this.state.currentScene}/>
             <div className="mid-section">
                 <SourcePanel server={context.state.OBSServer}  event={this.state.event} showHide={context.showHideScreen} func={this.toggleSource} srcClass={this.state.srcClass} />
                 <VideoBox channel={this.props.context.state.displayName}></VideoBox>

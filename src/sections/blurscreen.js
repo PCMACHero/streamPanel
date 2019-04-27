@@ -22,7 +22,14 @@ export default class BlurScreen extends Component{
                 }} style={{height:"100vh", width:"100vw", zIndex:"5", position:"absolute", display:"flex", justifyContent:"center", alignItems:"center"}}>
                     <div className="blur-box" onClick={(e)=>{
                         e.stopPropagation();
-                    }}style={{height:"70%",width:"70%",display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column", backgroundColor:this.props.color}}>
+                    }}style={{height:"70%",width:"70%",display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column", border:"1px solid white", backgroundColor:this.props.color}}>
+                        <div className="close-container" style={{width:"100%"}}>
+                            <div onClick={()=>{
+                                this.props.close("all",false)
+                            }}style={style.close}><i style={{color:"red"}} className="material-icons">clear</i></div>
+                            
+                        </div>
+                        
                         <div className="blur-title" style={{fontSize:"2.5em", color:"white"}}>{this.props.title}</div>
                         <div className="blur-content">{this.props.content}</div>
                     </div>
@@ -31,14 +38,19 @@ export default class BlurScreen extends Component{
         }else{
             return (
                 null
-                // <div className="blur-container" style={{height:"0vh", width:"0vw", zIndex:"5", position:"absolute", display:"none", justifyContent:"center", alignItems:"center", visibility:"none"}}>
-                //     <div className="blur-box" style={{height:"70%",width:"70%",display:"flex", justifyContent:"center", alignItems:"center", flexDirection:"column", backgroundColor:this.props.color, opacity:".5"}}>
-                //         <div className="blur-title" style={{fontSize:"2em"}}>{this.props.title}</div>
-                //         <div className="blur-content">{this.props.content}</div>
-                //     </div>
-                // </div>
+               
             )
         }
+        
+    }
+}
+
+let style ={
+    close:{
+        fontSize: "2rem",
+        height: "60px",
+        width: "60px",
+        color: "red",
         
     }
 }

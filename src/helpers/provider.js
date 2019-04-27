@@ -27,6 +27,7 @@ export class MyProvider extends Component {
         mixerScreen: false,
         profileScreen: false,
         updateScreen: false,
+        alexScreen: false,
         OBSServer: null,
         OBSConnected:false,
         OBSCounter:null,
@@ -52,6 +53,7 @@ export class MyProvider extends Component {
             class: ""
         },
         gamesList:{},
+        scopeToChat:null,
         "followers-only": null,
         "subs-only": null,
         slow: null,
@@ -119,6 +121,7 @@ export class MyProvider extends Component {
                 profileScreen: onoff,
                 mixerScreen: onoff,
                 updateScreen: onoff,
+                alexScreen: onoff,
                 blur:onoff
             })
         }
@@ -151,6 +154,14 @@ export class MyProvider extends Component {
                 commandsScreen: onoff,
                 blur: onoff,
             })
+            
+        }
+        if(screen==="alex"){
+            this.setState({
+                alexScreen: onoff,
+                blur: onoff,
+            })
+            
         }
         
         
@@ -272,11 +283,27 @@ export class MyProvider extends Component {
         
         
     }
-
+    getScope=(oauth)=>{
+        const headers = {"headers":{
+            "Client-ID": "4khw278k18bgk0s4bt7nfu4vcs6xvy",
+            "Authorization": 'OAuth '+oauth
+        }}
+         axios.get(`https://api.twitch.tv/kraken/`,headers).then(data=>{
+             if(data.token.authorization.scopes.includes("chat:edit"))
+             console.log("scope includes?", data.token.authorization.scopes)
+             this.setState({
+                 scopeToChat: true
+             })
+    })
+    }
     getBizUser=()=>{
         axios.post(`/api/getuserinfo/`).then(res=>{
-            console.log("my greek 2", res.data.data)
-            this.makeOBS(res.data.data.localIp)
+            console.log("my greek 2", res)
+            let ip = "localhost"
+            if(res.data.data.localIp){
+                ip = res.data.data.localIp
+            }
+            this.makeOBS(ip)
             this.makeTwitchClient(res.data.data.accessToken, res.data.data.displayName, res)
             this.getUserID(res.data.data.displayName, res.data.data.accessToken, )
             this.setState({
@@ -286,6 +313,9 @@ export class MyProvider extends Component {
             })
             
             
+        }).catch(err=>{
+            this.makeOBS()
+            console.log("we gots err")
         })
     }
     
@@ -303,9 +333,10 @@ export class MyProvider extends Component {
 }
 
     makeOBS=(ip)=>{
+        console.log("we got obs 1", ip)
         let server = new Obs();
         server.connect(ip).then(data=>{
-            
+                console.log("we got obs 2", data)
                 this.setState({
                     OBSServer:server
                 

@@ -11,6 +11,7 @@ import Update from '../sections/updatemodal/update';
 import MyModal from '../sections/chatmode';
 import CommandsInput from '../sections/commandsinput';
 import ChatModal from '../sections/chatmode';
+import Alex from '../sections/alex';
 
 
 
@@ -123,6 +124,7 @@ class StreamPanel extends Component {
                 
                     
                         <Fragment>
+                            <BlurScreen title="ALEX" color="rgba(0,0,0, 0.4)" show={context.state.alexScreen} close={context.showHideScreen} content={<Alex context={context}/>}/>
                             <BlurScreen title="BOT COMMANDS" color="rgba(0,0,0, 0.4)" show={context.state.commandsScreen} close={context.showHideScreen} content={<CommandsInput context={context}/>}/>
                             <BlurScreen title="CHATMODE" color="rgba(0,0,0, 0.4)" show={context.state.chatModeScreen} close={context.showHideScreen} content={<ChatModal context={context}/>}/>
                             <BlurScreen title="UPDATE" color="rgba(0,0,0, 0.4)" show={context.state.updateScreen} close={context.showHideScreen} content={<Update context={context}/>}/>

@@ -188,7 +188,7 @@ export default class Update extends React.Component{
                                 data={this.props.context.state.gamesList}
                                 name="newGame"
                                 id="newGame"
-                                placeholder={`Enter Game/Category: ${this.props.context.state.game}`}
+                                placeholder={`Enter Game/Category`}
                                 
                                 
                                 
@@ -200,20 +200,12 @@ export default class Update extends React.Component{
                         </Row>
                         
                         <div className="input-field command-input-text">
-                            <input className="input-name" name="newTitle" autoComplete="off" id="new-title"placeholder={`Enter Title ex: ${this.props.context.state.title}`} 
+                            <input className="input-name" name="newTitle" autoComplete="off" id="new-title"placeholder={`Enter Stream Title`} 
                             type="text" onChange={(e)=>this.changeHandler(e)} value={this.state.newTitle}/>
                             
                         </div>
                         
-
-                    </form>
-
-                    
-
-
-
-                
-                <div onClick={()=>{
+                        <div onClick={()=>{
                     // let title = null
                     // if(this.state.newTitle===""){
                     //     title = this.state.currentTitle
@@ -258,14 +250,23 @@ export default class Update extends React.Component{
                       
                 }} className="s1 btn right-align #4a148c purple darken-4" waves='light'>Update</div>
 
+                    </form>
+
+                    
+
+
+
+                
+                
+
                 
                 
                     <form action="" style={{display:"flex", justifyContent:"space-evenly", width:"700px"}}>
-                        <input type="text" style={{width:"150px"}} name="line1" id="line1" value={this.state.line1} autoComplete="off" onChange={(e)=>{this.changeLines(e)}}/>
-                        <input type="text" style={{width:"30px"}} name="counterNum" id="counterNum" value={this.state.counterNum} autoComplete="off" onChange={(e)=>{this.changeLines(e)}}/>
-                        <input type="text" style={{width:"150px"}} name="line2" id="line2" value={this.state.line2} autoComplete="off" onChange={(e)=>{this.changeLines(e)}}/>
+                        <input type="text" style={{width:"150px"}} name="line1" id="line1" value={this.state.line1} autoComplete="off" onChange={(e)=>{this.changeLines(e)}} placeholder="I have"/>
+                        <input type="text" style={{width:"30px"}} name="counterNum" id="counterNum" value={this.state.counterNum} autoComplete="off" onChange={(e)=>{this.changeLines(e)}} placeholder="4"/>
+                        <input type="text" style={{width:"150px"}} name="line2" id="line2" value={this.state.line2} autoComplete="off" onChange={(e)=>{this.changeLines(e)}} placeholder="wins today!"/>
                         
-                        <div className="btn" onClick={()=>{this.setText()}}>SEND</div>
+                        <div className="btn" onClick={()=>{this.setText()}}>SEND TO OBS</div>
                         
                     </form>
                     {this.state.ipBtn}

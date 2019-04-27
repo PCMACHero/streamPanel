@@ -230,7 +230,8 @@ render(){
                 <div className="profiles-btn">
                 <div className="profiles-btn" style={{display:"flex", flexDirection:"column", height:"100%"}}>
                 <div style={{height:"50%", width:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>
-                    <div className="chicken-counter" style={{width:"50%",height:"100%"}} ></div>
+                    <div className="chicken-counter" style={{width:"50%",height:"100%"}} onClick={(e)=>{console.log(e.type)
+                            context.showHideScreen("alex", true)}}>ALEX</div>
                     <div className="chicken-counter" style={{width:"50%",height:"100%"}} onClick={()=>{this.increaseOBSCounter(this.props.context.state.OBSCounterLine1, -1, this.props.context.state.OBSCounterLine2)}}>RESET</div>
                 </div>
                 <div  style={{height:"50%", width:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>

@@ -1,8 +1,8 @@
-import React,{Component, Fragment} from 'react'
+import React from 'react'
 import axios from 'axios'
 import { clientID } from '../common/common';
 
-export default class Presets extends Component{
+export default class Presets extends React.Component{
     state={
         divs:[],
         btnClicked:null,
@@ -284,7 +284,7 @@ export default class Presets extends Component{
     render(){
         console.log("re rendered")
         return (
-            <Fragment>
+            <React.Fragment>
                 <div className="preset-item">
                     <input type="text" style={{color:"white"}}name="preset-name" id="preset-name" value={this.state.presetName} onChange={(e)=>{this.handleChange(e)}}/>
                     <div className="btn" 
@@ -296,7 +296,7 @@ export default class Presets extends Component{
                 {this.state.divs}
                 </div>
                 
-            </Fragment>
+            </React.Fragment>
                 
             
             

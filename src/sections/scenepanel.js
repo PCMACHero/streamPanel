@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router-dom'
+
+
 // import SceneBtn from './scenebtn'
 // import {OBSSceneObj} from '../helpers/dummydata'
 
@@ -17,12 +19,15 @@ class ScenePanel extends Component{
     OBSSceneObj = this.state.scenes;
     server = this.props.server
     btnClass = null;
-    scenes = [<div key="1" style={{fontSize:"2rem", display:"flex", "justifyContent":"center", "alignItems":"center",height:"20%", backgroundColor:"red", position:"absolute"}}>Cannot Find OBS. Make sure you have installed OBS Websocket (see <Link to="/setup">Setup</Link>), and that OBS is running, then refresh.</div>];
+    scenes = [<div key="1" className="animated infinite pulse" 
+    style={{fontSize:"1rem", display:"flex", "justifyContent":"center", "alignItems":"center",height:"100%",width:"100%", backgroundColor:"red", }}
+    >Cannot Find OBS. Make sure you have installed OBS Websocket, and that OBS is running, then refresh.</div>];
     
     getAndMakeScenesAndSources(server){
         server.send({'request-type': 'GetSceneList'}).then(data=>{
             console.log("IS SERVER WORKING?", data)
             this.makeDivs(data.scenes, data["current-scene"]  )
+            this.props.context.updateState("scenes", data.scenes)
             this.setState( { 
                 scenes: data.scenes,
                 currentScene:data["current-scene"] 
@@ -158,6 +163,48 @@ class ScenePanel extends Component{
     }
     componentDidUpdate(prev){
         console.log("event prop", this.props.event)
+        if(prev.context.state.alexTimer !== this.props.context.state.alexTimer){
+            let alex = this.props.context.state.alexTimer
+            if(alex.length % 2 === 0){
+                let loopTime = 0
+                alex.forEach((e,i)=>{
+                    if(i%2!==0){
+                        loopTime+=e
+                    }
+                })
+                let startTime = 0
+            this.setSceneAndSourcesOnClick(alex[0])
+            for(let i =2; i<alex.length;i+=2){
+                startTime+= alex[i-1]
+                setTimeout(() => {
+                    this.setSceneAndSourcesOnClick(alex[i])
+                }, startTime*1000);
+            }
+                console.log("looptimeis 10",loopTime)
+                setInterval(() => {
+                    let startTime = 0
+            this.setSceneAndSourcesOnClick(alex[0])
+            for(let i =2; i<alex.length;i+=2){
+                startTime+= alex[i-1]
+                setTimeout(() => {
+                    this.setSceneAndSourcesOnClick(alex[i])
+                }, startTime*1000);
+            }
+                }, loopTime*1000);
+            }else{
+                let startTime = 0
+            this.setSceneAndSourcesOnClick(alex[0])
+            for(let i =2; i<alex.length;i+=2){
+                startTime+= alex[i-1]
+                setTimeout(() => {
+                    this.setSceneAndSourcesOnClick(alex[i])
+                }, startTime*1000);
+            }
+            }
+            
+            
+            
+        }
         if(this.props.server && prev.server==undefined){
             console.log("OBS CONNECTED")
             this.getFirstScenesAndSources()  
@@ -186,3 +233,4 @@ class ScenePanel extends Component{
     
 }
 export default ScenePanel
+

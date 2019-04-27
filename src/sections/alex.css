@@ -1,0 +1,87 @@
+.row{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.cont{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: white; */
+    color: black;
+    flex-direction:column;
+}
+.sceneRow{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: white; */
+    color: black;
+    flex-direction:row;
+}
+.sceneBox{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    color: black;
+    flex-direction:row;
+    width: 100px;
+    height: 50px;
+    border-right: 1px solid black;
+}
+.sceneBox:hover{
+    background-color: rgb(206, 206, 206);
+}
+.instText{
+    color:white;
+    margin:20px;
+    font-size:1.5rem;
+}
+.timerInput{
+    width:100px;
+    color:white;
+}
+.addTimerBtn{
+    color:white;
+    background-color:purple;
+    height:30px;
+    width: 100px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.tlScene{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: white; */
+    border: 1px solid white;
+    color: lightblue;
+    flex-direction:row;
+    padding-left: 5px;
+    padding-right: 5px;
+    height: 50px;
+    /* border-right: 1px solid black */
+}
+.tlTime{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* background-color: white; */
+    color: white;
+    flex-direction:row;
+    width: 100px;
+    height: 50px;
+    border-right: 1px solid black;
+}
+
+.done{
+    color:white;
+    background-color:purple;
+    height:45px;
+    width: 100px;
+    display:flex;
+    justify-content:center;
+    align-items:center
+}
