@@ -21,7 +21,8 @@ class twitchLogin extends Component{
     lineDiv:<div key={this.counter}className="nice-line animated fadeIn">WELCOME TO STREAMPANEL APP</div>,
     info: {
       body1: ""
-    }
+    },
+    elevated:null,
   }
   
 
@@ -39,9 +40,8 @@ class twitchLogin extends Component{
   counter=0
 lineCounter = 0
 lines=["All-in-one soution for Twitch Streaming", "Control OBS and Twitch from one place", "Many features already included, and many more planned.", "Works on any device on your network", "Use your tablet, laptop or desktop", "Easy to use, clean, and fast to get started"]
-// URL = `https://id.twitch.tv/oauth2/authorize?client_id=${
-// clientID}&redirect_uri=http://192.168.2.2:3000/panel&response_type=token&scope=channel_editor+channel_read+chat:read+chat:edit+user:edit+communities_moderate+channel:moderate`
-URL = ""
+
+URLElevated = "https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=1w72cq9l8ub9r1pzuqrh91pwduz8r2&redirect_uri=https://streampanel.app/success/payment-portal&scope=channel_editor+chat:read+chat:edit+channel:moderate+user:read:email+bits:read+clips:edit&state=77bfce89f4169e4e4e79d45af98d0c04"
 
 getTwitchLink=()=>{
   console.log("twitch link 1")
@@ -131,8 +131,12 @@ render(){
               
               </div>
               <div className="center">
-              <a className="twitch-btn-login" href= {this.state.twitchURL} style={{height:"100%"}}><div className="login">{this.props.auth? `Welcome, ${this.props.context.state.displayName}`: "Login"}</div></a>
+              <a className="twitch-btn-login " href= {this.state.twitchURL} style={{height:"100%"}}><div className="login">{this.state.elevated?"LOGIN (NORMAL)":"LOGIN"}</div></a>
               </div>
+              <div className="center">
+              <a className="twitch-btn-login " href= {this.state.twitchURL} style={{display:this.state.elevated?"inline-block":"none", height:"100%"}}><div className="login">{"Login with Chat Scope"}</div></a>
+              </div>
+              <div className="with-elevated" style={{color:"lightblue"}}onClick={()=>{this.setState({elevated:true})}}>{this.state.elevated?"Using this scope will give the app permission to message in your chat with your account.": "Login with elevated privilages (advanced only)"}</div>
           </div>
           
 

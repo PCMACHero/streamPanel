@@ -158,7 +158,7 @@ getFirstChatMode=(client)=>{
                         if(this.props.context.state.scopeToChat){
                             this.props.context.showHideScreen("commands", "on")
                         }else{
-                            alert("You need to login without safe mode to use this feature")
+                            alert("You need to login elevated privilages to use this feature. Use the link on the home page")
                         }
                         }}>
     

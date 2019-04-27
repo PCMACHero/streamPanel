@@ -54,9 +54,19 @@ const about = ()=>{
               </div>
             </Collapsible>
             <div><h2>How-To</h2></div>
+            <Collapsible  transitionTime={200} trigger={<div className="collapse">How Do I Unlock the Bot Commander?<i className="material-icons">arrow_drop_down</i></div>}>
+              <div className="collapse-content">
+              <p>To unlock use of the Bot Commands, you must obtain an OAUTH token with elevated privilages for being able to message your chat as yourself (the Bot uses your own account for conveninece to message in your own chat).
+                 This link will request an OAUTH token that includes the "chat:edit" scope, in addition to the scopes indluded in the other login. Use the "with chat edit privilages" link.</p> 
+
+              </div>
+            </Collapsible>
             <Collapsible  transitionTime={200} trigger={<div className="collapse">How Do I Control with Wireless / Secondary Device?<i className="material-icons">arrow_drop_down</i></div>}>
               <div className="collapse-content">
-              <p>Just make sure your second device is connected to the same network as the machine with OBS is. Then, on the machine runnning OBS, log in to <a href="http://streampanel.app" target="_blank">StreamPanel.app</a> and click the “update” button on bottom left. Then, click “this machine has OBS”. With that, we will know which device has OBS, and save it. Now you can login on any device (with the same twitch account you used for the OBS machine), and it will automatically find OBS and connect.</p> 
+              <p>Just make sure your second device is connected to the same network as the machine with OBS is. Then, on the machine runnning OBS, 
+                log in to <a href="http://streampanel.app" target="_blank">StreamPanel.app</a> and click the “update” button on bottom left. Then, click 
+                “this machine has OBS”. With that, we will know which device has OBS, and save it. Now you can login on any device (with the same twitch account 
+                you used for the OBS machine), and it will automatically find OBS and connect.</p> 
 
               </div>
             </Collapsible>
