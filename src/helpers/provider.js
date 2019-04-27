@@ -305,6 +305,7 @@ export class MyProvider extends Component {
             }
             this.makeOBS(ip)
             this.makeTwitchClient(res.data.data.accessToken, res.data.data.displayName, res)
+            this.getScope(res.data.data.accessToken)
             this.getUserID(res.data.data.displayName, res.data.data.accessToken, )
             this.setState({
                 oauth: res.data.data.accessToken,
