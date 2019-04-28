@@ -20,7 +20,7 @@ class VideoBox extends React.Component{
     
     render(){
         return ( 
-            <div  className={ this.state.condition ? "video-box-small" : "video-box-big" }
+            <div  className={this.props.class }
             >   
             
                 <iframe 

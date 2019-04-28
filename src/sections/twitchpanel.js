@@ -144,7 +144,7 @@ getFirstChatMode=(client)=>{
                 <Fragment>
                     
                 
-                <div className='source-panel'>
+                <div className='twitch-panel'>
                 
                 <div className="twitch-btn"  onClick={()=>{this.runAd(this.props.context.state.displayName) }}>
                     <i className="material-icons">

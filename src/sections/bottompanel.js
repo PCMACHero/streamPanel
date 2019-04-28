@@ -252,8 +252,8 @@ render(){
                 </div>
                 <div  style={{height:"50%", width:"100%", display:"flex", justifyContent:"center", alignItems:"center"}}>
                     
-                    <div className="chicken-counter2" style={{width:"50%",height:"100%"}} ><Link to="/">Home</Link></div>
-                    <div className="chicken-counter2" style={{width:"50%",height:"100%"}} ></div>
+                    <div className="chicken-counter2 homey" style={{width:"50%",height:"100%"}} ><Link to="/">Home</Link></div>
+                    <div className="chicken-counter2 homey" style={{width:"50%",height:"100%"}} ></div>
                 </div>
             
             
@@ -270,7 +270,7 @@ render(){
 
 
 
-                
+                {this.props.video}
                 
             </div>
             <div className="bottom-middle-container">

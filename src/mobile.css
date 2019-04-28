@@ -1,0 +1,153 @@
+/* font-family: 'Roboto', sans-serif;
+font-family: 'Thasadith', sans-serif;
+font-family: 'Montserrat', sans-serif;
+font-family: 'Roboto Condensed', sans-serif;
+font-family: 'Major Mono Display', monospace;
+font-family: 'Oswald', sans-serif;
+font-family: 'Staatliches', cursive;
+font-family: 'Ubuntu', sans-serif;
+font-family: 'Titillium Web', sans-serif;
+font-family: 'Anton', sans-serif;
+font-family: 'Fjalla One', sans-serif;
+font-family: 'Julius Sans One', sans-serif;
+font-family: 'Baloo', cursive;
+font-family: 'Homenaje', sans-serif;
+font-family: 'Rubik Mono One', sans-serif; */
+
+@media only screen and (max-width: 667px) {
+
+
+
+
+
+
+
+
+
+
+
+
+    body {
+      background-color: lightblue;
+    }
+    .brand{
+        width: 100vw;
+    }
+    .brand-title{
+        font-size: 1.5rem;
+        font-family: 'Anton', sans-serif;
+        background: -webkit-linear-gradient(right, rgb(0, 211, 141), rgb(151, 86, 255),rgb(0, 238, 255));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .video-box-small, .bottom-middle-container, .bottom-right-container, .tiny-btns {
+        display:none;
+    }
+    #chat-section{
+        position: absolute;
+        width: 100vw;
+        height: 30vh;
+        bottom:0;
+        border-top: 1px solid white;
+        margin:0;
+    }
+    .main-section{
+        flex-basis: 100%;
+    }
+    .scene-panel{
+        
+        position: absolute;
+        top:10vh;
+        justify-content: flex-start;
+        height: 10vh;
+        width: 100vw;
+
+    }
+    .scene-btn, .selected-scene-btn{
+        transform: none;
+        height: 10vh !important;
+        width:33.33% !important;
+        
+    }
+    .twitch-button{
+
+    }
+    .mid-section{
+        flex-direction: column;
+    }
+    .source-panel{
+        flex-direction: row;
+        width: 100vw;
+        overflow: auto;
+        position: absolute;
+        top:20vh;
+        height: 15vh;
+        
+    }
+    .twitch-panel{
+        flex-direction: row;
+        width: 100vw;
+        overflow: auto;
+        position: absolute;
+        top:35vh;
+        height: 15vh;
+        
+    }
+    .src-btn, .src-btn-active, .twitch-btn, .scene-btn{
+        width:33.33% !important;
+        height: 15vh;
+    }
+    .bottom-left-container{
+        display: flex;
+        flex-direction: row;
+        width: 100vw;
+        height:20vh;
+        position: absolute;
+        top:50vh;
+        overflow-x: scroll;
+        justify-content: flex-start;
+        flex-shrink: 0;
+    }
+    .profiles-btn{
+        height:100%;
+        width: 50vw !important;
+        flex-shrink: 0;
+    }
+    .blur-box, .modal-content{
+        width: 100vw !important;
+    }
+    .video-box-small2{
+        display: flex;
+        height: 20vh;
+        width: 100vw;
+        flex-shrink: 0;
+    }
+    .homey{
+        display: none;
+    }
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+}

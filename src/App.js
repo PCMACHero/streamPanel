@@ -8,6 +8,7 @@ import about from './views/about'
 import setup from './views/setup'
 import {BrowserRouter, Route, Redirect} from 'react-router-dom'
 import './App.css';
+import './mobile.css'
 import Axios from 'axios';
 
 

@@ -295,7 +295,7 @@ iframe{
   /* justify-content: space-evenly; */
 }
 
-.source-panel {
+.source-panel, .twitch-panel {
   /* margin: 0px 2px; */
   display: flex;
   flex-shrink: 0;
@@ -747,6 +747,9 @@ height:70%;
   flex-direction: row;
   height: 10%;
   background-color: #000000;
+}
+.video-box-small2{
+  display: none;
 }
 .brand{
   display: flex;

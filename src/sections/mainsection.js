@@ -179,12 +179,12 @@ class MainSection extends Component{
             <ScenePanel server={context.state.OBSServer}  event={this.state.event} scenes={this.state.scenes} func={this.setSceneAndSourcesOnClick} context={context} currentScene={this.state.currentScene}/>
             <div className="mid-section">
                 <SourcePanel server={context.state.OBSServer}  event={this.state.event} showHide={context.showHideScreen} func={this.toggleSource} srcClass={this.state.srcClass} />
-                <VideoBox channel={this.props.context.state.displayName}></VideoBox>
+                <VideoBox channel={this.props.context.state.displayName} class={"video-box-small"} ></VideoBox>
                 <TwitchPanel client={context.state.client} oauth={this.props.oauth} newMessage={context.newMessage} context={context} runAd={this.runAd}/>
                 
             </div>
             
-            <BottomPanel event={this.state.event} server={context.state.OBSServer} channelOBJ={this.state.channel} client={this.client} OBSOBJ={this.state} oauth={this.props.oauth} micSources={this.state.micSources} context={context}/>
+            <BottomPanel event={this.state.event} video={<VideoBox channel={this.props.context.state.displayName} class={"video-box-small2"}></VideoBox>}server={context.state.OBSServer}  channelOBJ={this.state.channel} client={this.client} OBSOBJ={this.state} oauth={this.props.oauth} micSources={this.state.micSources} context={context}/>
             
         </div> 
             
