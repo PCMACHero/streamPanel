@@ -30,7 +30,7 @@ class VideoBox extends React.Component{
                     width="1280"
                     frameBorder="0"
                     scrolling="no"
-                    allowFullScreen={true}>
+                    allowFullScreen={false}>
                 </iframe>
             </div>
         

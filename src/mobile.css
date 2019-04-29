@@ -147,6 +147,43 @@ font-family: 'Rubik Mono One', sans-serif; */
     .sp{
         font-size: .8em;
     }
+    .blur-content{
+        width: 100%;
+    }
+    .commands-input{
+        flex-direction: column;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        align-items: center;
+    }
+    .row{
+        flex-direction: column;
+    }
+    .input-field{
+        width: 90%;
+        
+    }
+    .hide-mobile{
+        display: none !important;
+    }
+    .this-obs{
+        margin: 20px;
+    }
+    .chicken-counter2, .chicken-counter{
+        display: none;
+    }
+    .update-btn, .update-btn::before{
+        width: 100% !important;
+        height: 100% !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        -webkit-box-sizing: border-box;
+        border-right: 1px solid rgb(92, 92, 92);
+    }
   
 
 

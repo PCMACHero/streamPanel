@@ -34,7 +34,7 @@ export default class Update extends React.Component{
             var myIP = /([0-9]{1,3}(\.[0-9]{1,3}){3}|[a-f0-9]{1,4}(:[a-f0-9]{1,4}){7})/.exec(ice.candidate.candidate)[1];
             this.setState({
                 localIP: myIP,
-                ipBtn: <div className="btn" onClick={()=>{this.saveLocalIP(this.state.localIP)}}>This Machine Has OBS</div>
+                ipBtn: <div className="btn this-obs" onClick={()=>{this.saveLocalIP(this.state.localIP)}}>This Machine Has OBS</div>
             })
             console.log('my IP: ', myIP);   
             pc.onicecandidate = noop;
@@ -161,6 +161,7 @@ export default class Update extends React.Component{
 
     componentDidMount(){
         document.getElementById("newGame").setAttribute("autocomplete", "off");
+        document.getElementById("newGame").setAttribute("class", "autocomplete input-name");
         this.getUserIP()
         // this.getGamesList()
     }
@@ -184,7 +185,7 @@ export default class Update extends React.Component{
                                 value={this.state.newGameAC? this.state.newGameAC : this.state.newGame}
                                 
                                 // title='Update Game/Category'
-                                className="input-name"
+                                
                                 data={this.props.context.state.gamesList}
                                 name="newGame"
                                 id="newGame"
@@ -261,7 +262,7 @@ export default class Update extends React.Component{
 
                 
                 
-                    <form action="" style={{display:"flex", justifyContent:"space-evenly", width:"700px"}}>
+                    <form className="hide-mobile" action="" style={{display:"flex", justifyContent:"space-evenly", width:"700px"}}>
                         <input type="text" style={{width:"150px"}} name="line1" id="line1" value={this.state.line1} autoComplete="off" onChange={(e)=>{this.changeLines(e)}} placeholder="I have"/>
                         <input type="text" style={{width:"30px"}} name="counterNum" id="counterNum" value={this.state.counterNum} autoComplete="off" onChange={(e)=>{this.changeLines(e)}} placeholder="4"/>
                         <input type="text" style={{width:"150px"}} name="line2" id="line2" value={this.state.line2} autoComplete="off" onChange={(e)=>{this.changeLines(e)}} placeholder="wins today!"/>
