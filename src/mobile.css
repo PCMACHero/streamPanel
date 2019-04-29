@@ -21,7 +21,9 @@ font-family: 'Rubik Mono One', sans-serif; */
 
 
 
-
+    :root {
+        --VH: 0vh;
+    }
 
 
 
@@ -33,7 +35,7 @@ font-family: 'Rubik Mono One', sans-serif; */
     .cover{
         position: absolute;;
         height: 5vh;
-        top:10vh;
+        top: calc(var(--VH) + 0vh);
     }
     .brand{
         width: 100vw;
@@ -53,17 +55,18 @@ font-family: 'Rubik Mono One', sans-serif; */
         position: absolute;
         width: 100vw;
         height: 30vh;
-        top:70vh;
+        top: calc(var(--VH) + 60vh);
         border-top: 1px solid white;
         margin:0;
     }
     .main-section{
         flex-basis: 100%;
+        background-color: black;
     }
     .scene-panel{
         
         position: absolute;
-        top:15vh;
+        top: calc(var(--VH) + 5vh);
         justify-content: flex-start;
         height: 10vh;
         width: 100vw;
@@ -86,7 +89,7 @@ font-family: 'Rubik Mono One', sans-serif; */
         width: 100vw;
         overflow: auto;
         position: absolute;
-        top:25vh;
+        top: calc(var(--VH) + 15vh);
         height: 15vh;
         
     }
@@ -95,8 +98,9 @@ font-family: 'Rubik Mono One', sans-serif; */
         width: 100vw;
         overflow: auto;
         position: absolute;
-        top:40vh;
+        top: calc(var(--VH) + 30vh);
         height: 10vh;
+        overflow-y: hidden;
         
     }
     .src-btn, .src-btn-active, .twitch-btn, .scene-btn{
@@ -109,7 +113,7 @@ font-family: 'Rubik Mono One', sans-serif; */
         width: 100vw;
         height:20vh;
         position: absolute;
-        top:50vh;
+        top: calc(var(--VH) + 40vh);
         overflow-x: scroll;
         justify-content: flex-start;
         flex-shrink: 0;
