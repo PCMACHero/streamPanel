@@ -41,7 +41,7 @@ class twitchLogin extends Component{
 lineCounter = 0
 lines=["All-in-one soution for Twitch Streaming", "Control OBS and Twitch from one place", "Many features already included, and many more planned.", "Works on any device on your network", "Use your tablet, laptop or desktop", "Easy to use, clean, and fast to get started"]
 
-URLElevated = "https://id.twitch.tv/oauth2/authorize?response_type=code&client_id=1w72cq9l8ub9r1pzuqrh91pwduz8r2&redirect_uri=https://streampanel.app/success/payment-portal&scope=channel_editor+chat:read+chat:edit+channel:moderate+user:read:email+bits:read+clips:edit&state=77bfce89f4169e4e4e79d45af98d0c04"
+URLElevated = "http://id.twitch.tv/oauth2/authorize?response_type=code&client_id=1w72cq9l8ub9r1pzuqrh91pwduz8r2&redirect_uri=https://streampanel.app/success/payment-portal&scope=channel_editor+chat:read+chat:edit+channel:moderate+user:read:email+bits:read+clips:edit&state=77bfce89f4169e4e4e79d45af98d0c04"
 
 getTwitchLink=()=>{
   console.log("twitch link 1")
